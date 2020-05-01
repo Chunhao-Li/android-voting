@@ -9,4 +9,6 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="create_voting_title">Want to create a voting?</string>
+    <string name="create_voting_button">Create Voting</string>
 </resources>

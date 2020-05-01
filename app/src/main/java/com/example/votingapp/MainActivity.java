@@ -1,34 +1,37 @@
 package com.example.votingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+    private RecyclerView mRecyclerView;
+    private QuestionAdapter mQuestionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+
+        // Initialize fields
+//        mRecyclerView = findViewById(R.id.main_recyler_view);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        mMainCardAdapter = new MainCardAdapter(this);
+//        mRecyclerView.setAdapter(mMainCardAdapter);
+
+
     }
 
     @Override
@@ -51,5 +54,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void switchToEdit(View view) {
+        Intent intent = new Intent(this, VotingEdit.class);
+        startActivity(intent);
     }
 }
