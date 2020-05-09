@@ -25,16 +25,18 @@
             android:id="@+id/fab_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:src="@drawable/ic_short_text"
             android:layout_marginBottom="16dp"
-            app:fabSize="mini"/>
+            android:onClick="editTextQ"
+            android:src="@drawable/ic_short_text"
+            android:visibility="invisible"
+            app:fabSize="mini" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:onClick="editMultipleChoice"
             android:visibility="invisible"
             app:fabSize="mini"
             android:src="@drawable/ic_radio_button" />

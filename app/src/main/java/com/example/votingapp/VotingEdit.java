@@ -2,6 +2,7 @@ package com.example.votingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -44,5 +45,10 @@ public class VotingEdit extends AppCompatActivity {
         });
 
 
+    }
+
+    public void editTextQ(View view) {
+        Intent intent = new Intent(this,CreateTextQ.class);
+        startActivity(intent);
     }
 }

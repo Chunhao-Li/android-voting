@@ -60,4 +60,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, VotingEdit.class);
         startActivity(intent);
     }
+
+
 }
