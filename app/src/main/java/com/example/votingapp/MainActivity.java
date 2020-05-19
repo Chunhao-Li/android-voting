@@ -168,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToEdit(View view) {
-        Intent intent = new Intent(this, VotingEdit.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, VotingEdit.class);
+//        startActivity(intent);
     }
 
 
