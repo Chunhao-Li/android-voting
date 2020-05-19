@@ -18,7 +18,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
-    <style name="CreateVotingButton">
+    <style name="MainActivityButton">
         <item name="android:background">@color/colorCreateVoting</item>
         <item name="android:textColor">@android:color/white</item>
     </style>

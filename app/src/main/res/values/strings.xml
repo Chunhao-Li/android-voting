@@ -13,4 +13,6 @@
     <string name="create_voting_button">Create Voting</string>
     <string name="sign_in_text">Sign In</string>
     <string name="sign_out_text">Sign Out</string>
+    <string name="do_voting_title">Do a voting!</string>
+    <string name="do_voting_button">Start</string>
 </resources>

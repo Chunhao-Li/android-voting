@@ -8,7 +8,6 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,23 +26,32 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private QuestionAdapter mQuestionAdapter;
 
     private static final int RC_SIGN_IN = 3425;
-    private static final String SIGN_IN_TAG = "Sign_in_tag";
+    private static final String TAG = "MainActivity";
 
-    private MenuItem mSignInOut;
+    private MenuItem mSignIn;
+    private MenuItem mSignOut;
 
     // firebase reference
     FirebaseDatabase mDatabase;
-    DatabaseReference mDatabaseRef;
+    DatabaseReference mDatabaseUserRef;
     FirebaseAuth auth;
+    FirebaseAuth.AuthStateListener mAuthStateListener;
+    FirebaseUser mUser;
+    String mUserId;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,24 +66,27 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
 
-        mDatabaseRef= mDatabase.getReference();
+        mDatabaseUserRef = mDatabase.getReference("users");
+//        mDatabaseUserRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                User user = dataSnapshot.getValue(User.class);
+//                if (user != null) {
+//                    Log.d("test: username", user.getUsername());
+//                    Log.d("test: email", user.getEmail());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//        mDatabaseUserRef.addChildEventListener()
 
 
 
-        writeNewUser("342", "Janny", "dfsf@gamil.com");
-        mDatabaseRef.child("users").child("32").child("username").setValue("fred");
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                Log.d("MainActi: ", user.getEmail() +user.getUsername());
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
 //        mDatabaseRef.child("users").child("342").addValueEventListener(userListener);
 ////        Log.d("test_erereer", mDatabaseRef.child("users").push().getKey());
 //        mDatabaseRef.child("users").child("342").child("email").setValue(null);
@@ -88,19 +99,73 @@ public class MainActivity extends AppCompatActivity {
 //        mMainCardAdapter = new MainCardAdapter(this);
 //        mRecyclerView.setAdapter(mMainCardAdapter);
 
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user=  firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // signed in user
+                    signInInitialize();
+                    mUser = user;
+//                    mSignInOut.setTitle(R.string.sign_out_text);
 
+//                    firebaseAuth.fetchSignInMethodsForEmail()
+                    String email = mUser.getEmail();
+                    String name = mUser.getDisplayName();
+                    Map<String, Object> userUpdate = new HashMap<>();
+                    userUpdate.put("username", name);
+                    userUpdate.put("email", email);
+                    User newUser = new User(name, email);
+                    mDatabaseUserRef.child(newUser.getUserId()).updateChildren(userUpdate);
+//                    if (mDatabaseUserRef.child())
+//                    mDatabaseUserRef.child(email).setValue();
+
+
+//                    mDatabaseUserRef.child(uid).setValue(new User(name,email));
+//                String uid = mUser.getIdToken(true);
+
+                    Log.d("TAG","Name:"+name);
+                    Log.d("TAG","email:"+email);
+//                    Log.d("TAG","uid:"+uid);
+
+                }
+            }
+        };
+
+
+    }
+
+    private void signInInitialize() {
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        auth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        auth.addAuthStateListener(mAuthStateListener);
     }
 
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
-        mDatabaseRef.child("users").child(userId).setValue(user);
+        mDatabaseUserRef.child("users").child(userId).setValue(user);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        mSignInOut = menu.findItem(R.id.sign_in_out_item);
+        mSignIn = menu.findItem(R.id.sign_in_item);
+        mSignOut = menu.findItem(R.id.sign_out_item);
+        if (mUser != null) {
+            mSignIn.setVisible(false);
+            mSignOut.setVisible(true);
+        }
         return true;
     }
 
@@ -113,11 +178,13 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = auth.getCurrentUser();
-                mSignInOut.setTitle(R.string.sign_out_text);
+                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+                mSignIn.setVisible(false);
+                mSignOut.setVisible(true);
 
-            } else {
-                Log.d(SIGN_IN_TAG, "Sign in failed...");
+            } else if(resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Sign in cancelled...", Toast.LENGTH_SHORT).show();
+//                Log.d(SIGN_IN_TAG, "Sign in failed...");
             }
         }
     }
@@ -127,7 +194,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 // change back to sign in
-                mSignInOut.setTitle(R.string.sign_in_text);
+               mSignIn.setVisible(true);
+               mSignOut.setVisible(false);
             }
         });
     }
@@ -137,40 +205,50 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.sign_in_item:
+                popToSignIn();
 
-        if (auth.getCurrentUser() == null) {
-            if (item.getTitle().toString().equals(getString(R.string.sign_out_text))) {
-                item.setTitle(R.string.sign_in_text);
-            }
-
-            // Choose authentication providers
-
-                List<AuthUI.IdpConfig> providers = Arrays.asList(
-                        new AuthUI.IdpConfig.EmailBuilder().build(),
-                        new AuthUI.IdpConfig.AnonymousBuilder().build(),
-                        new AuthUI.IdpConfig.GoogleBuilder().build()
-                );
-
-                // Create and launch sign-in intent
-                startActivityForResult(AuthUI.getInstance().
-                        createSignInIntentBuilder().
-                        setIsSmartLockEnabled(false).
-                        setAvailableProviders(providers).
-                        build(), RC_SIGN_IN);
-
-
-        } else { // sign out
-            signOut();
+            case R.id.sign_out_item:
+                signOut();
         }
+
+
 
         return super.onOptionsItemSelected(item);
     }
 
+
+    public void popToSignIn() {
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+//                new AuthUI.IdpConfig.AnonymousBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build()
+        );
+
+        // Create and launch sign-in intent
+        startActivityForResult(AuthUI.getInstance().
+                createSignInIntentBuilder().
+                setIsSmartLockEnabled(false).
+                setAvailableProviders(providers).
+                build(), RC_SIGN_IN);
+
+    }
+
     public void switchToEdit(View view) {
-//        Intent intent = new Intent(this, VotingEdit.class);
-//        startActivity(intent);
+        if (auth.getCurrentUser() == null) {
+            // not signed in
+//            Toast.makeText(this, "Signed in to continue...", Toast.LENGTH_SHORT).show();
+            popToSignIn();
+        }else {
+            Intent intent = new Intent(this, VotingEdit.class);
+            startActivity(intent);
+        }
     }
 
 
+    public void doVoting(View view) {
+    }
 }
