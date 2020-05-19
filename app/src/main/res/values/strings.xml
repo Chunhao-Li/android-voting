@@ -11,4 +11,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="create_voting_title">Want to create a voting?</string>
     <string name="create_voting_button">Create Voting</string>
+    <string name="sign_in_text">Sign In</string>
+    <string name="sign_out_text">Sign Out</string>
 </resources>

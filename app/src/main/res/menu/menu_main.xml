@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.votingapp.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/sign_in_out_item"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/sign_in_text"
         app:showAsAction="never" />
 </menu>
