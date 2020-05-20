@@ -1,11 +1,13 @@
-package com.example.votingapp.data_storage;
+package com.example.votingapp.data_storage.firebase_data;
 
 import android.annotation.SuppressLint;
 import android.os.Parcel;
 
+import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
+
 import java.util.HashMap;
 
-@SuppressLint("ParcelCreator")
 public class TextQuestionStatistics extends QuestionStatistics {
 //    a hash map that stores all answer strings with user UID as key
     private HashMap<String,String> answers;
@@ -36,13 +38,4 @@ public class TextQuestionStatistics extends QuestionStatistics {
         return this.questionString;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
 }

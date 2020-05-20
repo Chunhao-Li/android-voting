@@ -19,11 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".VotingEdit"
+        <activity android:name=".VotingEditActivity"
             android:parentActivityName=".MainActivity">
         </activity>
 
-        <activity android:name=".CreateTextQ" />
+        <activity android:name=".TextQuestionActivity" />
     </application>
 
 </manifest>

@@ -1,5 +1,5 @@
-package com.example.votingapp.data_storage;
-import com.example.votingapp.data_storage.voting_edit.EditQuestion;
+package com.example.votingapp.data_storage.firebase_data;
+import com.example.votingapp.voting_edit.EditQuestion;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -15,13 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.voting_edit.TextEditQuestion;
+import com.example.votingapp.voting_edit.EditTextQuestion;
+import com.example.votingapp.voting_edit.QuestionAdapter;
+import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class VotingEdit extends AppCompatActivity {
+public class VotingEditActivity extends AppCompatActivity {
     FloatingActionButton mAddButton;
     FloatingActionButton mChoiceButton;
     FloatingActionButton mTextButton;
@@ -117,7 +119,7 @@ public class VotingEdit extends AppCompatActivity {
             public void onClick(View v) {
                 // pop to the text question edit page.
                 initializeFAB();
-                Intent intent = new Intent(VotingEdit.this, CreateTextQ.class);
+                Intent intent = new Intent(VotingEditActivity.this, TextQuestionActivity.class);
                 startActivityForResult(intent, RC_TEXT_QUESTION);
             }
         });
@@ -131,8 +133,8 @@ public class VotingEdit extends AppCompatActivity {
             Log.d("result_code:", Integer.toString(requestCode));
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    String text_question = data.getStringExtra(CreateTextQ.GET_TEXT_QUESTION);
-                    TextEditQuestion textQuestion = new TextEditQuestion(text_question);
+                    String text_question = data.getStringExtra(TextQuestionActivity.GET_TEXT_QUESTION);
+                    EditTextQuestion textQuestion = new EditTextQuestion(text_question);
                     int oldQuestionItemsSize = questionItems.size();
                     questionItems.add(new RecyclerViewQuestionItem(textQuestion, QuestionType.TEXT_QUESTION));
                     mAdapter.notifyItemInserted(oldQuestionItemsSize);

@@ -3,7 +3,8 @@ package com.example.votingapp;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.votingapp.data_storage.User;
+import com.example.votingapp.data_storage.firebase_data.User;
+import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == RC_VOTING_EDIT) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    newVoting = data.getParcelableExtra(VotingEdit.VOTING_INFO_KEY);
+                    newVoting = data.getParcelableExtra(VotingEditActivity.VOTING_INFO_KEY);
                     saveVoting();
                 }
             }
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, "Signed in to continue...", Toast.LENGTH_SHORT).show();
             popToSignIn();
         } else {
-            Intent intent = new Intent(this, VotingEdit.class);
+            Intent intent = new Intent(this, VotingEditActivity.class);
             startActivityForResult(intent, RC_VOTING_EDIT);
         }
     }

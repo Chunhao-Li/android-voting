@@ -1,11 +1,10 @@
-package com.example.votingapp.data_storage;
+package com.example.votingapp.data_storage.firebase_data;
 
-import android.annotation.SuppressLint;
-import android.os.Parcel;
+import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 
 import java.util.ArrayList;
 
-@SuppressLint("ParcelCreator")
 public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
 //    the name of each choice
     private ArrayList<String> choices;
@@ -46,13 +45,4 @@ public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
         return this.choiceVoterCount;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-    }
 }

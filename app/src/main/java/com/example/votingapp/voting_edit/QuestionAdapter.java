@@ -1,4 +1,4 @@
-package com.example.votingapp;
+package com.example.votingapp.voting_edit;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.votingapp.data_storage.voting_edit.TextEditQuestion;
+import com.example.votingapp.R;
+
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if (viewType == TEXT_TYPE) {
-                View view = inflater.inflate(R.layout.text_question_item, parent, false);
+                View view = inflater.inflate(R.layout.voting_text_question_item, parent, false);
                 return new TextQuestionViewHolder(view);
             } else  {
 //                View view = inflater
@@ -47,7 +48,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TextQuestionViewHolder) {
-            String question = ((TextEditQuestion) questionItems.get(position).getData()).getQuestionString();
+            String question = ((EditTextQuestion) questionItems.get(position).getData()).getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
         }
     }

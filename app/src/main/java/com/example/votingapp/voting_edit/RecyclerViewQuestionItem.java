@@ -1,9 +1,8 @@
-package com.example.votingapp;
+package com.example.votingapp.voting_edit;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.votingapp.data_storage.voting_edit.EditQuestion;
 import com.example.votingapp.data_storage.QuestionType;
 
 public class RecyclerViewQuestionItem  implements Parcelable {

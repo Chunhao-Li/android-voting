@@ -1,30 +1,29 @@
-package com.example.votingapp.data_storage.voting_edit;
+package com.example.votingapp.voting_edit;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.example.votingapp.data_storage.QuestionType;
 
-public class TextEditQuestion extends EditQuestion implements Parcelable {
-    public TextEditQuestion(String question){
+public class EditTextQuestion extends EditQuestion  {
+    public EditTextQuestion(String question){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
     }
 
-    protected TextEditQuestion(Parcel in) {
+    protected EditTextQuestion(Parcel in) {
         questionType = QuestionType.valueOf(in.readString());
         questionString = in.readString();
     }
 
-    public static final Creator<TextEditQuestion> CREATOR = new Creator<TextEditQuestion>() {
+    public static final Creator<EditTextQuestion> CREATOR = new Creator<EditTextQuestion>() {
         @Override
-        public TextEditQuestion createFromParcel(Parcel in) {
-            return new TextEditQuestion(in);
+        public EditTextQuestion createFromParcel(Parcel in) {
+            return new EditTextQuestion(in);
         }
 
         @Override
-        public TextEditQuestion[] newArray(int size) {
-            return new TextEditQuestion[size];
+        public EditTextQuestion[] newArray(int size) {
+            return new EditTextQuestion[size];
         }
     };
 

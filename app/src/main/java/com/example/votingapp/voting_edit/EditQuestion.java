@@ -1,4 +1,4 @@
-package com.example.votingapp.data_storage.voting_edit;
+package com.example.votingapp.voting_edit;
 
 import android.os.Parcelable;
 
