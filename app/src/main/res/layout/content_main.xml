@@ -7,7 +7,7 @@
     android:layout_margin="8dp"
     android:orientation="vertical">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,6 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/main_create_voting_cardview"
@@ -29,7 +32,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
                     <TextView
-                        android:id="@+id/voting_title_textView"
+                        android:id="@+id/create_voting_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -42,7 +45,7 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
-                        android:onClick="switchToEdit"
+                        android:onClick="launchVotingEdit"
                         android:text="@string/create_voting_button" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -80,10 +83,17 @@
             </androidx.cardview.widget.CardView>
 
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_recyclerview"
+            android:nestedScrollingEnabled="false"
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
-
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </LinearLayout>

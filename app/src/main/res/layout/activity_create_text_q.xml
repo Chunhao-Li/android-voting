@@ -8,7 +8,7 @@
     tools:context=".CreateTextQ">
 
     <EditText
-        android:id="@+id/title"
+        android:id="@+id/text_q_editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -18,31 +18,31 @@
         android:layout_marginRight="182dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="edit"
+        android:hint="Edit here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
-        android:text="cancle"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+        android:text="@string/text_q_cancel"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_save"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
 
-        android:text="save"
+        android:text="@string/text_q_save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintStart_toEndOf="@+id/button_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/text_q_editText" />
 
     <TextView
         android:id="@+id/textView"

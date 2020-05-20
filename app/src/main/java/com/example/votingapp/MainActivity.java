@@ -3,23 +3,20 @@ package com.example.votingapp;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.votingapp.backend_storage.User;
+import com.example.votingapp.data_storage.User;
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -28,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +33,17 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
-    private QuestionAdapter mQuestionAdapter;
+    private VotingAdapter mVotingAdapter;
 
     private static final int RC_SIGN_IN = 3425;
+    private static final int RC_VOTING_EDIT = 2983;
     private static final String TAG = "MainActivity";
 
     private MenuItem mSignIn;
     private MenuItem mSignOut;
+
+    private ArrayList<RecyclerViewQuestionItem> newVoting = new ArrayList<>();
+    private ArrayList<String> votings = new ArrayList<>();
 
     // firebase reference
     FirebaseDatabase mDatabase;
@@ -52,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     String mUserId;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         // Initialise fields
+        mRecyclerView = findViewById(R.id.main_recyclerview);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mVotingAdapter = new VotingAdapter(this, votings);
+        mRecyclerView.setAdapter(mVotingAdapter);
 
         // Initialise firebase reference
         mDatabase = FirebaseDatabase.getInstance();
@@ -67,41 +72,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         mDatabaseUserRef = mDatabase.getReference("users");
-//        mDatabaseUserRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                User user = dataSnapshot.getValue(User.class);
-//                if (user != null) {
-//                    Log.d("test: username", user.getUsername());
-//                    Log.d("test: email", user.getEmail());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//        mDatabaseUserRef.addChildEventListener()
-
-
-
-//        mDatabaseRef.child("users").child("342").addValueEventListener(userListener);
-////        Log.d("test_erereer", mDatabaseRef.child("users").push().getKey());
-//        mDatabaseRef.child("users").child("342").child("email").setValue(null);
 
 
         // Initialize fields
-//        mRecyclerView = findViewById(R.id.main_recyler_view);
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        mMainCardAdapter = new MainCardAdapter(this);
-//        mRecyclerView.setAdapter(mMainCardAdapter);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user=  firebaseAuth.getCurrentUser();
+                FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // signed in user
                     signInInitialize();
@@ -123,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
 //                    mDatabaseUserRef.child(uid).setValue(new User(name,email));
 //                String uid = mUser.getIdToken(true);
 
-                    Log.d("TAG","Name:"+name);
-                    Log.d("TAG","email:"+email);
-                    Log.d("TAG","uid:"+user.getUid());
+                    Log.d("TAG", "Name:" + name);
+                    Log.d("TAG", "email:" + email);
+                    Log.d("TAG", "uid:" + user.getUid());
 
                 }
             }
@@ -173,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
@@ -181,11 +158,27 @@ public class MainActivity extends AppCompatActivity {
                 mSignIn.setVisible(false);
                 mSignOut.setVisible(true);
 
-            } else if(resultCode == RESULT_CANCELED) {
+            } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in cancelled...", Toast.LENGTH_SHORT).show();
 //                Log.d(SIGN_IN_TAG, "Sign in failed...");
             }
+        } else if (requestCode == RC_VOTING_EDIT) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    newVoting = data.getParcelableExtra(VotingEdit.VOTING_INFO_KEY);
+                    saveVoting();
+                }
+            }
         }
+    }
+
+    private void saveVoting() {
+        // save to the database and update the main UI
+        int pos = votings.size();
+        Log.d("saveVoting: votlength ", Integer.toString(votings.size()));
+        votings.add("newVoting");
+        mVotingAdapter.notifyItemInserted(pos);
+        Log.d("saveVoting:", votings.get(0));
     }
 
     public void signOut() {
@@ -193,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 // change back to sign in
-               mSignIn.setVisible(true);
-               mSignOut.setVisible(false);
+                mSignIn.setVisible(true);
+                mSignOut.setVisible(false);
             }
         });
     }
@@ -212,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sign_out_item:
                 signOut();
         }
-
 
 
         return super.onOptionsItemSelected(item);
@@ -236,14 +228,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void switchToEdit(View view) {
+    public void launchVotingEdit(View view) {
         if (auth.getCurrentUser() == null) {
             // not signed in
 //            Toast.makeText(this, "Signed in to continue...", Toast.LENGTH_SHORT).show();
             popToSignIn();
-        }else {
+        } else {
             Intent intent = new Intent(this, VotingEdit.class);
-            startActivity(intent);
+            startActivityForResult(intent, RC_VOTING_EDIT);
         }
     }
 

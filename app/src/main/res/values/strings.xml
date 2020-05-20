@@ -15,4 +15,7 @@
     <string name="sign_out_text">Sign Out</string>
     <string name="do_voting_title">Do a voting!</string>
     <string name="do_voting_button">Start</string>
+    <string name="text_q_cancel">cancel</string>
+    <string name="text_q_save">save</string>
+    <string name="save_menu_item">Save</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.votingapp.backend_storage;
+package com.example.votingapp.data_storage;
 
 import java.util.ArrayList;
 import java.util.Date;
