@@ -23,7 +23,6 @@
         android:gravity="center"
         android:orientation="vertical">
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_text"
             android:layout_width="wrap_content"
@@ -53,8 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:src="@drawable/ic_add" />
-
-
     </LinearLayout>
 
 

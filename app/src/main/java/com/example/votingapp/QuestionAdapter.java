@@ -15,6 +15,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     private Context mContext;
     // data
 
+
     public QuestionAdapter(Context context) {
         this.mContext = context;
     }
@@ -44,6 +45,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
 
         }
     }
