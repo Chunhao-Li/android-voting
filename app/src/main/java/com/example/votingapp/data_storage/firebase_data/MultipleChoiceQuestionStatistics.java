@@ -3,12 +3,7 @@ package com.example.votingapp.data_storage;
 import android.annotation.SuppressLint;
 import android.os.Parcel;
 
-import com.example.votingapp.data_storage.QuestionStatistics;
-import com.example.votingapp.data_storage.QuestionType;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
 
 @SuppressLint("ParcelCreator")
 public class MultipleChoiceQuestionStatistics extends QuestionStatistics {

@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.TextQuestion;
+import com.example.votingapp.data_storage.voting_edit.TextEditQuestion;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -132,7 +132,7 @@ public class VotingEdit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     String text_question = data.getStringExtra(CreateTextQ.GET_TEXT_QUESTION);
-                    TextQuestion textQuestion = new TextQuestion(text_question);
+                    TextEditQuestion textQuestion = new TextEditQuestion(text_question);
                     int oldQuestionItemsSize = questionItems.size();
                     questionItems.add(new RecyclerViewQuestionItem(textQuestion, QuestionType.TEXT_QUESTION));
                     mAdapter.notifyItemInserted(oldQuestionItemsSize);

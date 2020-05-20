@@ -3,18 +3,14 @@ package com.example.votingapp.data_storage;
 import android.annotation.SuppressLint;
 import android.os.Parcel;
 
-import com.example.votingapp.data_storage.QuestionStatistics;
-import com.example.votingapp.data_storage.QuestionType;
-
 import java.util.HashMap;
-import java.util.Map;
 
 @SuppressLint("ParcelCreator")
-public class textQuestionStatistics extends QuestionStatistics {
+public class TextQuestionStatistics extends QuestionStatistics {
 //    a hash map that stores all answer strings with user UID as key
     private HashMap<String,String> answers;
 
-    public textQuestionStatistics(String question, Integer totalNum, HashMap<String,String> answers){
+    public TextQuestionStatistics(String question, Integer totalNum, HashMap<String,String> answers){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
         super.totalVoterCount = totalNum;

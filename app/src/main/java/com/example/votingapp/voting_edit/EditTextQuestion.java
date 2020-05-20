@@ -1,29 +1,30 @@
-package com.example.votingapp.data_storage;
+package com.example.votingapp.data_storage.voting_edit;
 
-import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class TextQuestion extends Question implements Parcelable {
-    public TextQuestion(String question){
+import com.example.votingapp.data_storage.QuestionType;
+
+public class TextEditQuestion extends EditQuestion implements Parcelable {
+    public TextEditQuestion(String question){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
     }
 
-    protected TextQuestion(Parcel in) {
+    protected TextEditQuestion(Parcel in) {
         questionType = QuestionType.valueOf(in.readString());
         questionString = in.readString();
     }
 
-    public static final Creator<TextQuestion> CREATOR = new Creator<TextQuestion>() {
+    public static final Creator<TextEditQuestion> CREATOR = new Creator<TextEditQuestion>() {
         @Override
-        public TextQuestion createFromParcel(Parcel in) {
-            return new TextQuestion(in);
+        public TextEditQuestion createFromParcel(Parcel in) {
+            return new TextEditQuestion(in);
         }
 
         @Override
-        public TextQuestion[] newArray(int size) {
-            return new TextQuestion[size];
+        public TextEditQuestion[] newArray(int size) {
+            return new TextEditQuestion[size];
         }
     };
 

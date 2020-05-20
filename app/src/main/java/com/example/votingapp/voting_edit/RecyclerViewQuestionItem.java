@@ -3,16 +3,16 @@ package com.example.votingapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.votingapp.data_storage.Question;
+import com.example.votingapp.data_storage.voting_edit.EditQuestion;
 import com.example.votingapp.data_storage.QuestionType;
 
 public class RecyclerViewQuestionItem  implements Parcelable {
 
-    private Question data;
+    private EditQuestion data;
     private QuestionType type;
 
     protected RecyclerViewQuestionItem(Parcel in) {
-        data = in.readParcelable(Question.class.getClassLoader());
+        data = in.readParcelable(EditQuestion.class.getClassLoader());
         type = QuestionType.valueOf(in.readString());
     }
 
@@ -30,7 +30,7 @@ public class RecyclerViewQuestionItem  implements Parcelable {
 
 
 
-    public Question getData() {
+    public EditQuestion getData() {
         return data;
     }
 
@@ -38,7 +38,7 @@ public class RecyclerViewQuestionItem  implements Parcelable {
         return type;
     }
 
-    public RecyclerViewQuestionItem(Question data, QuestionType type) {
+    public RecyclerViewQuestionItem(EditQuestion data, QuestionType type) {
         this.data = data;
         this.type = type;
     }

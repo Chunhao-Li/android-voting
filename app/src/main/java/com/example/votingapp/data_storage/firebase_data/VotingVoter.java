@@ -1,15 +1,16 @@
-package com.example.votingapp.backend_storage;
+package com.example.votingapp.data_storage;
+import com.example.votingapp.data_storage.voting_edit.EditQuestion;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class VotingVoter extends Voting {
 //    for participant use data structure
-    private ArrayList<Question> questions;
+    private ArrayList<EditQuestion> questions;
 //    participant ID
     private String participantUid;
 
-    VotingVoter(String participantUid, String creatorUid, Date deadline, ArrayList<Question> questions){
+    VotingVoter(String participantUid, String creatorUid, Date deadline, ArrayList<EditQuestion> questions){
         super.VotingUid = Integer.toString(questions.hashCode());
         this.creatorUid = creatorUid;
         this.deadline = deadline;
@@ -17,7 +18,7 @@ public class VotingVoter extends Voting {
         this.participantUid = participantUid;
     }
 
-    public ArrayList<Question> getQuestions(){
+    public ArrayList<EditQuestion> getQuestions(){
         return this.questions;
     }
 

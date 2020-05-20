@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.votingapp.data_storage.TextQuestion;
+import com.example.votingapp.data_storage.voting_edit.TextEditQuestion;
 
 import java.util.ArrayList;
 
@@ -47,7 +47,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TextQuestionViewHolder) {
-            String question = ((TextQuestion) questionItems.get(position).getData()).getQuestionString();
+            String question = ((TextEditQuestion) questionItems.get(position).getData()).getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
         }
     }
