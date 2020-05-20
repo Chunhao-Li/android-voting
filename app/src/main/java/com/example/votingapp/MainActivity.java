@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d("TAG","Name:"+name);
                     Log.d("TAG","email:"+email);
-//                    Log.d("TAG","uid:"+uid);
+                    Log.d("TAG","uid:"+user.getUid());
 
                 }
             }
