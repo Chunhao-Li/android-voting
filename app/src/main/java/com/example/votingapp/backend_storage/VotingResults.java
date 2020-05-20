@@ -8,6 +8,7 @@ public class VotingResults extends Voting{
     private ArrayList<QuestionStatistics> questionStatistics = new ArrayList<>();
 //      the result of each question has been stored in questionStatistics class.
     VotingResults(String creatorUid, Date deadline, ArrayList<QuestionStatistics> questions) {
+        super.VotingUid = Integer.toString(questions.hashCode());
         super.creatorUid = creatorUid;
         super.deadline = deadline;
         this.questionStatistics =questions;
@@ -18,6 +19,11 @@ public class VotingResults extends Voting{
 //    if you want the whole data structure
     public ArrayList<QuestionStatistics> getQuestionStatistics(){
         return this.questionStatistics;
+    }
+
+    @Override
+    String getVotingUid() {
+        return this.VotingUid;
     }
 
     @Override

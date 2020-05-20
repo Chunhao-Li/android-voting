@@ -10,6 +10,7 @@ public class VotingVoter extends Voting {
     private String participantUid;
 
     VotingVoter(String participantUid, String creatorUid, Date deadline, ArrayList<Question> questions){
+        super.VotingUid = Integer.toString(questions.hashCode());
         this.creatorUid = creatorUid;
         this.deadline = deadline;
         this.questions = questions;
@@ -22,6 +23,11 @@ public class VotingVoter extends Voting {
 
     public String getParticipantID(){
         return this.participantUid;
+    }
+
+    @Override
+    String getVotingUid() {
+        return this.VotingUid;
     }
 
     @Override

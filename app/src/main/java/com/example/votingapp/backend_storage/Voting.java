@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 abstract class Voting{
+//    Voting UID
+    String VotingUid;
 //    creator uid of this voting
     String creatorUid;
 //    voting due date
     Date deadline;
+    abstract String getVotingUid();
     abstract String getCreatorUid();
     abstract Date getDeadline();
 
