@@ -3,7 +3,7 @@ package com.example.votingapp.backend_storage;
 import java.util.ArrayList;
 
 /* Notice: this abstract question class is participant-use class,
-   for creator usage you should check QuestionAnalysis class
+   for creator usage you should check QuestionStatistics class with further extension
 * */
 
 // abstract question class for any question
@@ -15,49 +15,17 @@ abstract class Question{
      abstract String getQuestionString();
 }
 
-//multiple choice question sub class,
-class multipleChoiceQuestion extends Question{
-//    the name of each class
-    private ArrayList<String> choices;
-
-    public multipleChoiceQuestion(String question, ArrayList<String> choices){
-        super.questionString = question;
-        super.questionType = QuestionType.MULTI_CHOICE;
-        this.choices = choices;
-    }
-
-    public ArrayList<String> getChoices(){
-        return this.choices;
-    }
-
-    @Override
-    public QuestionType getQuestionType(){
-        return super.questionType;
-    }
-
-    @Override
-    public String getQuestionString(){
-        return super.questionString;
-    }
+/*Here is QuestionStatistics class which should give statistics data for questionnaire creator,
+  for participant-use class you should see non-statistic one.
+* */
+abstract class QuestionStatistics extends Question{
+//    count the # of voters
+    Integer totalVoterCount;
+    abstract Integer getTotalVoterCount();
+    abstract QuestionType getQuestionType();
+    abstract String getQuestionString();
 }
 
-class textQuestion extends Question{
-
-    public textQuestion(String question){
-        super.questionString = question;
-        super.questionType = QuestionType.TEXT_QUESTION;
-    }
-
-    @Override
-    public QuestionType getQuestionType(){
-        return super.questionType;
-    }
-
-    @Override
-    public String getQuestionString(){
-        return super.questionString;
-    }
-}
 
 //public class Question {
 //    private String question;
