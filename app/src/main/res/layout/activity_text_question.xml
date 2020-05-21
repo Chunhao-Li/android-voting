@@ -29,7 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
+        android:background="#8BC34A"
         android:text="@string/text_q_cancel"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBaseline_toBaselineOf="@+id/button_save"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -39,7 +41,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
 
+        android:background="#8BC34A"
         android:text="@string/text_q_save"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_cancel"
         app:layout_constraintTop_toBottomOf="@+id/text_q_editText" />
@@ -52,6 +56,7 @@
         android:layout_marginLeft="19dp"
         android:layout_marginTop="50dp"
         android:text="Your Qustion"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

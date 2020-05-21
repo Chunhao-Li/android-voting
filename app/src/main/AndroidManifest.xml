@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".VotingEditActivity"
-           />
+            />
         <activity android:name=".TextQuestionActivity" />
     </application>
 

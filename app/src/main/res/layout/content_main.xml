@@ -31,12 +31,14 @@
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="16dp">
+
                     <TextView
                         android:id="@+id/create_voting_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="@string/create_voting_title"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textSize="20sp" />
 
                     <Button
@@ -69,6 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="@string/do_voting_title"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textSize="20sp" />
 
                     <Button
@@ -83,14 +86,14 @@
             </androidx.cardview.widget.CardView>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/main_recyclerview"
-            android:nestedScrollingEnabled="false"
-            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_recyclerview"
+                android:nestedScrollingEnabled="false"
+                >
 
-        </androidx.recyclerview.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
