@@ -6,11 +6,11 @@ import java.util.Date;
 
 public class VotingVoter extends Voting {
 //    for participant use data structure
-    private ArrayList<EditQuestion> questions;
+    private ArrayList<Question> questions;
 //    participant ID
     private String participantUid;
 
-    VotingVoter(String participantUid, String creatorUid, Date deadline, ArrayList<EditQuestion> questions){
+    VotingVoter(String participantUid, String creatorUid, Date deadline, ArrayList<Question> questions){
         super.VotingUid = Integer.toString(questions.hashCode());
         this.creatorUid = creatorUid;
         this.deadline = deadline;
@@ -18,7 +18,7 @@ public class VotingVoter extends Voting {
         this.participantUid = participantUid;
     }
 
-    public ArrayList<EditQuestion> getQuestions(){
+    public ArrayList<Question> getQuestions(){
         return this.questions;
     }
 

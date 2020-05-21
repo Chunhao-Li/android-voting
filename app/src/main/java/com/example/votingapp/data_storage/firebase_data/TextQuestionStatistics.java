@@ -29,6 +29,11 @@ public class TextQuestionStatistics extends QuestionStatistics {
     }
 
     @Override
+    void update(Answer ans) {
+        this.answers.put(ans.respondentUid,ans.getAnswerString());
+    }
+
+    @Override
     public QuestionType getQuestionType() {
         return this.questionType;
     }

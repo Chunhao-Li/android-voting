@@ -1,5 +1,7 @@
 package com.example.votingapp.data_storage.firebase_data;
 
+import com.example.votingapp.data_storage.QuestionType;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,7 +16,15 @@ public class VotingResults extends Voting {
         this.questionStatistics =questions;
     }
 
-//    public void addAnswers()
+    public void addAnswers(UserAnswers answers){
+        for(int i = 0;i<answers.getAnswers().size();i++){
+            if (answers.getAnswers().get(i).questionType == QuestionType.MULTI_CHOICE){
+                this.questionStatistics.get(i).update(answers.getAnswers().get(i));
+            }else if(answers.getAnswers().get(i).questionType == QuestionType.TEXT_QUESTION){
+                this.questionStatistics.get(i).update(answers.getAnswers().get(i));
+            }
+        }
+    }
 
 //    if you want the whole data structure
     public ArrayList<QuestionStatistics> getQuestionStatistics(){

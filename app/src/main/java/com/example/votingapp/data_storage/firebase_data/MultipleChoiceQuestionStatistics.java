@@ -27,6 +27,15 @@ public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
     }
 
     @Override
+    void update(Answer ans) {
+        for(int i=0;i<this.choices.size();i++){
+            if(this.choices.get(i).equals(ans.getAnswerString())){
+                this.choiceVoterCount[i]+=1;
+            }
+        }
+    }
+
+    @Override
     public QuestionType getQuestionType(){
         return this.questionType;
     }

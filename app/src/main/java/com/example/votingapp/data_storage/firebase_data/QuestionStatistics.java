@@ -8,5 +8,6 @@ public abstract class QuestionStatistics extends Question {
 
     Integer totalVoterCount;
     abstract Integer getTotalVoterCount();
+    abstract void update(Answer ans);
 
 }
