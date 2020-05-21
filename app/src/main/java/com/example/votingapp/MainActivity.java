@@ -3,7 +3,12 @@ package com.example.votingapp;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
+import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.User;
+import com.example.votingapp.data_storage.firebase_data.VotingResults;
+import com.example.votingapp.voting_edit.EditQuestion;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem mSignIn;
     private MenuItem mSignOut;
 
-    private ArrayList<RecyclerViewQuestionItem> newVoting = new ArrayList<>();
-    private ArrayList<String> votings = new ArrayList<>();
+    private VotingResults newVoting;
+    private ArrayList<VotingResults> votingResultList = new ArrayList<>();
+    private ArrayList<String> votingNames =new ArrayList<>();
 
     // firebase reference
     FirebaseDatabase mDatabase;
@@ -64,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialise fields
         mRecyclerView = findViewById(R.id.main_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mVotingAdapter = new VotingAdapter(this, votings);
+        mVotingAdapter = new VotingAdapter(this, votingNames);
         mRecyclerView.setAdapter(mVotingAdapter);
 
         // Initialise firebase reference
@@ -166,20 +172,29 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == RC_VOTING_EDIT) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
-                    newVoting = data.getParcelableExtra(VotingEditActivity.VOTING_INFO_KEY);
-                    saveVoting();
+                    ArrayList<RecyclerViewQuestionItem> newVoting = data.getParcelableExtra(VotingEditActivity.VOTING_INFO_KEY);
+                    saveVoting(newVoting);
                 }
             }
         }
     }
 
-    private void saveVoting() {
-        // save to the database and update the main UI
-        int pos = votings.size();
-        Log.d("saveVoting: votlength ", Integer.toString(votings.size()));
-        votings.add("newVoting");
-        mVotingAdapter.notifyItemInserted(pos);
-        Log.d("saveVoting:", votings.get(0));
+    private void saveVoting(ArrayList<RecyclerViewQuestionItem> newVoting) {
+        // save the new Voting to votingResultList
+        ArrayList<QuestionStatistics> questionStatistics = new ArrayList<>();
+        for (RecyclerViewQuestionItem item : newVoting) {
+            EditQuestion question = item.getData();
+            if (item.getType() == QuestionType.TEXT_QUESTION) {
+//                TextQuestionStatistics
+
+            }
+
+        }
+//        int pos = votingResultList.size();
+//        Log.d("saveVoting: votlength ", Integer.toString(votingResultList.size()));
+//        votingResultList.add("newVoting");
+//        mVotingAdapter.notifyItemInserted(pos);
+//        Log.d("saveVoting:", votingResultList.get(0));
     }
 
     public void signOut() {

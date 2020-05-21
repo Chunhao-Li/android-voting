@@ -70,7 +70,7 @@ which is the final object that voters send.
 
 ## MultipleChoiceAnswer ##
 which is one of extension of abstract answer class.
-* 1 answerChoice: **String**, the destription of chosen choice, using **getAnswerString** to get.
+* 1 answerChoice: **String**, the description of chosen choice, using **getAnswerString** to get.
 * 2 same that has questionString, questionType,respondentUid inside.
 
 ## TextAnswer ##

@@ -3,21 +3,24 @@ package com.example.votingapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.voting_edit.DatePickerFragment;
 import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
+import com.example.votingapp.voting_edit.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ public class VotingEditActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private QuestionAdapter mAdapter;
     private boolean isOriginStatus = true;   // are fabs in their origin status
+    private String deadline;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -44,11 +48,27 @@ public class VotingEditActivity extends AppCompatActivity {
     }
 
     private void saveVoting() {
-        Intent toMainIntent = new Intent();
-        toMainIntent.putParcelableArrayListExtra(VOTING_INFO_KEY, questionItems);
-        setResult(RESULT_OK, toMainIntent);
-        finish();
+        showDeadlinePicker();
+//        Intent toMainIntent = new Intent();
+//        toMainIntent.putParcelableArrayListExtra(VOTING_INFO_KEY, questionItems);
+//        setResult(RESULT_OK, toMainIntent);
+//        finish();
     }
+
+    private void showDeadlinePicker() {
+       pickDate();
+    }
+
+    private void pickDate() {
+        DialogFragment dialogFragment = new DatePickerFragment();
+        dialogFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    private void pickTime() {
+        DialogFragment dialogFragment = new TimePickerFragment();
+        dialogFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,5 +189,24 @@ public class VotingEditActivity extends AppCompatActivity {
         mChoiceButton.setVisibility(View.VISIBLE);
         mTextButton.setVisibility(View.VISIBLE);
         isOriginStatus = false;
+    }
+
+    public void processDatePicker(int year, int month, int dayOfMonth) {
+        String month_str = Integer.toString(month+1);
+        String day_str = Integer.toString(dayOfMonth);
+        String year_str  = Integer.toString(year);
+        deadline = (day_str+"/" + month_str + "/" + year_str);
+        pickTime();
+//        Toast.makeText(this,  dateMessage,
+//                Toast.LENGTH_SHORT).show();
+    }
+
+    public void processTimePicker(int hour, int minute) {
+        String hour_str = Integer.toString(hour);
+        String minute_str = Integer.toString(minute);
+        deadline = deadline + "/" + hour_str + "/" + minute_str;
+        Toast.makeText(this,  deadline,
+                Toast.LENGTH_SHORT).show();
+
     }
 }
