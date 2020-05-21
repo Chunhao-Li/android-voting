@@ -18,9 +18,9 @@ public class VotingResults extends Voting {
 
     public void addAnswers(UserAnswers answers){
         for(int i = 0;i<answers.getAnswers().size();i++){
-            if (answers.getAnswers().get(i).questionType == QuestionType.MULTI_CHOICE){
+            if (answers.getAnswers().get(i).questionType.equals(QuestionType.MULTI_CHOICE)){
                 this.questionStatistics.get(i).update(answers.getAnswers().get(i));
-            }else if(answers.getAnswers().get(i).questionType == QuestionType.TEXT_QUESTION){
+            }else if(answers.getAnswers().get(i).questionType.equals(QuestionType.TEXT_QUESTION)){
                 this.questionStatistics.get(i).update(answers.getAnswers().get(i));
             }
         }
