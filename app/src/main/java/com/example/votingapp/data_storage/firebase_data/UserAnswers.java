@@ -11,7 +11,7 @@ public class UserAnswers {
     private String respondentUid;
 
 //    main data structure of answers
-    ArrayList<Answer> answers;
+    private ArrayList<Answer> answers;
 
     UserAnswers(String votingUid, String respondentUid, ArrayList<Answer> answers){
         this.votingUid = votingUid;
