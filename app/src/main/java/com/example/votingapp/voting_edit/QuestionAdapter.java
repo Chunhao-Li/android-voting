@@ -87,6 +87,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class MultipleChoiceViewHolder extends RecyclerView.ViewHolder {
         TextView mQuestion;
 
+
         public MultipleChoiceViewHolder(@NonNull View itemView) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.multiple_choice_q);

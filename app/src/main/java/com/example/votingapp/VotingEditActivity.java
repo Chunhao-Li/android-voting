@@ -28,6 +28,7 @@ public class VotingEditActivity extends AppCompatActivity {
     FloatingActionButton mChoiceButton;
     FloatingActionButton mTextButton;
     private final int RC_TEXT_QUESTION = 243;
+    private final int RC_MULTICHOICE_QUESTION = 245;
     public static final String VOTING_INFO_KEY = "com.example.votingapp.VOTING_INFO";
     private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
     private RecyclerView mRecyclerView;
@@ -112,6 +113,8 @@ public class VotingEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // pop to choice question edit
                 initializeFAB();
+                Intent intent = new Intent(VotingEditActivity.this, TextQuestionActivity.class);
+                startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
             }
         });
         mTextButton.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +133,7 @@ public class VotingEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_TEXT_QUESTION) {
-            Log.d("result_code:", Integer.toString(requestCode));
+//            Log.d("result_code:", Integer.toString(requestCode));
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     String text_question = data.getStringExtra(TextQuestionActivity.GET_TEXT_QUESTION);
@@ -142,6 +145,13 @@ public class VotingEditActivity extends AppCompatActivity {
 
             }
 
+        } else if (requestCode == RC_MULTICHOICE_QUESTION) {
+            if (resultCode == RESULT_OK) {
+                if (data!=null) {
+                    String textQuestion = data.getStringExtra("key");
+                    ArrayList<String> choices = data.getStringArrayListExtra("key_choices");
+                }
+            }
         }
 
     }
