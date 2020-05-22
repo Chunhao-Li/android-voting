@@ -7,7 +7,7 @@ package com.example.votingapp.data_storage.firebase_data;
 public abstract class QuestionStatistics extends Question {
 
     Integer totalVoterCount;
-    abstract Integer getTotalVoterCount();
+    public abstract Integer getTotalVoterCount();
     abstract void update(Answer ans);
 
 }

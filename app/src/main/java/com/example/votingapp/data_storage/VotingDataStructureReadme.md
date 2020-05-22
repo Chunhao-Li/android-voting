@@ -45,7 +45,7 @@ Method:
 * 1 choices: several choices for current question by **ArrayList**, using **getChoices** to get.
 * 2 questionString: title of question by **String**, using **getQuestionString** to get.
 * 3 questionType: type of question by **QuestionType**, using **getQuestionType**  to get.
-* 4 choiceVoterCount: each choice has choiceVoterCount[i] voters vote, by **Array**, using **getChoiceVoterCount** to get.
+* 4 choiceVoterCount: each choice has choiceVoterCount.get(i) voters vote, using **getChoiceVoterCount** to get.
 * 5 totalVoterCount: Number of voters answer this question, by **Interger**, using **getTotalVoterCount** to get.
 <br><br>
 Method:
@@ -70,7 +70,7 @@ which is the final object that voters send.
 
 ## MultipleChoiceAnswer ##
 which is one of extension of abstract answer class.
-* 1 answerChoice: **String**, the destription of chosen choice, using **getAnswerString** to get.
+* 1 answerChoice: **String**, the description of chosen choice, using **getAnswerString** to get.
 * 2 same that has questionString, questionType,respondentUid inside.
 
 ## TextAnswer ##

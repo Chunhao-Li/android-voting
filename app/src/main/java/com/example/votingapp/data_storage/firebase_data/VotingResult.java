@@ -3,17 +3,30 @@ package com.example.votingapp.data_storage.firebase_data;
 import com.example.votingapp.data_storage.QuestionType;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
-public class VotingResults extends Voting {
+public class VotingResult extends Voting {
 //    for creator only main structure
     private ArrayList<QuestionStatistics> questionStatistics;
+
+    public void setVotingResultId(String votingResultId) {
+        this.votingResultId = votingResultId;
+    }
+
+    public String getVotingResultId() {
+        return votingResultId;
+    }
+
+    private String votingResultId;
 //      the result of each question has been stored in questionStatistics class.
-    VotingResults(String creatorUid, Date deadline, ArrayList<QuestionStatistics> questions) {
+    public VotingResult(String creatorUid, String deadline, ArrayList<QuestionStatistics> questions, String title) {
         super.VotingUid = Integer.toString(questions.hashCode());
         super.creatorUid = creatorUid;
         super.deadline = deadline;
+        super.votingTitle = title;
         this.questionStatistics =questions;
+
     }
 
     public void addAnswers(UserAnswers answers){
@@ -42,7 +55,7 @@ public class VotingResults extends Voting {
     }
 
     @Override
-    public Date getDeadline() {
+    public String getDeadline() {
         return this.deadline;
     }
 }
