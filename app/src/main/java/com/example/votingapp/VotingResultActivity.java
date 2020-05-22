@@ -46,7 +46,5 @@ public class VotingResultActivity extends AppCompatActivity {
         votingTitle.setText(title);
         votingIdText.setText(votingId);
 
-
-
     }
 }

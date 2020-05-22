@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
     private RecyclerView mRecyclerView;
     private VotingAdapter mVotingAdapter;
 
@@ -60,13 +61,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_VOTING_EDIT = 2983;
     private static final String TAG = "MainActivity";
     public static final String GET_VOTING_TITLE = "com.example.votingapp.GET_VOTING_TITLE";
+    public static final String GET_VOTING_ID = "com.example.votingapp.GET_VOTING_ID";
 
     private MenuItem mSignIn;
     private MenuItem mSignOut;
 
-//    private ArrayList<String> votingTitles = new ArrayList<>();
-//    private ArrayList<String> createdVotingIds = new ArrayList<>();
-//    private HashMap<String, String> votings = new HashMap<>();
+
     private ArrayList<String> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
     private VotingResult newVoting;
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
         // Initialize fields
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -155,6 +156,26 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         auth.addAuthStateListener(mAuthStateListener);
+
+    }
+
+    private void obtainAllVotingId() {
+        mDatabaseVotingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot childVotingId : dataSnapshot.getChildren()) {
+                    String votingId = childVotingId.getKey().toString();
+                    Log.d("obtainAllVotingId", votingId);
+                    allVotingId.add(votingId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
 
     }
 
@@ -192,36 +213,31 @@ public class MainActivity extends AppCompatActivity {
                                         .child("votingTitle").getValue().toString();
                                 String curVotingInfo = votingRId + "," + votingTitle;
                                 votingInfo.add(curVotingInfo);
-                                Log.d("obtainCreate Here", Integer.toString(votingInfo.size()));
+                                allVotingId.add(votingRId);
                                 publishProgress();
                             }
                         }
                     }
 
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
-
-
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
           return null;
-
         }
     }
 
 
 
     private void updateUser() {
+        // update or add the user on the server
         String email = mUser.getEmail();
         String name = mUser.getDisplayName();
-
         User newUser = new User(name, email);
         curUserId = newUser.getUserId();
         Map<String, Object> userUpdate = new HashMap<>();
@@ -253,10 +269,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
                 mSignIn.setVisible(false);
                 mSignOut.setVisible(true);
-
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in cancelled...", Toast.LENGTH_SHORT).show();
-//                Log.d(SIGN_IN_TAG, "Sign in failed...");
             }
         }
     }
@@ -286,9 +300,6 @@ public class MainActivity extends AppCompatActivity {
             if (splitDeadline.length == 5) {
                 newVoting = new VotingResult(
                         curUserId, deadline, questionStatistics, votingTitle);
-//                votingResultList.add(newVotingResult);
-//                votingTitles.add(votingTitle);
-//                obtainCreatedVotingId(true);
                 saveVotingOnCloud();
 
             }
@@ -296,23 +307,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveVotingOnCloud() {
-//        createdVotingIds = obtainCreatedVotingId();
-        Log.d("saveVotingONcloud", Integer.toString(votingInfo.size()));
-
         DatabaseReference newVotingRef = mDatabaseVotingRef.push();
         String votingResultKey = newVotingRef.getKey(); // get unique id for the voting result
-//            createdVotingIds.add(votingResultKey);
         newVoting.setVotingResultId(votingResultKey);
 
+        // save general voting information
         Log.d("saveVotingoncloud:", curUserId);
         newVotingRef.child("votingTitle").setValue(newVoting.getVotingTitle());
-
         newVotingRef.child("creatorUid").setValue(newVoting.getCreatorUid());
         newVotingRef.child("deadline").setValue(newVoting.getDeadline());
 
         ArrayList<QuestionStatistics> questionStatistics = newVoting.getQuestionStatistics();
-
-        // save question statistic on the server
+        // save question on the server
         // TODO store multiple choice questions
         for (int i = 0; i < questionStatistics.size(); i++) {
             QuestionStatistics curQuestionStat = questionStatistics.get(i);
@@ -320,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
                 DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
+                curQuestionStatRef.child("questionType").setValue(QuestionType.TEXT_QUESTION);
 //                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnwsers();
 //                for (String ans : answers) {
 //                    curQuestionStatRef.child("answer").push().setValue(ans);
@@ -327,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // save voting result id for the user
+        // save voting id for the creator
         mDatabaseUserRef.child(curUserId).child("votings").
                push().setValue(votingResultKey);
         updateUI();
@@ -361,8 +368,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sign_out_item:
                 signOut();
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -371,7 +376,6 @@ public class MainActivity extends AppCompatActivity {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
-//                new AuthUI.IdpConfig.AnonymousBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build()
         );
 
@@ -385,17 +389,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("onStop","hey");
-//        auth.removeAuthStateListener(mAuthStateListener);
-    }
-
     public void launchVotingEdit(View view) {
         if (mUser == null) {
             // not signed in
-//            Toast.makeText(this, "Signed in to continue...", Toast.LENGTH_SHORT).show();
             popToSignIn();
         } else {
             // Build a dialog for title
@@ -409,16 +405,12 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-//                    m_Text = input.getText().toString();
                     String title = votingTitleInput.getText().toString();
-//                    Log.d("create_Title_here", title);
                     if (title.length() > 0) {
-//                        Toast.makeText(MainActivity.this, "create survey", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, VotingEditActivity.class);
                         intent.putExtra(GET_VOTING_TITLE, title);
                         dialog.dismiss();
                         startActivity(intent);
-//                        finish();
                     }
                 }
             });
@@ -435,21 +427,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void doVoting(View view) {
-//        String inputId = votingIdInput.getText().toString();
-//        if (inputId.length() > 0) {
-//            new DoVotingCheckingTask().execute(inputId);
-//        }
-
+        // check voting id first, if it is valid, launch DoVotingActivity
         final String inputId = votingIdInput.getText().toString();
         votingIdInput.getText().clear();
         if (inputId.length() == 0) {
-//            cancel(true);
             Toast.makeText(this, "Input is empty!", Toast.LENGTH_SHORT).show();
         } else if (!allVotingId.contains(inputId)) {
             Toast.makeText(this, "Invalid voting id!", Toast.LENGTH_SHORT).show();
         } else {
-
-
             mDatabaseVotingRef.child(inputId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -459,7 +444,6 @@ public class MainActivity extends AppCompatActivity {
                     final Calendar c = Calendar.getInstance();
                     long rightNow = c.getTimeInMillis();
                     Log.d("isClosed rightnow", Long.toString(rightNow));
-
                     c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
                     c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
                     c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
@@ -470,11 +454,12 @@ public class MainActivity extends AppCompatActivity {
                     boolean isClosed = (rightNow > deadlineTime);
                     if (isClosed) {
                         Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        launchDoVoting();
                     }
 
                     mDatabaseVotingRef.removeEventListener(this);
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -486,83 +471,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void obtainAllVotingId() {
-        mDatabaseVotingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot childVotingId : dataSnapshot.getChildren()) {
-                    String votingId = childVotingId.getKey().toString();
-                    allVotingId.add(votingId);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-
+    private void launchDoVoting() {
+        // do voting
+        String curId = votingIdInput.getText().toString();
+        Intent intent = new Intent(this, DoVotingActivity.class);
+        intent.putExtra(GET_VOTING_ID, curId);
+        startActivity(intent);
     }
 
 
-    private class DoVotingCheckingTask extends AsyncTask<String, Void, Void> {
-        boolean isClosed;
-        final long[] timeList = new long[2];
-        String inputId;
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            mDatabaseVotingRef.child(strings[0]).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String deadline = dataSnapshot.child("deadline").getValue().toString();
-                    String[] deadlineSplit = deadline.split("/");
-                    Log.d("currentDeadline, ", deadline);
-                    final Calendar c = Calendar.getInstance();
-                    long rightNow = c.getTimeInMillis();
-                    Log.d("isClosed rightnow", Long.toString(rightNow));
-                    timeList[0] = rightNow;
-
-//                    Log.d("isClosed Rightnow", Integer.toString(year)+"/" + Integer.toString(month)+"/"+
-//                            Integer.toString(day)+"/" + Integer.toString(hour)+"/" + Integer.toString(hour)+"/" +
-//                            Integer.toString(minute));
-
-                    c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
-                    c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
-                    c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
-                    c.set(Calendar.HOUR, Integer.parseInt(deadlineSplit[3]));
-                    c.set(Calendar.MINUTE, Integer.parseInt(deadlineSplit[4]));
-                    long deadlineTime = c.getTimeInMillis();
-                    timeList[1] = deadlineTime;
-                    Log.d("isClosed deadline", Long.toString(deadlineTime));
-
-                    isClosed = (rightNow > deadlineTime);
-                    Log.d("Compare", Boolean.toString(isClosed));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-//            isClosed = timeList[0]>timeList[1];
-            Log.d("isClosed", Boolean.toString(isClosed));
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            votingIdInput.getText().clear();
-            if (isClosed) {
-                Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 }
