@@ -327,11 +327,18 @@ public class MainActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.TEXT_QUESTION);
-//                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnwsers();
-//                for (String ans : answers) {
-//                    curQuestionStatRef.child("answer").push().setValue(ans);
-//                }
+                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnswers();
+                if (answers.size() != 0){
+                    for (String ans : answers) {
+                        curQuestionStatRef.child("answer").push().setValue(ans);
+                    }
+                }else{
+                    curQuestionStatRef.child("answer").push().setValue("EMPTY");
+                }
             }
+//            else if(curQuestionStat.getQuestionType() == QuestionType.MULTI_CHOICE){
+//                DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
+//            }
         }
 
         // save voting id for the creator

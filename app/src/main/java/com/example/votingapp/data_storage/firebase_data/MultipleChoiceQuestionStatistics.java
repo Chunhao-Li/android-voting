@@ -4,6 +4,7 @@ import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
 //    the name of each choice
@@ -11,14 +12,32 @@ public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
 //    # of voters vote for each choice, permute the same order as choices
     private ArrayList<Integer> choiceVoterCount;
 
-
-    public MultipleChoiceQuestionStatistics(String questionString, Integer totalNum, ArrayList<String> choices, ArrayList<Integer> choiceVoterCount){
+//    inherit previous status
+    public MultipleChoiceQuestionStatistics(String questionString, Integer totalNum, ArrayList<String> choices, ArrayList<Integer> choiceVoterCount) {
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
         super.totalVoterCount = totalNum;
         this.choices = choices;
+
         this.choiceVoterCount = choiceVoterCount;
     }
+// if it's the first time to create this question, init statistics to default.
+    public MultipleChoiceQuestionStatistics(String questionString, ArrayList<String> choices) {
+        super.questionString = questionString;
+        super.questionType = QuestionType.MULTI_CHOICE;
+        super.totalVoterCount = 0;
+        this.choices = choices;
+        int len = choices.size();
+        Integer[] cvc = new Integer[len];
+        Arrays.fill(cvc, 0);
+        this.choiceVoterCount = new ArrayList<>(Arrays.asList(cvc));
+    }
+
+
+
+    //        int len = choices.size();
+////        Integer[] cvc = new Integer[len];
+////        Arrays.fill(cvc, 0);
 //            this.choiceVoterCount = new Integer[choices.size()];
 
     @Override
