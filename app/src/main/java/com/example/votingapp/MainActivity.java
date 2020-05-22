@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private VotingAdapter mVotingAdapter;
 
     private EditText votingIdInput;
+    private String votingIdInputText;
 
     private static final int RC_SIGN_IN = 3425;
     private static final int RC_VOTING_EDIT = 2983;
@@ -436,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
     public void doVoting(View view) {
         // check voting id first, if it is valid, launch DoVotingActivity
         final String inputId = votingIdInput.getText().toString();
+        votingIdInputText = inputId;
         votingIdInput.getText().clear();
         if (inputId.length() == 0) {
             Toast.makeText(this, "Input is empty!", Toast.LENGTH_SHORT).show();
@@ -480,9 +482,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchDoVoting() {
         // do voting
-        String curId = votingIdInput.getText().toString();
+//        String curId = votingIdInput.getText().toString();
         Intent intent = new Intent(this, DoVotingActivity.class);
-        intent.putExtra(GET_VOTING_ID, curId);
+        Log.d("MainDoVotingTest", votingIdInputText);
+        intent.putExtra(GET_VOTING_ID, votingIdInputText);
         startActivity(intent);
     }
 

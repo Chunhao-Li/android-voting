@@ -15,6 +15,8 @@ public class TextQuestionActivity extends AppCompatActivity {
     private Button saveButton;
     private Button cancelButton;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +45,8 @@ public class TextQuestionActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
 
 
