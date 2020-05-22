@@ -214,36 +214,30 @@ public class MainActivity extends AppCompatActivity {
                                 String curVotingInfo = votingRId + "," + votingTitle;
                                 votingInfo.add(curVotingInfo);
                                 allVotingId.add(votingRId);
-                                Log.d("obtainCreate Here", Integer.toString(votingInfo.size()));
                                 publishProgress();
                             }
                         }
                     }
 
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
-
-
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
           return null;
-
         }
     }
 
 
 
     private void updateUser() {
+        // update or add the user on the server
         String email = mUser.getEmail();
         String name = mUser.getDisplayName();
-
         User newUser = new User(name, email);
         curUserId = newUser.getUserId();
         Map<String, Object> userUpdate = new HashMap<>();
@@ -275,10 +269,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
                 mSignIn.setVisible(false);
                 mSignOut.setVisible(true);
-
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in cancelled...", Toast.LENGTH_SHORT).show();
-//                Log.d(SIGN_IN_TAG, "Sign in failed...");
             }
         }
     }
@@ -308,9 +300,6 @@ public class MainActivity extends AppCompatActivity {
             if (splitDeadline.length == 5) {
                 newVoting = new VotingResult(
                         curUserId, deadline, questionStatistics, votingTitle);
-//                votingResultList.add(newVotingResult);
-//                votingTitles.add(votingTitle);
-//                obtainCreatedVotingId(true);
                 saveVotingOnCloud();
 
             }
@@ -318,23 +307,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveVotingOnCloud() {
-//        createdVotingIds = obtainCreatedVotingId();
-        Log.d("saveVotingONcloud", Integer.toString(votingInfo.size()));
-
         DatabaseReference newVotingRef = mDatabaseVotingRef.push();
         String votingResultKey = newVotingRef.getKey(); // get unique id for the voting result
-//            createdVotingIds.add(votingResultKey);
         newVoting.setVotingResultId(votingResultKey);
 
+        // save general voting information
         Log.d("saveVotingoncloud:", curUserId);
         newVotingRef.child("votingTitle").setValue(newVoting.getVotingTitle());
-
         newVotingRef.child("creatorUid").setValue(newVoting.getCreatorUid());
         newVotingRef.child("deadline").setValue(newVoting.getDeadline());
 
         ArrayList<QuestionStatistics> questionStatistics = newVoting.getQuestionStatistics();
-
-        // save question statistic on the server
+        // save question on the server
         // TODO store multiple choice questions
         for (int i = 0; i < questionStatistics.size(); i++) {
             QuestionStatistics curQuestionStat = questionStatistics.get(i);
@@ -350,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // save voting result id for the user
+        // save voting id for the creator
         mDatabaseUserRef.child(curUserId).child("votings").
                push().setValue(votingResultKey);
         updateUI();
@@ -384,8 +368,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sign_out_item:
                 signOut();
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -394,7 +376,6 @@ public class MainActivity extends AppCompatActivity {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
-//                new AuthUI.IdpConfig.AnonymousBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build()
         );
 
@@ -408,17 +389,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("onStop","hey");
-//        auth.removeAuthStateListener(mAuthStateListener);
-    }
-
     public void launchVotingEdit(View view) {
         if (mUser == null) {
             // not signed in
-//            Toast.makeText(this, "Signed in to continue...", Toast.LENGTH_SHORT).show();
             popToSignIn();
         } else {
             // Build a dialog for title
@@ -432,16 +405,12 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-//                    m_Text = input.getText().toString();
                     String title = votingTitleInput.getText().toString();
-//                    Log.d("create_Title_here", title);
                     if (title.length() > 0) {
-//                        Toast.makeText(MainActivity.this, "create survey", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, VotingEditActivity.class);
                         intent.putExtra(GET_VOTING_TITLE, title);
                         dialog.dismiss();
                         startActivity(intent);
-//                        finish();
                     }
                 }
             });
@@ -458,21 +427,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void doVoting(View view) {
-//        String inputId = votingIdInput.getText().toString();
-//        if (inputId.length() > 0) {
-//            new DoVotingCheckingTask().execute(inputId);
-//        }
-
+        // check voting id first, if it is valid, launch DoVotingActivity
         final String inputId = votingIdInput.getText().toString();
         votingIdInput.getText().clear();
         if (inputId.length() == 0) {
-//            cancel(true);
             Toast.makeText(this, "Input is empty!", Toast.LENGTH_SHORT).show();
         } else if (!allVotingId.contains(inputId)) {
             Toast.makeText(this, "Invalid voting id!", Toast.LENGTH_SHORT).show();
         } else {
-
-
             mDatabaseVotingRef.child(inputId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -482,7 +444,6 @@ public class MainActivity extends AppCompatActivity {
                     final Calendar c = Calendar.getInstance();
                     long rightNow = c.getTimeInMillis();
                     Log.d("isClosed rightnow", Long.toString(rightNow));
-
                     c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
                     c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
                     c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
@@ -499,7 +460,6 @@ public class MainActivity extends AppCompatActivity {
 
                     mDatabaseVotingRef.removeEventListener(this);
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -512,6 +472,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchDoVoting() {
+        // do voting
         String curId = votingIdInput.getText().toString();
         Intent intent = new Intent(this, DoVotingActivity.class);
         intent.putExtra(GET_VOTING_ID, curId);

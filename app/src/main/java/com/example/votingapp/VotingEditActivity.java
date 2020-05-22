@@ -141,7 +141,7 @@ public class VotingEditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // pop to choice question edit
                 initializeFAB();
-                Intent intent = new Intent(VotingEditActivity.this, TextQuestionActivity.class);
+                Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestion.class);
                 startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
             }
         });

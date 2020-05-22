@@ -45,14 +45,5 @@ public class TextQuestionActivity extends AppCompatActivity {
         });
     }
 
-    public void saveTextQuestion(View view) {
 
-
-    }
-
-    public void cancelTextQuestion(View view) {
-
-        setResult(RESULT_CANCELED);
-        finish();
-    }
 }

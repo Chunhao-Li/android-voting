@@ -11,10 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.votingapp.data_storage.firebase_data.VotingResult;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHolder> {
     private Context mContext;
