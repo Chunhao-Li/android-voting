@@ -7,33 +7,45 @@
     tools:context=".MultiChoiceQuestion"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText_question"
+    <TextView
+        android:id="@+id/Activity_multi_choice_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+
+        android:layout_marginTop="50dp"
+        android:text="Your Question"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
-
-    <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/editText_question_"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:hint="Add question and edit here"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText3_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Add question and edit here"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText4_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Add question and edit here"
+        android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/save_button_multichoice"
+        android:id="@+id/save_button_multichoice_"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Button" />
+
 </LinearLayout>
