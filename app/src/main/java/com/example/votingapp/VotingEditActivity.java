@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,11 +34,14 @@ public class VotingEditActivity extends AppCompatActivity {
     private final int RC_TEXT_QUESTION = 243;
     private final int RC_MULTICHOICE_QUESTION = 245;
     public static final String VOTING_INFO_KEY = "com.example.votingapp.VOTING_INFO";
+    public static final String DEADLINE_KEY = "com.example.votingapp.DEADLINE";
+    public static final String GET_VOTING_TITLE = "com.example.votingapp.VOTING_TITLE";
     private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private QuestionAdapter mAdapter;
     private boolean isOriginStatus = true;   // are fabs in their origin status
     private String deadline;
+    private String votingTitle;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -48,14 +52,13 @@ public class VotingEditActivity extends AppCompatActivity {
     }
 
     private void saveVoting() {
-        showDeadlinePicker();
-//        Intent toMainIntent = new Intent();
-//        toMainIntent.putParcelableArrayListExtra(VOTING_INFO_KEY, questionItems);
-//        setResult(RESULT_OK, toMainIntent);
-//        finish();
+        Toast.makeText(this,  "Choose a deadline",
+                Toast.LENGTH_SHORT).show();
+        pickDeadline();
+
     }
 
-    private void showDeadlinePicker() {
+    private void pickDeadline() {
        pickDate();
     }
 
@@ -67,6 +70,7 @@ public class VotingEditActivity extends AppCompatActivity {
     private void pickTime() {
         DialogFragment dialogFragment = new TimePickerFragment();
         dialogFragment.show(getSupportFragmentManager(), "timePicker");
+
     }
 
 
@@ -86,6 +90,10 @@ public class VotingEditActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new QuestionAdapter(this, questionItems);
         mRecyclerView.setAdapter(mAdapter);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.containsKey(MainActivity.GET_VOTING_TITLE)) {
+            votingTitle = bundle.getString(MainActivity.GET_VOTING_TITLE);
+        }
 
 
         // enable item to swipe(delete) or move(change order)
@@ -195,7 +203,7 @@ public class VotingEditActivity extends AppCompatActivity {
         String month_str = Integer.toString(month+1);
         String day_str = Integer.toString(dayOfMonth);
         String year_str  = Integer.toString(year);
-        deadline = (day_str+"/" + month_str + "/" + year_str);
+        deadline = (year_str+"/" + month_str + "/" + day_str);
         pickTime();
 //        Toast.makeText(this,  dateMessage,
 //                Toast.LENGTH_SHORT).show();
@@ -205,8 +213,19 @@ public class VotingEditActivity extends AppCompatActivity {
         String hour_str = Integer.toString(hour);
         String minute_str = Integer.toString(minute);
         deadline = deadline + "/" + hour_str + "/" + minute_str;
-        Toast.makeText(this,  deadline,
-                Toast.LENGTH_SHORT).show();
+        if (questionItems.size() < 1) {
+            Toast.makeText(this, "Voting is empty", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Created a new voting!", Toast.LENGTH_SHORT).show();
+        }
+        // Back to MainActivity
+        Intent toMainIntent = new Intent(this, MainActivity.class);
+        toMainIntent.putParcelableArrayListExtra(VOTING_INFO_KEY, questionItems);
+        toMainIntent.putExtra(DEADLINE_KEY, deadline);
+        toMainIntent.putExtra(GET_VOTING_TITLE, votingTitle);
+        startActivity(toMainIntent);
+//        setResult(RESULT_OK, toMainIntent);
+//        finish();
 
     }
 }

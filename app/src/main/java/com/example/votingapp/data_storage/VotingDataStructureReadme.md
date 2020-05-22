@@ -45,7 +45,7 @@ Method:
 * 1 choices: several choices for current question by **ArrayList**, using **getChoices** to get.
 * 2 questionString: title of question by **String**, using **getQuestionString** to get.
 * 3 questionType: type of question by **QuestionType**, using **getQuestionType**  to get.
-* 4 choiceVoterCount: each choice has choiceVoterCount[i] voters vote, by **Array**, using **getChoiceVoterCount** to get.
+* 4 choiceVoterCount: each choice has choiceVoterCount.get(i) voters vote, using **getChoiceVoterCount** to get.
 * 5 totalVoterCount: Number of voters answer this question, by **Interger**, using **getTotalVoterCount** to get.
 <br><br>
 Method:

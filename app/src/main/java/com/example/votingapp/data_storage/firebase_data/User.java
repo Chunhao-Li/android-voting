@@ -1,5 +1,7 @@
 package com.example.votingapp.data_storage.firebase_data;
 
+import java.util.ArrayList;
+
 public class User {
 
     private String username;
@@ -10,6 +12,8 @@ public class User {
     }
 
     private String userId;
+
+    private ArrayList<String> votingResultId = new ArrayList<>();
 
 
     public User() {

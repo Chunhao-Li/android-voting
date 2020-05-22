@@ -74,6 +74,14 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textSize="20sp" />
 
+                    <EditText
+                        android:id="@+id/editText_do_voting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:hint="@string/hint_do_voting" />
+
                     <Button
                         android:id="@+id/do_voting_button"
                         style="@style/MainActivityButton"

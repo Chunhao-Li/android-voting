@@ -30,7 +30,11 @@ public class DatePickerFragment extends DialogFragment
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         VotingEditActivity activity = (VotingEditActivity) getActivity();
-        activity.processDatePicker(year, month, dayOfMonth);
+        dismiss();
+        if (activity != null) {
+            activity.processDatePicker(year, month, dayOfMonth);
+        }
+
     }
 
 

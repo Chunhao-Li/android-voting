@@ -19,6 +19,7 @@ public class TimePickerFragment extends DialogFragment
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         VotingEditActivity activity = (VotingEditActivity) getActivity();
         if (activity != null) {
+            dismiss();
             activity.processTimePicker(hourOfDay, minute);
         }
     }

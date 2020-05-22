@@ -42,12 +42,19 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
     }
 
 
-    class VotingHolder extends RecyclerView.ViewHolder {
+    class VotingHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView votingTitle;
 
         public VotingHolder(@NonNull View itemView) {
             super(itemView);
             votingTitle = itemView.findViewById(R.id.voting_title);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
 }

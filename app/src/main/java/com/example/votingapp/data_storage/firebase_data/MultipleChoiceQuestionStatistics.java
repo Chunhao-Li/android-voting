@@ -9,10 +9,10 @@ public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
 //    the name of each choice
     private ArrayList<String> choices;
 //    # of voters vote for each choice, permute the same order as choices
-    private Integer[] choiceVoterCount;
+    private ArrayList<Integer> choiceVoterCount;
 
 
-    MultipleChoiceQuestionStatistics(String questionString, Integer totalNum, ArrayList<String> choices, Integer[] choiceVoterCount){
+    public MultipleChoiceQuestionStatistics(String questionString, Integer totalNum, ArrayList<String> choices, ArrayList<Integer> choiceVoterCount){
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
         super.totalVoterCount = totalNum;
@@ -30,7 +30,8 @@ public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
     void update(Answer ans) {
         for(int i=0;i<this.choices.size();i++){
             if(this.choices.get(i).equals(ans.getAnswerString())){
-                this.choiceVoterCount[i]+=1;
+                this.choiceVoterCount.set(choiceVoterCount.get(i)+1, i);
+
             }
         }
     }
@@ -50,7 +51,7 @@ public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
         return this.choices;
     }
 
-    public Integer[] getChoiceVoterCount(){
+    public ArrayList<Integer> getChoiceVoterCount(){
         return this.choiceVoterCount;
     }
 
