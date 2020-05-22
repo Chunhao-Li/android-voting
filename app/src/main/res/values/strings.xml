@@ -20,4 +20,5 @@
     <string name="save_menu_item">Save</string>
     <string name="default_voting_title">New Voting</string>
     <string name="hint_do_voting">Input a Voting Id</string>
+    <string name="voting_id_title_text">Voting id:</string>
 </resources>

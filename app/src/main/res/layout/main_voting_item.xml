@@ -18,6 +18,7 @@
             android:layout_gravity="center"
             android:textSize="20sp" />
 
+
         <Button
             android:id="@+id/voting_view_button"
             style="@style/MainActivityButton"

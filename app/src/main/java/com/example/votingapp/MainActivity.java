@@ -64,8 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem mSignIn;
     private MenuItem mSignOut;
 
-    private ArrayList<String> votingTitles = new ArrayList<>();
-    private ArrayList<String> createdVotingIds = new ArrayList<>();
+//    private ArrayList<String> votingTitles = new ArrayList<>();
+//    private ArrayList<String> createdVotingIds = new ArrayList<>();
+//    private HashMap<String, String> votings = new HashMap<>();
+    private ArrayList<String> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
     private VotingResult newVoting;
 
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialise fields
         mRecyclerView = findViewById(R.id.main_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mVotingAdapter = new VotingAdapter(this, votingTitles);
+        mVotingAdapter = new VotingAdapter(this, votingInfo);
         mRecyclerView.setAdapter(mVotingAdapter);
 
         votingIdInput = findViewById(R.id.editText_do_voting);
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     needUpdate = true;
                 }
-                Log.d("onAuthStateChanged:", Integer.toString(votingTitles.size()));
+                Log.d("onAuthStateChanged:", Integer.toString(votingInfo.size()));
             }
         };
         auth.addAuthStateListener(mAuthStateListener);
@@ -164,21 +166,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            Log.d("onProgressUpdate", Integer.toString(votingTitles.size()));
+            Log.d("onProgressUpdate", Integer.toString(votingInfo.size()));
             mVotingAdapter.notifyDataSetChanged();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             // when signing out
-            Log.d("onPostExecute", Integer.toString(votingTitles.size()));
+            Log.d("onPostExecute", Integer.toString(votingInfo.size()));
             mVotingAdapter.notifyDataSetChanged();
         }
 
         @Override
         protected void onPreExecute() {
-            createdVotingIds.clear();
-            votingTitles.clear();
+            votingInfo.clear();
             mDatabase.getReference().addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -187,16 +188,14 @@ public class MainActivity extends AppCompatActivity {
                             for (DataSnapshot childVotingId :
                                     dataSnapshot.child("users").child(curUserId).child("votings").getChildren()) {
                                 String votingRId = childVotingId.getValue().toString();
-                                createdVotingIds.add(votingRId);
                                 String votingTitle = dataSnapshot.child("votings").child(votingRId)
                                         .child("votingTitle").getValue().toString();
-                                votingTitles.add(votingTitle);
-                                Log.d("obtainCreate Here", Integer.toString(createdVotingIds.size()));
+                                String curVotingInfo = votingRId + "," + votingTitle;
+                                votingInfo.add(curVotingInfo);
+                                Log.d("obtainCreate Here", Integer.toString(votingInfo.size()));
                                 publishProgress();
                             }
                         }
-                    } else {
-                        publishProgress();
                     }
 
                 }
@@ -298,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveVotingOnCloud() {
 //        createdVotingIds = obtainCreatedVotingId();
-        Log.d("saveVotingONcloud", Integer.toString(createdVotingIds.size()));
+        Log.d("saveVotingONcloud", Integer.toString(votingInfo.size()));
 
         DatabaseReference newVotingRef = mDatabaseVotingRef.push();
         String votingResultKey = newVotingRef.getKey(); // get unique id for the voting result
