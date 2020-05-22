@@ -8,12 +8,12 @@ public class EditTextQuestion extends EditQuestion  {
     public EditTextQuestion(String question){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
-    }
+    }// constructor for text q
 
     protected EditTextQuestion(Parcel in) {
         questionType = QuestionType.valueOf(in.readString());
         questionString = in.readString();
-    }
+    }// parcel interface
 
     public static final Creator<EditTextQuestion> CREATOR = new Creator<EditTextQuestion>() {
         @Override

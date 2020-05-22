@@ -14,6 +14,7 @@ import com.example.votingapp.R;
 
 
 import java.util.ArrayList;
+import java.util.function.ToDoubleBiFunction;
 
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -35,12 +36,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {// convert abstract question to view holder
             if (viewType == TEXT_TYPE) {
                 View view = inflater.inflate(R.layout.voting_text_question_item, parent, false);
                 return new TextQuestionViewHolder(view);
             } else  {
 //                View view = inflater
+                //TODO
+
                 return null;
             }
     }
