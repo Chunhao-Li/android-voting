@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             String deadline = votingEditIntent.getStringExtra(VotingEditActivity.DEADLINE_KEY);
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
             if (newVoting != null && deadline != null && newVoting.size() > 0) {
+                Log.d("getFromEdit","hehehe");
                 saveVoting(newVoting, deadline, votingTitle);
                 needUpdate = false;
             }
@@ -326,7 +327,6 @@ public class MainActivity extends AppCompatActivity {
 //                }
             }
         }
-//        newVotingRef.child("deadline").
 
         // save voting result id for the user
         mDatabaseUserRef.child(curUserId).child("votings").
@@ -417,7 +417,6 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(MainActivity.this, "create survey", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, VotingEditActivity.class);
                         intent.putExtra(GET_VOTING_TITLE, title);
-                        MainActivity.this.finish();
                         dialog.dismiss();
                         startActivity(intent);
 //                        finish();
