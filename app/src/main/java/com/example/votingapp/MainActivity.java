@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
     private RecyclerView mRecyclerView;
     private VotingAdapter mVotingAdapter;
 
@@ -60,13 +61,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_VOTING_EDIT = 2983;
     private static final String TAG = "MainActivity";
     public static final String GET_VOTING_TITLE = "com.example.votingapp.GET_VOTING_TITLE";
+    public static final String GET_VOTING_ID = "com.example.votingapp.GET_VOTING_ID";
 
     private MenuItem mSignIn;
     private MenuItem mSignOut;
 
-//    private ArrayList<String> votingTitles = new ArrayList<>();
-//    private ArrayList<String> createdVotingIds = new ArrayList<>();
-//    private HashMap<String, String> votings = new HashMap<>();
+
     private ArrayList<String> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
     private VotingResult newVoting;
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
         // Initialize fields
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -155,6 +156,26 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         auth.addAuthStateListener(mAuthStateListener);
+
+    }
+
+    private void obtainAllVotingId() {
+        mDatabaseVotingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot childVotingId : dataSnapshot.getChildren()) {
+                    String votingId = childVotingId.getKey().toString();
+                    Log.d("obtainAllVotingId", votingId);
+                    allVotingId.add(votingId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
 
     }
 
@@ -192,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                                         .child("votingTitle").getValue().toString();
                                 String curVotingInfo = votingRId + "," + votingTitle;
                                 votingInfo.add(curVotingInfo);
+                                allVotingId.add(votingRId);
                                 Log.d("obtainCreate Here", Integer.toString(votingInfo.size()));
                                 publishProgress();
                             }
@@ -320,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
                 DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
+                curQuestionStatRef.child("questionType").setValue(QuestionType.TEXT_QUESTION);
 //                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnwsers();
 //                for (String ans : answers) {
 //                    curQuestionStatRef.child("answer").push().setValue(ans);
@@ -470,6 +493,8 @@ public class MainActivity extends AppCompatActivity {
                     boolean isClosed = (rightNow > deadlineTime);
                     if (isClosed) {
                         Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        launchDoVoting();
                     }
 
                     mDatabaseVotingRef.removeEventListener(this);
@@ -486,83 +511,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void obtainAllVotingId() {
-        mDatabaseVotingRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot childVotingId : dataSnapshot.getChildren()) {
-                    String votingId = childVotingId.getKey().toString();
-                    allVotingId.add(votingId);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-
+    private void launchDoVoting() {
+        String curId = votingIdInput.getText().toString();
+        Intent intent = new Intent(this, DoVotingActivity.class);
+        intent.putExtra(GET_VOTING_ID, curId);
+        startActivity(intent);
     }
 
 
-    private class DoVotingCheckingTask extends AsyncTask<String, Void, Void> {
-        boolean isClosed;
-        final long[] timeList = new long[2];
-        String inputId;
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            mDatabaseVotingRef.child(strings[0]).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String deadline = dataSnapshot.child("deadline").getValue().toString();
-                    String[] deadlineSplit = deadline.split("/");
-                    Log.d("currentDeadline, ", deadline);
-                    final Calendar c = Calendar.getInstance();
-                    long rightNow = c.getTimeInMillis();
-                    Log.d("isClosed rightnow", Long.toString(rightNow));
-                    timeList[0] = rightNow;
-
-//                    Log.d("isClosed Rightnow", Integer.toString(year)+"/" + Integer.toString(month)+"/"+
-//                            Integer.toString(day)+"/" + Integer.toString(hour)+"/" + Integer.toString(hour)+"/" +
-//                            Integer.toString(minute));
-
-                    c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
-                    c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
-                    c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
-                    c.set(Calendar.HOUR, Integer.parseInt(deadlineSplit[3]));
-                    c.set(Calendar.MINUTE, Integer.parseInt(deadlineSplit[4]));
-                    long deadlineTime = c.getTimeInMillis();
-                    timeList[1] = deadlineTime;
-                    Log.d("isClosed deadline", Long.toString(deadlineTime));
-
-                    isClosed = (rightNow > deadlineTime);
-                    Log.d("Compare", Boolean.toString(isClosed));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-//            isClosed = timeList[0]>timeList[1];
-            Log.d("isClosed", Boolean.toString(isClosed));
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            votingIdInput.getText().clear();
-            if (isClosed) {
-                Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 }
