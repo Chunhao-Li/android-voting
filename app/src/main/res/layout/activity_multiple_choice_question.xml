@@ -58,13 +58,23 @@
         app:layout_constraintTop_toBottomOf="@+id/editText_question" />
 
     <EditText
-        android:id="@+id/editText_choice1"
+        android:id="@+id/editText_choice0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="Add choice and edit here"
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/guideline3" />
+
+    <EditText
+        android:id="@+id/editText_choice1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Add choice and edit here"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@id/editText_choice0"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
 
     <EditText
@@ -125,16 +135,6 @@
         android:hint="Add choice and edit here"
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@id/editText_choice6"
-        app:layout_constraintStart_toStartOf="@+id/guideline3" />
-
-    <EditText
-        android:id="@+id/editText_choice8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Add choice and edit here"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toBottomOf="@id/editText_choice7"
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
 
     <Button
