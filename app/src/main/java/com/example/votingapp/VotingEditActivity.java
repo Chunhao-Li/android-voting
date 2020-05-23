@@ -22,6 +22,7 @@ import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.example.votingapp.voting_edit.TimePickerFragment;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -85,6 +86,7 @@ public class VotingEditActivity extends AppCompatActivity {
 
 
     public void initial(){
+        ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
         findViewById(R.id.fab_c).setVisibility(View.INVISIBLE);
         findViewById(R.id.fab_t).setVisibility(View.INVISIBLE);
 //        findViewById(R.id.fab_a).animate().rotation(45);
