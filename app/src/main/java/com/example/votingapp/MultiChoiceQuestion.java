@@ -54,10 +54,17 @@ public class MultiChoiceQuestion extends AppCompatActivity {
                 tempChoiceID=findViewById(R.id.editText_choice7);
                 choices.add(tempChoiceID.getText().toString());
 
+                ArrayList<String> removeEmptyChoices = new ArrayList<>();
+                for (String choice: choices) {
+                    if (!choice.isEmpty()) {
+                        removeEmptyChoices.add(choice);
+                    }
+                }
+
 
                 Intent replyIntent = new Intent();
                 replyIntent.putExtra("key", textQuestion);
-                replyIntent.putStringArrayListExtra("key_choices", choices);
+                replyIntent.putStringArrayListExtra("key_choices", removeEmptyChoices);
                 //  passing to voting edit
 
                 setResult(RESULT_OK, replyIntent);
