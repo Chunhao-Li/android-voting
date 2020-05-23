@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.voting_edit.EditTextQuestion;
@@ -68,6 +69,7 @@ public class VotingEditActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
 
+
         // enable item to swipe(delete) or move(change order)
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT |
                 ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN,
@@ -92,6 +94,7 @@ public class VotingEditActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(mRecyclerView);
+
 
         mAddButton = findViewById(R.id.fab_add);
         mChoiceButton = findViewById(R.id.fab_choice);
@@ -126,8 +129,9 @@ public class VotingEditActivity extends AppCompatActivity {
                 startActivityForResult(intent, RC_TEXT_QUESTION);
             }
         });
-    }
 
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -170,4 +174,5 @@ public class VotingEditActivity extends AppCompatActivity {
         mTextButton.setVisibility(View.VISIBLE);
         isOriginStatus = false;
     }
+
 }
