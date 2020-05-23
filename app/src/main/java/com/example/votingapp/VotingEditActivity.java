@@ -22,6 +22,7 @@ import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.example.votingapp.voting_edit.TimePickerFragment;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class VotingEditActivity extends AppCompatActivity {
     public void initial(){
         findViewById(R.id.fab_c).setVisibility(View.INVISIBLE);
         findViewById(R.id.fab_t).setVisibility(View.INVISIBLE);
+        ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
 //        findViewById(R.id.fab_a).animate().rotation(45);
     }
 
@@ -136,57 +138,20 @@ public class VotingEditActivity extends AppCompatActivity {
         findViewById(R.id.fab_c).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initial();
+                ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
                 Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestion.class);
-                startActivity(intent);
+                startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
             }
         });
 
         findViewById(R.id.fab_t).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initial();
+                ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
                 Intent intent = new Intent(VotingEditActivity.this, TextQuestionActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, RC_TEXT_QUESTION);
             }
         });
-
-
-
-
-//        mAddButton = findViewById(R.id.fab_add);
-//        mChoiceButton = findViewById(R.id.fab_choice);
-//        mTextButton = findViewById(R.id.fab_text);
-//
-//        mAddButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isOriginStatus) {
-//                    updateFAB();
-//                } else {
-//                    initializeFAB();
-//                }
-//            }
-//        });
-//        mChoiceButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // pop to choice question edit
-//                initializeFAB();
-//                Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestion.class);
-//                startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
-//            }
-//        });
-//        mTextButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // pop to the text question edit page.
-//                initializeFAB();
-//                Intent intent = new Intent(VotingEditActivity.this, TextQuestionActivity.class);
-//                startActivityForResult(intent, RC_TEXT_QUESTION);
-//            }
-//        });
-
 
     }
 
