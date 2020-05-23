@@ -171,7 +171,8 @@ public class DoVotingActivity extends AppCompatActivity {
 //    extract answer from recycler view
     public ArrayList<Answer> extractAnswer(){
         ArrayList<Answer> answers = new ArrayList<>();
-        int num = mRecyclerView.getAdapter().getItemCount();
+        int num = mRecyclerView.getChildCount();
+        Toast.makeText(getApplicationContext(), num, Toast.LENGTH_SHORT).show();
         for(int i=0;i<num;i++){
             View currentAnswerView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
             RecyclerViewQuestionItem currentQuestion =  questionItems.get(i);
