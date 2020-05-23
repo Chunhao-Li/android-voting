@@ -7,21 +7,21 @@ import java.util.ArrayList;
 public class UserAnswers {
 //    Voting UID
     private String votingUid;
-//    respondent UID
-    private String respondentUid;
+////    respondent UID
+//    private String respondentUid;
 
 //    main data structure of answers
     private ArrayList<Answer> answers;
 
-    UserAnswers(String votingUid, String respondentUid, ArrayList<Answer> answers){
+    public UserAnswers(String votingUid, ArrayList<Answer> answers){
         this.votingUid = votingUid;
-        this.respondentUid = respondentUid;
+//        this.respondentUid = respondentUid;
         this.answers = answers;
     }
 
-    public String getRespondentUid(){
-        return this.respondentUid;
-    };
+//    public String getRespondentUid(){
+//        return this.respondentUid;
+//    };
     public String getVotingUid(){
         return this.votingUid;
     }

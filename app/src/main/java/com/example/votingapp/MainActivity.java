@@ -39,6 +39,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase mDatabase;
     DatabaseReference mDatabaseUserRef;
     DatabaseReference mDatabaseVotingRef;
+    DatabaseReference mDatabaseAnswerRef;
+
     //    DatabaseReference mDatabaseVotingRef;
     FirebaseAuth auth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -486,8 +489,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DoVotingActivity.class);
         Log.d("MainDoVotingTest", votingIdInputText);
         intent.putExtra(GET_VOTING_ID, votingIdInputText);
+        intent.putExtra("GET_VOTER_ID",curUserId);
         startActivity(intent);
     }
+
 
 
 }

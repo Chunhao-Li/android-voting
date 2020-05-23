@@ -2,14 +2,14 @@ package com.example.votingapp.data_storage.firebase_data;
 
 import com.example.votingapp.data_storage.QuestionType;
 
-abstract class Answer {
+public abstract class Answer {
     //    respondent UID
-    protected String respondentUid;
+//    protected String respondentUid;
     protected  String questionString;
     protected QuestionType questionType;
 
-    protected  abstract String getRespondentUid();
-    protected abstract String getQuestionString();
-    protected abstract QuestionType getQuestionType();
-    protected abstract String getAnswerString();
+//    public abstract String getRespondentUid();
+    public abstract String getQuestionString();
+    public abstract QuestionType getQuestionType();
+    public abstract String getAnswerString();
 }

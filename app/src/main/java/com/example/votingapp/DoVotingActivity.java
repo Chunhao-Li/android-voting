@@ -10,9 +10,17 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.data_storage.firebase_data.Answer;
+import com.example.votingapp.data_storage.firebase_data.MultipleChoiceAnswer;
+import com.example.votingapp.data_storage.firebase_data.TextAnswer;
+import com.example.votingapp.data_storage.firebase_data.UserAnswers;
 import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
@@ -36,6 +44,7 @@ public class DoVotingActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mDatabaseVotingRef;
+    private DatabaseReference mDatabaseAnswerRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,7 @@ public class DoVotingActivity extends AppCompatActivity {
         // Initialize firebase fields
         mDatabase = FirebaseDatabase.getInstance();
         mDatabaseVotingRef = mDatabase.getReference("votings");
+        mDatabaseAnswerRef = mDatabase.getReference("answers");
 
         Log.d(TAG, Integer.toString(index)); // 1
         index += 1;
@@ -76,6 +86,7 @@ public class DoVotingActivity extends AppCompatActivity {
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        mAdapter = new QuestionAdapter(this, questionItems);
 //        mRecyclerView.setAdapter(mAdapter);
+        submitAnswers();
     }
 
     private void downloadQuestionItems() {
@@ -144,5 +155,76 @@ public class DoVotingActivity extends AppCompatActivity {
             return null;
         }
 
+    }
+
+//    extract answer from recycler view
+    public ArrayList<Answer> extractAnswer(){
+        ArrayList<Answer> answers = new ArrayList<>();
+        int num = mRecyclerView.getAdapter().getItemCount();
+        for(int i=0;i<num;i++){
+            View currentAnswerView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
+            RecyclerViewQuestionItem currentQuestion =  questionItems.get(i);
+            String childViewName = currentAnswerView.getClass().getSimpleName();
+            if(childViewName.equals("EditText")){
+//                currentAnswerView = (EditText) currentAnswerView;
+                String currentAnswerText = ((EditText) currentAnswerView).getText().toString();
+                TextAnswer curAns = new TextAnswer(currentQuestion.getData().questionString,currentAnswerText);
+                answers.add(curAns);
+            }
+        }
+        return answers;
+    }
+
+//  if hit submit button
+    public void submitAnswers(){
+        Button buttonSubmit = findViewById(R.id.button_submit);
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
+                ArrayList<Answer> answers = extractAnswer();
+                for( Answer item: answers){
+                    if(item.getQuestionType().equals(QuestionType.TEXT_QUESTION)){
+                        String ansText = item.getAnswerString();
+                        TextAnswer tmp = new TextAnswer(item.getQuestionString(),ansText);
+                        answers.add(tmp);
+                    }else if(item.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
+                        String ansChoice = item.getAnswerString();
+                        MultipleChoiceAnswer tmp = new MultipleChoiceAnswer(item.getQuestionString(),item.getAnswerString());
+                        answers.add(tmp);
+                    }
+                }
+                UserAnswers rtnAns = new UserAnswers(votingId,answers);
+                Log.d("connecting to server...","an");
+                SaveAnswerOnCloud(rtnAns);
+            }
+        });
+    }
+//    save user's answer to server
+    public  void SaveAnswerOnCloud(UserAnswers rtnAns){
+        DatabaseReference newVotingAnswerRef = mDatabaseAnswerRef.push();
+        String votingAnswerKey = newVotingAnswerRef.getKey();
+//        ready to connect
+        newVotingAnswerRef.child("Voting UID").setValue(rtnAns.getVotingUid());
+//        newVotingAnswerRef.child("Respondent UID").setValue(rtnAns.getRespondentUid());
+        ArrayList<Answer> answers = rtnAns.getAnswers();
+//        store answers in server
+        for(int i = 0;i<answers.size();i++){
+            Answer currentAns = answers.get(i);
+            if(currentAns.getQuestionType().equals(QuestionType.TEXT_QUESTION)){
+                DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
+                curQuestionStatRef.child("answer text").setValue(currentAns.getAnswerString());
+                curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
+                curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
+            }else if(currentAns.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
+                DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
+                curQuestionStatRef.child("chosen choice").setValue(currentAns.getAnswerString());
+                curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
+                curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
+            }
+        }
+        Toast.makeText(getApplicationContext(), "Successfully Submitted!"+answers.size(), Toast.LENGTH_SHORT).show();
+        Intent intents = new Intent(this, MainActivity.class);
+        startActivity(intents);
     }
 }

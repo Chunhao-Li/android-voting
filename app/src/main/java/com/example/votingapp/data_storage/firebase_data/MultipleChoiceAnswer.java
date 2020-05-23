@@ -8,17 +8,17 @@ public class MultipleChoiceAnswer extends Answer {
 //    which choice, use choice str instead of index to represent
     private String answerChoice;
 
-    MultipleChoiceAnswer(String respondentUid,String questionString, String answerChoice){
+    public MultipleChoiceAnswer(String questionString, String answerChoice){
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
-        super.respondentUid = respondentUid;
+//        super.respondentUid = respondentUid;
         this.answerChoice = answerChoice;
     }
 
-    @Override
-    protected String getRespondentUid() {
-        return this.respondentUid;
-    }
+//    @Override
+//    public String getRespondentUid() {
+//        return this.respondentUid;
+//    }
 
     @Override
     public String getQuestionString() {
@@ -31,7 +31,7 @@ public class MultipleChoiceAnswer extends Answer {
     }
 
     @Override
-    protected String getAnswerString() {
+    public String getAnswerString() {
         return this.answerChoice;
     }
 }

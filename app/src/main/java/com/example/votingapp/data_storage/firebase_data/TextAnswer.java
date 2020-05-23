@@ -6,17 +6,17 @@ public class TextAnswer extends Answer{
 //    string answer for text question
     private String answerText;
 
-    TextAnswer(String respondentUid, String questionString, String answerText){
+    public TextAnswer(String questionString, String answerText){
         super.questionString = questionString;
         super.questionType = QuestionType.TEXT_QUESTION;
         this.answerText = answerText;
-        super.respondentUid = respondentUid;
+//        super.respondentUid = respondentUid;
     }
 
-    @Override
-    protected String getRespondentUid() {
-        return this.respondentUid;
-    }
+//    @Override
+//    public String getRespondentUid() {
+//        return this.respondentUid;
+//    }
 
     @Override
     public String getQuestionString() {
@@ -29,7 +29,7 @@ public class TextAnswer extends Answer{
     }
 
     @Override
-    protected String getAnswerString() {
+    public String getAnswerString() {
         return this.answerText;
     }
 }
