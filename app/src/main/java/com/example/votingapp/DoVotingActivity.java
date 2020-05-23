@@ -29,16 +29,34 @@ public class DoVotingActivity extends AppCompatActivity {
     private String votingTitle;
     private String votingId;
     private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
+    private static final String TAG = "DoVotingTAG";
+    private int index = 0;
     private RecyclerView mRecyclerView;
     private QuestionAdapter mAdapter;
 
-    FirebaseDatabase mDatabase;
-    DatabaseReference mDatabaseVotingRef;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mDatabaseVotingRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_voting);
+        Log.d(TAG, Integer.toString(index)); // 0
+        index += 1;
+        // Initialize firebase fields
+        mDatabase = FirebaseDatabase.getInstance();
+        mDatabaseVotingRef = mDatabase.getReference("votings");
+
+        Log.d(TAG, Integer.toString(index)); // 1
+        index += 1;
+
+
+        mRecyclerView = findViewById(R.id.voting_do_recyclerview);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new QuestionAdapter(this, questionItems);
+        mRecyclerView.setAdapter(mAdapter);
+        Log.d(TAG, Integer.toString(index)); // 2
+        index += 1;
 
         Intent intent = getIntent();
         votingTitleTextView = findViewById(R.id.voting_do_title);
@@ -46,13 +64,12 @@ public class DoVotingActivity extends AppCompatActivity {
             votingId = intent.getExtras().getString(MainActivity.GET_VOTING_ID);
         }
         // Initialize
-        mDatabase = FirebaseDatabase.getInstance();
-        mDatabaseVotingRef = mDatabase.getReference("votings");
-        mRecyclerView = findViewById(R.id.voting_do_recyclerview);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new QuestionAdapter(this, questionItems);
-        mRecyclerView.setAdapter(mAdapter);
+
+        Log.d("AMazingWhy", votingId);
+
+
         ;
+
 
         downloadQuestionItems();
 //        mRecyclerView = findViewById(R.id.recyclerview_edit);
@@ -64,6 +81,7 @@ public class DoVotingActivity extends AppCompatActivity {
     private void downloadQuestionItems() {
         DownloadQuestionTask downloadQuestionTask = new DownloadQuestionTask(this);
         downloadQuestionTask.execute();
+
 
     }
 
@@ -86,14 +104,16 @@ public class DoVotingActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            Log.d("doInBackground,,", votingId);
             mDatabaseVotingRef.child(votingId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot votingChild : dataSnapshot.getChildren()) {
+//                    for (DataSnapshot votingChild : dataSnapshot.getChildren()) {
+                        Log.d("test_titleaaaa", dataSnapshot.child("votingTitle").getValue().toString());
+                        votingTitle = dataSnapshot.child("votingTitle").getValue().toString();
 
-                        votingTitle = votingChild.child("votingTitle").getValue().toString();
                         votingTitleTextView.setText(votingTitle);
-                        DataSnapshot questionRef = votingChild.child("questions");
+                        DataSnapshot questionRef = dataSnapshot.child("questions");
 
                         for (DataSnapshot questionChild : questionRef.getChildren()) {
 
@@ -113,7 +133,7 @@ public class DoVotingActivity extends AppCompatActivity {
                         }
 //
 //                    Log.d("DoDataActivity", questionType.name());
-                    }
+//                    }
                 }
 
                 @Override
