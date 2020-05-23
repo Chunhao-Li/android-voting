@@ -331,7 +331,6 @@ public class MainActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.TEXT_QUESTION);
-                curQuestionStatRef.child("answers").setValue("");
 //                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnwsers();
 //                for (String ans : answers) {
 //                    curQuestionStatRef.child("answer").push().setValue(ans);
@@ -341,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.MULTI_CHOICE);
-                curQuestionStatRef.child("answers").setValue("");
                 ArrayList<String> choices = ((MultipleChoiceQuestionStatistics) curQuestionStat).getChoices();
                 for (String choice: choices) {
                     if (!choice.isEmpty()) {
