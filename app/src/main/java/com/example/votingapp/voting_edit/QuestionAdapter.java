@@ -42,6 +42,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return new TextQuestionViewHolder(view);
             } else  {
 //                View view = inflater
+                //
                 //TODO
 
                 return null;
@@ -89,6 +90,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     class MultipleChoiceViewHolder extends RecyclerView.ViewHolder {
         TextView mQuestion;
+
+        //TODO
+
+        /**
+         * Defined in viewing layout
+         * @param itemView
+         */
 
 
         public MultipleChoiceViewHolder(@NonNull View itemView) {

@@ -11,6 +11,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 
 public class MultiChoiceQuestion extends AppCompatActivity {
+    //Passing data to VotingEditActivity
     private Button saveButton;
     private Button cancelButton;
     private String textQuestion;
@@ -57,6 +58,7 @@ public class MultiChoiceQuestion extends AppCompatActivity {
                 Intent replyIntent = new Intent();
                 replyIntent.putExtra("key", textQuestion);
                 replyIntent.putStringArrayListExtra("key_choices", choices);
+                //  passing to voting edit
 
                 setResult(RESULT_OK, replyIntent);
                 finish();

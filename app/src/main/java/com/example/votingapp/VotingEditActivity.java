@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.voting_edit.DatePickerFragment;
+import com.example.votingapp.voting_edit.EditMultipleChoiceQuestion;
 import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
@@ -175,9 +176,15 @@ public class VotingEditActivity extends AppCompatActivity {
 
         } else if (requestCode == RC_MULTICHOICE_QUESTION) {
             if (resultCode == RESULT_OK) {
+                //TODO
                 if (data!=null) {
                     String textQuestion = data.getStringExtra("key");
                     ArrayList<String> choices = data.getStringArrayListExtra("key_choices");
+                    EditMultipleChoiceQuestion multipleChoiceQuestion = new EditMultipleChoiceQuestion(textQuestion,choices);
+                    int oldQuestionItemsSize = questionItems.size();
+                    questionItems.add(new RecyclerViewQuestionItem(multipleChoiceQuestion,QuestionType.MULTI_CHOICE));
+                    mAdapter.notifyItemInserted(oldQuestionItemsSize);
+
                 }
             }
         }
