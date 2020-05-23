@@ -1,6 +1,7 @@
 package com.example.votingapp.voting_edit;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,7 @@ import com.example.votingapp.R;
 
 
 import java.util.ArrayList;
-import java.util.function.ToDoubleBiFunction;
-
-import static android.view.View.GONE;
+import java.util.Dictionary;
 
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -59,52 +58,17 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String question = ((EditTextQuestion) questionItems.get(position).getData()).getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
         }else{
-            String question = ((EditMultipleChoiceQuestion) questionItems.get(position).getData()).getQuestionString();
+            String question = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getQuestionString();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
-            ArrayList<String> choices= ((EditMultipleChoiceQuestion) questionItems.get(position).getData()).getChoices();
-            if(choices.size()==MultiChoiceQuestion.choiceSize){
-                if(!choices.get(0).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox0.setText(choices.get(0));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox0.setVisibility(View.VISIBLE);
-                }
-
-                if(!choices.get(1).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox1.setText(choices.get(1));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox1.setVisibility(View.VISIBLE);
-                }
-
-                if(!choices.get(2).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox2.setText(choices.get(2));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox2.setVisibility(View.VISIBLE);
-                }
-
-                if(!choices.get(3).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox3.setText(choices.get(3));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox3.setVisibility(View.VISIBLE);
-                }
-
-                if(!choices.get(4).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox4.setText(choices.get(4));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox4.setVisibility(View.VISIBLE);
-                }
-
-                if(!choices.get(5).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox5.setText(choices.get(5));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox5.setVisibility(View.VISIBLE);
-                }
-
-                if(!choices.get(6).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox6.setText(choices.get(6));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox6.setVisibility(View.VISIBLE);
-                }
-
-                if(!choices.get(7).isEmpty()){
-                    ((MultipleChoiceViewHolder) holder).mCheckBox7.setText(choices.get(7));
-                    ((MultipleChoiceViewHolder) holder).mCheckBox7.setVisibility(View.VISIBLE);
-                }
+            ArrayList<String> choices= ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getChoices();
+            ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
+            for (int i = 0; i < choices.size(); i++) {
+                checkBoxes.get(i).setText(choices.get(i));
+                checkBoxes.get(i).setVisibility(View.VISIBLE);
             }
+
         }
-        //TODO
+
 
     }
 
@@ -150,6 +114,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         CheckBox mCheckBox6;
         CheckBox mCheckBox7;
 
+        public ArrayList<CheckBox> getCheckBoxes() {
+            return checkBoxes;
+        }
+
+        ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+
         //TODO
 
         /**
@@ -169,6 +139,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mCheckBox5= itemView.findViewById(R.id.checkBox5);
             mCheckBox6= itemView.findViewById(R.id.checkBox6);
             mCheckBox7= itemView.findViewById(R.id.checkBox7);
+            checkBoxes.add(mCheckBox0);
+            checkBoxes.add(mCheckBox1);
+            checkBoxes.add(mCheckBox2);
+            checkBoxes.add(mCheckBox3);
+            checkBoxes.add(mCheckBox4);
+            checkBoxes.add(mCheckBox5);
+            checkBoxes.add(mCheckBox6);
+            checkBoxes.add(mCheckBox7);
         }
     }
 }
