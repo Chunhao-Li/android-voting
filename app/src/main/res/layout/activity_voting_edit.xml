@@ -37,11 +37,14 @@
                 android:layout_height="wrap_content"
                 app:menu_labels_colorNormal="#4CAF50"
                 app:menu_colorNormal="@color/colorAccent"
+                app:menu_labels_colorPressed="@color/colorAccent"
+                app:menu_colorPressed="@color/colorAccent"
                 android:layout_marginBottom="8dp">
                 <com.github.clans.fab.FloatingActionButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:fab_colorNormal="@color/colorAccent"
+                    app:fab_colorPressed="@color/colorAccent"
                     android:layout_marginBottom="16dp"
                     android:id="@+id/fab_c"
                     app:fab_size="mini"
@@ -51,6 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:fab_colorNormal="@color/colorAccent"
+                    app:fab_colorPressed="@color/colorAccent"
                     android:layout_marginBottom="16dp"
                     android:id="@+id/fab_t"
                     app:fab_size="mini"

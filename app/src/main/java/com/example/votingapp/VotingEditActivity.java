@@ -86,6 +86,7 @@ public class VotingEditActivity extends AppCompatActivity {
 
 
     public void initial(){
+        ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
         findViewById(R.id.fab_c).setVisibility(View.INVISIBLE);
         findViewById(R.id.fab_t).setVisibility(View.INVISIBLE);
         ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
