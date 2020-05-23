@@ -68,7 +68,8 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
 
 
         }
-
-
     }
+
+
+
 }

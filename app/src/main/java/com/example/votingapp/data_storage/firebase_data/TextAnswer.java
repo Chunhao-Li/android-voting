@@ -3,7 +3,11 @@ package com.example.votingapp.data_storage.firebase_data;
 import com.example.votingapp.data_storage.QuestionType;
 
 public class TextAnswer extends Answer{
-//    string answer for text question
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
+    }
+
+    //    string answer for text question
     private String answerText;
 
     public TextAnswer(String questionString, String answerText){
