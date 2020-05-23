@@ -209,21 +209,23 @@ public class DoVotingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
 //                ArrayList<Answer> answers = extractAnswer();
                 ArrayList<Answer> answers = textAnswers;
+                ArrayList<Answer> answerss = new ArrayList<>();
                 for( Answer item: answers){
                     if(item.getQuestionType().equals(QuestionType.TEXT_QUESTION)){
                         String ansText = item.getAnswerString();
                         Log.d("answerText", item.getAnswerString());
                         TextAnswer tmp = new TextAnswer(item.getQuestionString(),ansText);
-                        answers.add(tmp);
+                        answerss.add(tmp);
                     }
-//                    else if(item.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
-//                        String ansChoice = item.getAnswerString();
-//                        MultipleChoiceAnswer tmp = new MultipleChoiceAnswer(item.getQuestionString(),item.getAnswerString());
-//                        answers.add(tmp);
-//                    }
+                    else if(item.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
+                        String ansChoice = item.getAnswerString();
+                        Toast.makeText(getApplicationContext(),ansChoice, Toast.LENGTH_SHORT).show();
+                        MultipleChoiceAnswer tmp = new MultipleChoiceAnswer(item.getQuestionString(),ansChoice);
+                        answerss.add(tmp);
+                    }
                 }
-                UserAnswers rtnAns = new UserAnswers(votingId,answers);
-                Log.d("connecting to server...","an");
+                UserAnswers rtnAns = new UserAnswers(votingId,answerss);
+                Log.d("connecting to server...","...");
                 SaveAnswerOnCloud(rtnAns);
             }
         });
