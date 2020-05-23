@@ -24,4 +24,5 @@
     <string name="choice" >multiple</string>
     <string name="text">text</string >
     <string name="rad" >multiple</string>
+    <string name="send_do_voting">Send</string>
 </resources>

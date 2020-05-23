@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +40,7 @@ public class DoVotingActivity extends AppCompatActivity {
     private String votingTitle;
     private String votingId;
     private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
+    private ArrayList<Answer> textAnswers = new ArrayList<>();
     private static final String TAG = "DoVotingTAG";
     private int index = 0;
     private RecyclerView mRecyclerView;
@@ -64,7 +67,7 @@ public class DoVotingActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.voting_do_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new QuestionAdapter(this, questionItems);
+        mAdapter = new QuestionAdapter(this, questionItems, textAnswers);
         mRecyclerView.setAdapter(mAdapter);
         Log.d(TAG, Integer.toString(index)); // 2
         index += 1;
@@ -74,9 +77,9 @@ public class DoVotingActivity extends AppCompatActivity {
         if (intent.getExtras() != null) {
             votingId = intent.getExtras().getString(MainActivity.GET_VOTING_ID);
         }
-        // Initialize
+        
 
-        Log.d("AMazingWhy", votingId);
+        // Initialize
 
 
         ;
@@ -89,6 +92,10 @@ public class DoVotingActivity extends AppCompatActivity {
 //        mRecyclerView.setAdapter(mAdapter);
         submitAnswers();
     }
+
+ 
+
+ 
 
     private void downloadQuestionItems() {
         DownloadQuestionTask downloadQuestionTask = new DownloadQuestionTask(this);
@@ -131,12 +138,14 @@ public class DoVotingActivity extends AppCompatActivity {
                                     child("questionType").getValue().toString());
                             String questionString = questionChild.child("question").getValue().toString();
                             Log.d("dovoting download", questionType.name());
+//                            textAnswers.add("");
 
                             if (questionType == QuestionType.TEXT_QUESTION) {
                                 EditTextQuestion editTextQuestion = new EditTextQuestion(questionString);
 
                                 questionItems.add(new RecyclerViewQuestionItem(editTextQuestion,
                                         QuestionType.TEXT_QUESTION));
+                                textAnswers.add(new TextAnswer(questionString, ""));
                                 publishProgress();
                             } else if (questionType == QuestionType.MULTI_CHOICE) {
                                 ArrayList<String> choices = new ArrayList<>();
@@ -149,6 +158,7 @@ public class DoVotingActivity extends AppCompatActivity {
                                         questionString, choices);
                                 questionItems.add(new RecyclerViewQuestionItem(editMultiChoiceQuestion,
                                         QuestionType.MULTI_CHOICE));
+                                textAnswers.add(new MultipleChoiceAnswer(questionString, ""));
                                 publishProgress();
                             }
 //                    Log.d("test_Do_activity", questionChild.child("questionType").getValue().toString());
@@ -189,22 +199,28 @@ public class DoVotingActivity extends AppCompatActivity {
 
 //  if hit submit button
     public void submitAnswers(){
+        
         Button buttonSubmit = findViewById(R.id.button_submit);
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                Log.d("submitAnswers_test,", )
+                
                 Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
-                ArrayList<Answer> answers = extractAnswer();
+//                ArrayList<Answer> answers = extractAnswer();
+                ArrayList<Answer> answers = textAnswers;
                 for( Answer item: answers){
                     if(item.getQuestionType().equals(QuestionType.TEXT_QUESTION)){
                         String ansText = item.getAnswerString();
+                        Log.d("answerText", item.getAnswerString());
                         TextAnswer tmp = new TextAnswer(item.getQuestionString(),ansText);
                         answers.add(tmp);
-                    }else if(item.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
-                        String ansChoice = item.getAnswerString();
-                        MultipleChoiceAnswer tmp = new MultipleChoiceAnswer(item.getQuestionString(),item.getAnswerString());
-                        answers.add(tmp);
                     }
+//                    else if(item.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
+//                        String ansChoice = item.getAnswerString();
+//                        MultipleChoiceAnswer tmp = new MultipleChoiceAnswer(item.getQuestionString(),item.getAnswerString());
+//                        answers.add(tmp);
+//                    }
                 }
                 UserAnswers rtnAns = new UserAnswers(votingId,answers);
                 Log.d("connecting to server...","an");

@@ -1,6 +1,8 @@
 package com.example.votingapp.voting_edit;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.MultiChoiceQuestion;
 import com.example.votingapp.R;
+import com.example.votingapp.data_storage.firebase_data.Answer;
+import com.example.votingapp.data_storage.firebase_data.TextAnswer;
 
 
 import java.util.ArrayList;
@@ -25,16 +29,24 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private LayoutInflater inflater;
     // data
     private final ArrayList<RecyclerViewQuestionItem> questionItems;
+    private final ArrayList<Answer> textAnswers;
 
     private final int TEXT_TYPE = 0;
     private final int MULTIPLE_CHOICE_TYPE = 1;
 
 
+    public QuestionAdapter(Context mContext, ArrayList<RecyclerViewQuestionItem> questionItems, ArrayList<Answer> textAnswers) {
+        this.mContext = mContext;
+        this.inflater = LayoutInflater.from(mContext);
+        this.questionItems = questionItems;
+        this.textAnswers = textAnswers;
+    }
 
     public QuestionAdapter(Context context, ArrayList<RecyclerViewQuestionItem> data) {
         this.mContext = context;
         this.questionItems = data;
         this.inflater = LayoutInflater.from(mContext);
+        textAnswers = new ArrayList<>();
     }
 
     @NonNull
@@ -42,7 +54,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {// convert abstract question to view holder
             if (viewType == TEXT_TYPE) {
                 View view = inflater.inflate(R.layout.voting_text_question_item, parent, false);
-                return new TextQuestionViewHolder(view);
+                return new TextQuestionViewHolder(view, new TextAnswerListener());
             } else  {
                 View view = inflater.inflate(R.layout.voting_multiple_choice_item,parent,false);
                 //TODO
@@ -57,6 +69,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof TextQuestionViewHolder) {
             String question = ((EditTextQuestion) questionItems.get(position).getData()).getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
+            ((TextQuestionViewHolder) holder).listener.updatePosition(holder.getAdapterPosition());
+
         }else{
             String question = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getQuestionString();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
@@ -94,11 +108,37 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class TextQuestionViewHolder extends RecyclerView.ViewHolder{
         TextView mQuestion;
         EditText mAns;
+        TextAnswerListener listener;
 
-        public TextQuestionViewHolder(@NonNull View itemView) {
+        public TextQuestionViewHolder(@NonNull View itemView, TextAnswerListener listener) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.text_q_question);
             mAns = itemView.findViewById(R.id.text_q_editText);
+            this.listener = listener;
+            mAns.addTextChangedListener(listener);
+
+        }
+
+
+    }
+    private class TextAnswerListener implements TextWatcher{
+        int position;   // position of the ViewHolder
+        public void updatePosition(int pos) {
+            this.position = pos;
+        }
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            TextAnswer textAnswer = (TextAnswer) textAnswers.get(position);
+//            textAnswers.set(position, s.toString());
+            textAnswer.setAnswerText(s.toString());
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
 
         }
     }
@@ -149,4 +189,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             checkBoxes.add(mCheckBox7);
         }
     }
+
+//    public String getEditTextData() {
+//        String ans =
+//    }
 }
