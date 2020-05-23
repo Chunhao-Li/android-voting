@@ -23,7 +23,6 @@ import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.example.votingapp.voting_edit.TimePickerFragment;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,14 +84,6 @@ public class VotingEditActivity extends AppCompatActivity {
     }
 
 
-    public void initial(){
-        ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
-        findViewById(R.id.fab_c).setVisibility(View.INVISIBLE);
-        findViewById(R.id.fab_t).setVisibility(View.INVISIBLE);
-        ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
-//        findViewById(R.id.fab_a).animate().rotation(45);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,19 +127,19 @@ public class VotingEditActivity extends AppCompatActivity {
         helper.attachToRecyclerView(mRecyclerView);
 
 
-        findViewById(R.id.fab_c).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fab_choice).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
+                ((FloatingActionMenu) findViewById(R.id.fab_menu)).close(true);
                 Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestion.class);
                 startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
             }
         });
 
-        findViewById(R.id.fab_t).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fab_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((FloatingActionMenu) findViewById(R.id.fab_a)).close(true);
+                ((FloatingActionMenu) findViewById(R.id.fab_menu)).close(true);
                 Intent intent = new Intent(VotingEditActivity.this, TextQuestionActivity.class);
                 startActivityForResult(intent, RC_TEXT_QUESTION);
             }
@@ -160,7 +151,6 @@ public class VotingEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_TEXT_QUESTION) {
-//            Log.d("result_code:", Integer.toString(requestCode));
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     String text_question = data.getStringExtra(TextQuestionActivity.GET_TEXT_QUESTION);
@@ -189,30 +179,13 @@ public class VotingEditActivity extends AppCompatActivity {
 
     }
 
-
-//    public void initializeFAB() {
-//        mAddButton.animate().rotation(0);
-//        mChoiceButton.setVisibility(View.INVISIBLE);
-//        mTextButton.setVisibility(View.INVISIBLE);
-//        isOriginStatus = true;
-//    }
-//
-//    public void updateFAB() {
-//        mAddButton.animate().rotation(135);
-//        mChoiceButton.setVisibility(View.VISIBLE);
-//        mTextButton.setVisibility(View.VISIBLE);
-//        isOriginStatus = false;
-//    }
-
-
     public void processDatePicker(int year, int month, int dayOfMonth) {
         String month_str = Integer.toString(month+1);
         String day_str = Integer.toString(dayOfMonth);
         String year_str  = Integer.toString(year);
         deadline = (year_str+"/" + month_str + "/" + day_str);
         pickTime();
-//        Toast.makeText(this,  dateMessage,
-//                Toast.LENGTH_SHORT).show();
+
     }
 
     public void processTimePicker(int hour, int minute) {
