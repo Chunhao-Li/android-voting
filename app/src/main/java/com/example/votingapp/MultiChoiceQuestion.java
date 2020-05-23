@@ -16,7 +16,7 @@ public class MultiChoiceQuestion extends AppCompatActivity {
     private Button cancelButton;
     private String textQuestion;
     private EditText questionFiled;
-    private final int choiceSize=8;
+    public static final int choiceSize=8;
     private final String choiceIDFormat = "editText_choice";
     private ArrayList<String> choices = new ArrayList<>();
     private EditText tempChoiceID;

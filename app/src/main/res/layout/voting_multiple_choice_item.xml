@@ -27,6 +27,7 @@
             app:layout_constraintTop_toBottomOf="@id/multiple_choice_q"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
         <CheckBox
@@ -38,6 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/checkBox0"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
         <CheckBox
@@ -49,6 +51,7 @@
             app:layout_constraintTop_toBottomOf="@id/checkBox1"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
         <CheckBox
@@ -60,6 +63,7 @@
             app:layout_constraintTop_toBottomOf="@id/checkBox2"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
         <CheckBox
@@ -71,6 +75,7 @@
             app:layout_constraintTop_toBottomOf="@id/checkBox3"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
         <CheckBox
@@ -82,6 +87,7 @@
             app:layout_constraintTop_toBottomOf="@id/checkBox4"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
         <CheckBox
@@ -93,6 +99,7 @@
             app:layout_constraintTop_toBottomOf="@id/checkBox5"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
         <CheckBox
@@ -104,6 +111,7 @@
             app:layout_constraintTop_toBottomOf="@id/checkBox6"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
+            android:visibility="gone"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

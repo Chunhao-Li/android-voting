@@ -11,11 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.votingapp.MultiChoiceQuestion;
 import com.example.votingapp.R;
 
 
 import java.util.ArrayList;
 import java.util.function.ToDoubleBiFunction;
+
+import static android.view.View.GONE;
 
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -42,11 +45,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 View view = inflater.inflate(R.layout.voting_text_question_item, parent, false);
                 return new TextQuestionViewHolder(view);
             } else  {
-//                View view = inflater
-                //
+                View view = inflater.inflate(R.layout.voting_multiple_choice_item,parent,false);
                 //TODO
+                // Create view holder per multiple choice voting layout
 
-                return null;
+                return new MultipleChoiceViewHolder(view);
             }
     }
 
@@ -55,6 +58,51 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof TextQuestionViewHolder) {
             String question = ((EditTextQuestion) questionItems.get(position).getData()).getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
+        }else{
+            String question = ((EditMultipleChoiceQuestion) questionItems.get(position).getData()).getQuestionString();
+            ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
+            ArrayList<String> choices= ((EditMultipleChoiceQuestion) questionItems.get(position).getData()).getChoices();
+            if(choices.size()==MultiChoiceQuestion.choiceSize){
+                if(!choices.get(0).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox0.setText(choices.get(0));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox0.setVisibility(View.VISIBLE);
+                }
+
+                if(!choices.get(1).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox1.setText(choices.get(1));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox1.setVisibility(View.VISIBLE);
+                }
+
+                if(!choices.get(2).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox2.setText(choices.get(2));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox2.setVisibility(View.VISIBLE);
+                }
+
+                if(!choices.get(3).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox3.setText(choices.get(3));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox3.setVisibility(View.VISIBLE);
+                }
+
+                if(!choices.get(4).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox4.setText(choices.get(4));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox4.setVisibility(View.VISIBLE);
+                }
+
+                if(!choices.get(5).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox5.setText(choices.get(5));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox5.setVisibility(View.VISIBLE);
+                }
+
+                if(!choices.get(6).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox6.setText(choices.get(6));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox6.setVisibility(View.VISIBLE);
+                }
+
+                if(!choices.get(7).isEmpty()){
+                    ((MultipleChoiceViewHolder) holder).mCheckBox7.setText(choices.get(7));
+                    ((MultipleChoiceViewHolder) holder).mCheckBox7.setVisibility(View.VISIBLE);
+                }
+            }
         }
         //TODO
 
