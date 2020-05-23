@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,19 +17,20 @@ import android.widget.Toast;
 
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.voting_edit.DatePickerFragment;
+import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
 import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.example.votingapp.voting_edit.TimePickerFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class VotingEditActivity extends AppCompatActivity {
-    FloatingActionButton mAddButton;
-    FloatingActionButton mChoiceButton;
-    FloatingActionButton mTextButton;
+//    FloatingActionButton mAddButton;
+//    FloatingActionButton mChoiceButton;
+//    FloatingActionButton mTextButton;
     private final int RC_TEXT_QUESTION = 243;
     private final int RC_MULTICHOICE_QUESTION = 245;
     public static final String VOTING_INFO_KEY = "com.example.votingapp.VOTING_INFO";
@@ -42,6 +42,9 @@ public class VotingEditActivity extends AppCompatActivity {
     private boolean isOriginStatus = true;   // are fabs in their origin status
     private String deadline;
     private String votingTitle;
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -80,6 +83,7 @@ public class VotingEditActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +98,7 @@ public class VotingEditActivity extends AppCompatActivity {
         if (bundle != null && bundle.containsKey(MainActivity.GET_VOTING_TITLE)) {
             votingTitle = bundle.getString(MainActivity.GET_VOTING_TITLE);
         }
+
 
 
         // enable item to swipe(delete) or move(change order)
@@ -121,47 +126,31 @@ public class VotingEditActivity extends AppCompatActivity {
         });
         helper.attachToRecyclerView(mRecyclerView);
 
-        mAddButton = findViewById(R.id.fab_add);
-        mChoiceButton = findViewById(R.id.fab_choice);
-        mTextButton = findViewById(R.id.fab_text);
 
-
-        mAddButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fab_choice).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isOriginStatus) {
-                    updateFAB();
-                } else {
-                    initializeFAB();
-                }
-            }
-        });
-        mChoiceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // pop to choice question edit
-                initializeFAB();
+                ((FloatingActionMenu) findViewById(R.id.fab_menu)).close(true);
                 Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestion.class);
                 startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
             }
         });
-        mTextButton.setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.fab_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // pop to the text question edit page.
-                initializeFAB();
+                ((FloatingActionMenu) findViewById(R.id.fab_menu)).close(true);
                 Intent intent = new Intent(VotingEditActivity.this, TextQuestionActivity.class);
                 startActivityForResult(intent, RC_TEXT_QUESTION);
             }
         });
-    }
 
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_TEXT_QUESTION) {
-//            Log.d("result_code:", Integer.toString(requestCode));
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     String text_question = data.getStringExtra(TextQuestionActivity.GET_TEXT_QUESTION);
@@ -175,28 +164,19 @@ public class VotingEditActivity extends AppCompatActivity {
 
         } else if (requestCode == RC_MULTICHOICE_QUESTION) {
             if (resultCode == RESULT_OK) {
+                //TODO
                 if (data!=null) {
                     String textQuestion = data.getStringExtra("key");
                     ArrayList<String> choices = data.getStringArrayListExtra("key_choices");
+                    EditMultiChoiceQuestion multipleChoiceQuestion = new EditMultiChoiceQuestion(textQuestion,choices);
+                    int oldQuestionItemsSize = questionItems.size();
+                    questionItems.add(new RecyclerViewQuestionItem(multipleChoiceQuestion,QuestionType.MULTI_CHOICE));
+                    mAdapter.notifyItemInserted(oldQuestionItemsSize);
+
                 }
             }
         }
 
-    }
-
-
-    public void initializeFAB() {
-        mAddButton.animate().rotation(0);
-        mChoiceButton.setVisibility(View.INVISIBLE);
-        mTextButton.setVisibility(View.INVISIBLE);
-        isOriginStatus = true;
-    }
-
-    public void updateFAB() {
-        mAddButton.animate().rotation(135);
-        mChoiceButton.setVisibility(View.VISIBLE);
-        mTextButton.setVisibility(View.VISIBLE);
-        isOriginStatus = false;
     }
 
     public void processDatePicker(int year, int month, int dayOfMonth) {
@@ -205,8 +185,7 @@ public class VotingEditActivity extends AppCompatActivity {
         String year_str  = Integer.toString(year);
         deadline = (year_str+"/" + month_str + "/" + day_str);
         pickTime();
-//        Toast.makeText(this,  dateMessage,
-//                Toast.LENGTH_SHORT).show();
+
     }
 
     public void processTimePicker(int hour, int minute) {
@@ -224,8 +203,7 @@ public class VotingEditActivity extends AppCompatActivity {
         toMainIntent.putExtra(DEADLINE_KEY, deadline);
         toMainIntent.putExtra(GET_VOTING_TITLE, votingTitle);
         startActivity(toMainIntent);
-//        setResult(RESULT_OK, toMainIntent);
-//        finish();
+
 
     }
 }

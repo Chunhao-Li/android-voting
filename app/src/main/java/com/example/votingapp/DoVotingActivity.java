@@ -21,6 +21,7 @@ import com.example.votingapp.data_storage.firebase_data.Answer;
 import com.example.votingapp.data_storage.firebase_data.MultipleChoiceAnswer;
 import com.example.votingapp.data_storage.firebase_data.TextAnswer;
 import com.example.votingapp.data_storage.firebase_data.UserAnswers;
+import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
 import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
@@ -119,10 +120,8 @@ public class DoVotingActivity extends AppCompatActivity {
             mDatabaseVotingRef.child(votingId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    for (DataSnapshot votingChild : dataSnapshot.getChildren()) {
                         Log.d("test_titleaaaa", dataSnapshot.child("votingTitle").getValue().toString());
                         votingTitle = dataSnapshot.child("votingTitle").getValue().toString();
-
                         votingTitleTextView.setText(votingTitle);
                         DataSnapshot questionRef = dataSnapshot.child("questions");
 
@@ -131,14 +130,26 @@ public class DoVotingActivity extends AppCompatActivity {
                             QuestionType questionType = QuestionType.valueOf(questionChild.
                                     child("questionType").getValue().toString());
                             String questionString = questionChild.child("question").getValue().toString();
+                            Log.d("dovoting download", questionType.name());
+
                             if (questionType == QuestionType.TEXT_QUESTION) {
                                 EditTextQuestion editTextQuestion = new EditTextQuestion(questionString);
-                                Log.d("test_Do_activity", editTextQuestion.getQuestionString());
+
                                 questionItems.add(new RecyclerViewQuestionItem(editTextQuestion,
                                         QuestionType.TEXT_QUESTION));
                                 publishProgress();
-                            } else {
-                                // TODO MULTIPLE CHOICE
+                            } else if (questionType == QuestionType.MULTI_CHOICE) {
+                                ArrayList<String> choices = new ArrayList<>();
+                                for (DataSnapshot choiceRef: questionChild.child("choices").getChildren()) {
+                                    choices.add(choiceRef.getValue().toString());
+                                    Log.d("dovoting choice", choiceRef.getValue().toString());
+                                }
+                                Log.d("choices+length", Integer.toString(choices.size()));
+                                EditMultiChoiceQuestion editMultiChoiceQuestion = new EditMultiChoiceQuestion(
+                                        questionString, choices);
+                                questionItems.add(new RecyclerViewQuestionItem(editMultiChoiceQuestion,
+                                        QuestionType.MULTI_CHOICE));
+                                publishProgress();
                             }
 //                    Log.d("test_Do_activity", questionChild.child("questionType").getValue().toString());
                         }

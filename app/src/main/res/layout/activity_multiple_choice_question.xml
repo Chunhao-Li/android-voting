@@ -142,7 +142,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:background="#8BC34A"
+        android:background="#009688"
         android:text="@string/text_q_cancel"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBaseline_toBaselineOf="@+id/multi_button_save"
@@ -155,7 +155,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
 
-        android:background="#8BC34A"
+        android:background="#009688"
         android:text="@string/text_q_save"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"

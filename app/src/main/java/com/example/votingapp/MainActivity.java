@@ -11,7 +11,7 @@ import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.User;
 import com.example.votingapp.data_storage.firebase_data.VotingResult;
-import com.example.votingapp.voting_edit.EditMultipleChoiceQuestion;
+import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
 import com.example.votingapp.voting_edit.EditQuestion;
 import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
@@ -292,8 +292,8 @@ public class MainActivity extends AppCompatActivity {
                 questionStatistics.add(textQuestionStatistics);
             } else if (item.getType() == QuestionType.MULTI_CHOICE) {
                 MultipleChoiceQuestionStatistics multiChoiceStatistics =
-                        new MultipleChoiceQuestionStatistics(((EditMultipleChoiceQuestion) question).getQuestionString(),
-                                0, ((EditMultipleChoiceQuestion) question).getChoices(), new ArrayList<Integer>());
+                        new MultipleChoiceQuestionStatistics(((EditMultiChoiceQuestion) question).getQuestionString(),
+                                0, ((EditMultiChoiceQuestion) question).getChoices(), new ArrayList<Integer>());
                 questionStatistics.add(multiChoiceStatistics);
             }
         }
@@ -331,14 +331,24 @@ public class MainActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.TEXT_QUESTION);
-                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnswers();
-                if (answers.size() != 0){
-                    for (String ans : answers) {
-                        curQuestionStatRef.child("answer").push().setValue(ans);
+                curQuestionStatRef.child("answers").setValue("");
+//                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnwsers();
+//                for (String ans : answers) {
+//                    curQuestionStatRef.child("answer").push().setValue(ans);
+//                }
+            } else if (curQuestionStat.getQuestionType() == QuestionType.MULTI_CHOICE) {
+                DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
+                curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
+                curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
+                curQuestionStatRef.child("questionType").setValue(QuestionType.MULTI_CHOICE);
+                curQuestionStatRef.child("answers").setValue("");
+                ArrayList<String> choices = ((MultipleChoiceQuestionStatistics) curQuestionStat).getChoices();
+                for (String choice: choices) {
+                    if (!choice.isEmpty()) {
+                        curQuestionStatRef.child("choices").push().setValue(choice);
                     }
-                }else{
-                    curQuestionStatRef.child("answer").push().setValue("EMPTY");
                 }
+
             }
 //            else if(curQuestionStat.getQuestionType() == QuestionType.MULTI_CHOICE){
 //                DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));

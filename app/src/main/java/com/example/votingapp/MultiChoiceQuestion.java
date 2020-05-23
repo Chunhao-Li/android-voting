@@ -11,11 +11,12 @@ import android.widget.EditText;
 import java.util.ArrayList;
 
 public class MultiChoiceQuestion extends AppCompatActivity {
+    //Passing data to VotingEditActivity
     private Button saveButton;
     private Button cancelButton;
     private String textQuestion;
     private EditText questionFiled;
-    private final int choiceSize=8;
+    public static final int choiceSize=8;
     private final String choiceIDFormat = "editText_choice";
     private ArrayList<String> choices = new ArrayList<>();
     private EditText tempChoiceID;
@@ -53,10 +54,18 @@ public class MultiChoiceQuestion extends AppCompatActivity {
                 tempChoiceID=findViewById(R.id.editText_choice7);
                 choices.add(tempChoiceID.getText().toString());
 
+                ArrayList<String> removeEmptyChoices = new ArrayList<>();
+                for (String choice: choices) {
+                    if (!choice.isEmpty()) {
+                        removeEmptyChoices.add(choice);
+                    }
+                }
+
 
                 Intent replyIntent = new Intent();
                 replyIntent.putExtra("key", textQuestion);
-                replyIntent.putStringArrayListExtra("key_choices", choices);
+                replyIntent.putStringArrayListExtra("key_choices", removeEmptyChoices);
+                //  passing to voting edit
 
                 setResult(RESULT_OK, replyIntent);
                 finish();
