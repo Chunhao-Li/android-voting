@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HandsUp</string>
+    <string name="app_name">HandsUp!</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -18,4 +18,10 @@
     <string name="text_q_cancel">cancel</string>
     <string name="text_q_save">save</string>
     <string name="save_menu_item">Save</string>
+    <string name="default_voting_title">New Voting</string>
+    <string name="hint_do_voting">Input a Voting Id</string>
+    <string name="voting_id_title_text">Voting id:</string>
+    <string name="choice" >multiple</string>
+    <string name="text">text</string >
+    <string name="rad" >multiple</string>
 </resources>

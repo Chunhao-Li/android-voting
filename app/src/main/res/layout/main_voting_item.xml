@@ -16,8 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="New Voting"
             android:textSize="20sp" />
+
 
         <Button
             android:id="@+id/voting_view_button"

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -8,8 +9,6 @@
     android:paddingRight="16dp"
     android:paddingBottom="16dp">
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_edit"
         android:layout_width="match_parent"
@@ -18,50 +17,111 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_short_text"
-            android:visibility="invisible"
-             >
+            android:gravity="center"
+            android:orientation="vertical">
 
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/fab_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:menu_labels_colorNormal="#4CAF50"
+                app:menu_colorNormal="@color/colorAccent"
+                android:layout_marginBottom="8dp">
+                <com.github.clans.fab.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/colorAccent"
+                    android:layout_marginBottom="16dp"
+                    android:id="@+id/fab_c"
+                    app:fab_size="mini"
+                    app:fab_label="@string/rad"
+                    android:src="@drawable/ic_radio_button"/>
+                <com.github.clans.fab.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/colorAccent"
+                    android:layout_marginBottom="16dp"
+                    android:id="@+id/fab_t"
+                    app:fab_size="mini"
+                    app:fab_label="@string/text"
+                    android:src="@drawable/ic_short_text"/>
+            </com.github.clans.fab.FloatingActionMenu>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_choice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_radio_button"
-            android:visibility="invisible"
-            >
-
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
-
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_add" />
     </LinearLayout>
 
-
 </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginLeft="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_marginRight="16dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical">-->
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recyclerview_edit"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--    </androidx.recyclerview.widget.RecyclerView>-->
+
+
+
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/fab_text"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:src="@drawable/ic_short_text"-->
+<!--            android:visibility="invisible"-->
+<!--             >-->
+
+<!--        </com.google.android.material.floatingactionbutton.FloatingActionButton>-->
+
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/fab_choice"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            android:src="@drawable/ic_radio_button"-->
+<!--            android:visibility="invisible"-->
+<!--            app:fab_label="@string/choice"-->
+<!--            >-->
+
+<!--        </com.google.android.material.floatingactionbutton.FloatingActionButton>-->
+
+
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/fab_add"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:src="@drawable/ic_add"-->
+<!--            app:fab_label="@string/text"/>-->
+<!--    </LinearLayout>-->
+
+
+
+
+
+
+

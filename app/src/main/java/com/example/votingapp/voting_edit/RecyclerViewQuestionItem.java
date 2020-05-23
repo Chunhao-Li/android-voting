@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.example.votingapp.data_storage.QuestionType;
 
-public class RecyclerViewQuestionItem  implements Parcelable {
+public class RecyclerViewQuestionItem  implements Parcelable {//pass data to server
 
     private EditQuestion data;
     private QuestionType type;

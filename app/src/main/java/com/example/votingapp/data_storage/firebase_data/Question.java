@@ -5,7 +5,7 @@ import com.example.votingapp.data_storage.QuestionType;
 public abstract class Question {
     protected QuestionType questionType;
     //     question description
-    protected String questionString;
-    protected abstract QuestionType getQuestionType();
-    protected abstract String getQuestionString();
+    public  String questionString;
+    public abstract QuestionType getQuestionType();
+    public abstract String getQuestionString();
 }

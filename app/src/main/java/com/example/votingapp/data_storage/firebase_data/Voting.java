@@ -1,6 +1,7 @@
 package com.example.votingapp.data_storage.firebase_data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 abstract class Voting{
@@ -9,10 +10,17 @@ abstract class Voting{
 //    creator uid of this voting
     String creatorUid;
 //    voting due date
-    Date deadline;
+    String deadline; //  year/month/day/hour/minute
+    // voting title
+    String votingTitle;
+    public String getVotingTitle() {
+        return votingTitle;
+    }
+
+
     abstract String getVotingUid();
     abstract String getCreatorUid();
-    abstract Date getDeadline();
+    abstract String getDeadline();
 
 }
 

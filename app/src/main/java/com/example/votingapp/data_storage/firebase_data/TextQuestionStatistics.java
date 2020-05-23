@@ -6,20 +6,21 @@ import android.os.Parcel;
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TextQuestionStatistics extends QuestionStatistics {
 //    a hash map that stores all answer strings with user UID as key
-    private HashMap<String,String> answers;
+    private ArrayList<String> answers;
 
-    public TextQuestionStatistics(String question, Integer totalNum, HashMap<String,String> answers){
+    public TextQuestionStatistics(String question, Integer totalNum, ArrayList<String> answers){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
         super.totalVoterCount = totalNum;
         this.answers = answers;
     }
 
-    public HashMap<String,String> getAnwsers(){
+    public ArrayList<String> getAnwsers(){
         return this.answers;
     }
 
@@ -30,7 +31,7 @@ public class TextQuestionStatistics extends QuestionStatistics {
 
     @Override
     void update(Answer ans) {
-        this.answers.put(ans.respondentUid,ans.getAnswerString());
+        this.answers.add(ans.getAnswerString());
     }
 
     @Override
