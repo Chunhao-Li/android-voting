@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -55,6 +56,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String question = ((EditTextQuestion) questionItems.get(position).getData()).getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
         }
+        //TODO
+
     }
 
 
@@ -90,6 +93,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     class MultipleChoiceViewHolder extends RecyclerView.ViewHolder {
         TextView mQuestion;
+        CheckBox mCheckBox0;
+        CheckBox mCheckBox1;
+        CheckBox mCheckBox2;
+        CheckBox mCheckBox3;
+        CheckBox mCheckBox4;
+        CheckBox mCheckBox5;
+        CheckBox mCheckBox6;
+        CheckBox mCheckBox7;
 
         //TODO
 
@@ -102,6 +113,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public MultipleChoiceViewHolder(@NonNull View itemView) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.multiple_choice_q);
+            mCheckBox0= itemView.findViewById(R.id.checkBox0);
+            mCheckBox1= itemView.findViewById(R.id.checkBox1);
+            mCheckBox2= itemView.findViewById(R.id.checkBox2);
+            mCheckBox3= itemView.findViewById(R.id.checkBox3);
+            mCheckBox4= itemView.findViewById(R.id.checkBox4);
+            mCheckBox5= itemView.findViewById(R.id.checkBox5);
+            mCheckBox6= itemView.findViewById(R.id.checkBox6);
+            mCheckBox7= itemView.findViewById(R.id.checkBox7);
         }
     }
 }
