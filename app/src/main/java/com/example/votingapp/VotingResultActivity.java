@@ -80,7 +80,6 @@ public class VotingResultActivity extends AppCompatActivity {
         if (intent.getExtras() != null) {
             title = intent.getExtras().getString(VotingAdapter.RC_VOTING_TITLE);
             votingId = intent.getExtras().getString(VotingAdapter.RC_VOTING_ID);
-            questionItems = intent.getParcelableArrayListExtra(VotingAdapter.RC_QUESTION_ITEMS);
         }
 
         // Initialize recycler view

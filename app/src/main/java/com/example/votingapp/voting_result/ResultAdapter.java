@@ -2,11 +2,9 @@ package com.example.votingapp.voting_result;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
 import com.example.votingapp.data_storage.firebase_data.Answer;
-import com.example.votingapp.data_storage.firebase_data.TextAnswer;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
-import com.example.votingapp.voting_edit.EditTextQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 
@@ -51,7 +47,7 @@ public class ResultAdapter extends QuestionAdapter {
             // Create view holder per multiple choice voting layout
 
             return  new InnerViewHolder(inflater.inflate(
-                    R.layout.inner_viewholder_item, parent, false));
+                    R.layout.result_multi_choice_item, parent, false));
 //            View view = inflater.inflate(R.layout.result_multi_choice_item, parent, false);
 //            return new MultiQuestionViewHolder(view);
 
@@ -88,7 +84,7 @@ public class ResultAdapter extends QuestionAdapter {
 
         public TextQuestionViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.questionTitle = itemView.findViewById(R.id.text_question);
+            this.questionTitle = itemView.findViewById(R.id.result_text_q_title);
             this.ansDetail = itemView.findViewById(R.id.button_text_detail);
         }
     }

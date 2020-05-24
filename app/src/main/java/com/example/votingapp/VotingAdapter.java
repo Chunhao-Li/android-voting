@@ -23,7 +23,6 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
     private final ArrayList<RecyclerViewQuestionItem> questionItems;
     public static final String RC_VOTING_ID = "com.example.votingapp.VotingAdapterId";
     public static final String RC_VOTING_TITLE = "com.example.votingapp.VotingAdapterTitle";
-    public static final String RC_QUESTION_ITEMS = "com.example.votingapp.questionItems";
 
 
     VotingAdapter(Context mContext, ArrayList<ArrayList<String>> votings,
@@ -52,7 +51,6 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
                 Intent intent = new Intent(mContext, VotingResultActivity.class);
                 intent.putExtra(RC_VOTING_ID,curVotingInfo.get(0));
                 intent.putExtra(RC_VOTING_TITLE,curVotingInfo.get(1));
-                intent.putParcelableArrayListExtra(RC_QUESTION_ITEMS, questionItems);
                 mContext.startActivity(intent);
             }
         });

@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_question"
+        android:id="@+id/result_text_q_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:textSize="20sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/button_text_detail"
         app:layout_constraintStart_toStartOf="parent" />
@@ -23,9 +23,9 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="30dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="30dp"
         android:text="@string/button_text_ans_detail"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="30dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
