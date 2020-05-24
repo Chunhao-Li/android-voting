@@ -142,10 +142,11 @@ public class VotingResultActivity extends AppCompatActivity {
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     if (updateQuestionItems) {
                                         ArrayList<String> choices = new ArrayList<>();
-                                        choices.add("test_choice1");
-                                        choices.add("test_choice2");
-                                        choices.add("test_choice3");
-                                        choices.add("test_choice4");
+                                        for (int i = 0; i < 20; i++) {
+                                            choices.add("test_choice"+i);
+
+                                        }
+
                                         EditMultiChoiceQuestion multiQ = new EditMultiChoiceQuestion(questionS
                                                         , choices);
                                         questionItems.add(new RecyclerViewQuestionItem(

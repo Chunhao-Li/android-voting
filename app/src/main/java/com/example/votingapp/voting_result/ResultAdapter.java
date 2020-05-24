@@ -69,6 +69,7 @@ public class ResultAdapter extends QuestionAdapter {
 
             EditMultiChoiceQuestion question = (EditMultiChoiceQuestion) questionItems.get(position).getData();
             Log.d("ResultAdapter:", Integer.toString(question.getChoices().size()));
+               ((InnerViewHolder) holder).questionTitle.setText(question.getQuestionString());
             ((InnerViewHolder) holder).recyclerView.setAdapter(new InnerAdapter(question));
 //            String question = questionItems.get(position).getData().getQuestionString();
 //            ((MultiQuestionViewHolder) holder).questionTitle.setText(question);
@@ -106,9 +107,11 @@ public class ResultAdapter extends QuestionAdapter {
     class InnerViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView recyclerView;
         private EditMultiChoiceQuestion question;
+         private TextView questionTitle;
 
         public InnerViewHolder(@NonNull View itemView) {
             super(itemView);
+            questionTitle = itemView.findViewById(R.id.result_multi_title);
             recyclerView = itemView.findViewById(R.id.inner_recyclerview);
 //            this.question = question;
             recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(),LinearLayoutManager.VERTICAL, false));
