@@ -160,8 +160,10 @@ public class DoVotingActivity extends AppCompatActivity {
     //    extract answer from recycler view
     public ArrayList<Answer> extractAnswer() {
         ArrayList<Answer> answers = new ArrayList<>();
-        int num = mRecyclerView.getAdapter().getItemCount();
-        for (int i = 0; i < num; i++) {
+
+        int num = mRecyclerView.getChildCount();
+        Toast.makeText(getApplicationContext(), num, Toast.LENGTH_SHORT).show();
+        for(int i=0;i<num;i++){
             View currentAnswerView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
             RecyclerViewQuestionItem currentQuestion = questionItems.get(i);
             String childViewName = currentAnswerView.getClass().getSimpleName();
@@ -185,23 +187,11 @@ public class DoVotingActivity extends AppCompatActivity {
 //                Log.d("submitAnswers_test,", )
 
                 Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
-//                ArrayList<Answer> answers = extractAnswer();
+
                 ArrayList<Answer> answers = DoVotingActivity.this.answers;
-                for (Answer item : answers) {
-                    if (item.getQuestionType().equals(QuestionType.TEXT_QUESTION)) {
-                        String ansText = item.getAnswerString();
-                        Log.d("answerText", item.getAnswerString());
-                        TextAnswer tmp = new TextAnswer(item.getQuestionString(), ansText);
-                        answers.add(tmp);
-                    }
-//                    else if(item.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
-//                        String ansChoice = item.getAnswerString();
-//                        MultipleChoiceAnswer tmp = new MultipleChoiceAnswer(item.getQuestionString(),item.getAnswerString());
-//                        answers.add(tmp);
-//                    }
-                }
-                UserAnswers rtnAns = new UserAnswers(votingId, answers);
-                Log.d("connecting to server...", "an");
+
+                UserAnswers rtnAns = new UserAnswers(votingId,answers);
+                Log.d("connecting to server...","...");
                 SaveAnswerOnCloud(rtnAns);
             }
         });
