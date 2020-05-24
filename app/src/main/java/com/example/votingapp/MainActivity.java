@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem mSignOut;
 
 
-    private ArrayList<String> votingInfo = new ArrayList<>();
+    private ArrayList<ArrayList<String>> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
     private VotingResult newVoting;
 
@@ -140,12 +140,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                Log.d("onAuthStateChanged:", "initialise");
                 mUser = firebaseAuth.getCurrentUser();
                 if (mUser != null) {
-
                     // signed in user
-
                     updateUser();
 
                 } else {
@@ -156,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     needUpdate = true;
                 }
-                Log.d("onAuthStateChanged:", Integer.toString(votingInfo.size()));
             }
         };
         auth.addAuthStateListener(mAuthStateListener);
@@ -215,7 +211,9 @@ public class MainActivity extends AppCompatActivity {
                                 String votingRId = childVotingId.getValue().toString();
                                 String votingTitle = dataSnapshot.child("votings").child(votingRId)
                                         .child("votingTitle").getValue().toString();
-                                String curVotingInfo = votingRId + "," + votingTitle;
+                                ArrayList<String> curVotingInfo = new ArrayList<>();
+                                curVotingInfo.add(votingRId);
+                                curVotingInfo.add(votingTitle);
                                 votingInfo.add(curVotingInfo);
                                 allVotingId.add(votingRId);
                                 publishProgress();

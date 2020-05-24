@@ -3,7 +3,6 @@ package com.example.votingapp.voting_edit;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.votingapp.MultiChoiceQuestion;
 import com.example.votingapp.R;
 import com.example.votingapp.data_storage.firebase_data.Answer;
 import com.example.votingapp.data_storage.firebase_data.TextAnswer;
 
 
 import java.util.ArrayList;
-import java.util.Dictionary;
 
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -29,7 +26,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private LayoutInflater inflater;
     // data
     private final ArrayList<RecyclerViewQuestionItem> questionItems;
-    private final ArrayList<Answer> textAnswers;
+    private final ArrayList<Answer> answers;
 
     private final int TEXT_TYPE = 0;
     private final int MULTIPLE_CHOICE_TYPE = 1;
@@ -39,14 +36,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mContext = mContext;
         this.inflater = LayoutInflater.from(mContext);
         this.questionItems = questionItems;
-        this.textAnswers = textAnswers;
+        this.answers = textAnswers;
     }
 
     public QuestionAdapter(Context context, ArrayList<RecyclerViewQuestionItem> data) {
         this.mContext = context;
         this.questionItems = data;
         this.inflater = LayoutInflater.from(mContext);
-        textAnswers = new ArrayList<>();
+        answers = new ArrayList<>();
     }
 
     @NonNull
@@ -128,13 +125,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            TextAnswer textAnswer = (TextAnswer) textAnswers.get(position);
-//            textAnswers.set(position, s.toString());
+            TextAnswer textAnswer = (TextAnswer) answers.get(position);
             textAnswer.setAnswerText(s.toString());
         }
         @Override
