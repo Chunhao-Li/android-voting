@@ -12,19 +12,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
+
 import java.util.ArrayList;
 
 public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHolder> {
     private Context mContext;
     // data
     private final ArrayList<ArrayList<String>> votings;
+    private final ArrayList<RecyclerViewQuestionItem> questionItems;
     public static final String RC_VOTING_ID = "com.example.votingapp.VotingAdapterId";
     public static final String RC_VOTING_TITLE = "com.example.votingapp.VotingAdapterTitle";
+    public static final String RC_QUESTION_ITEMS = "com.example.votingapp.questionItems";
 
 
-    VotingAdapter(Context mContext, ArrayList<ArrayList<String>> votings) {
+    VotingAdapter(Context mContext, ArrayList<ArrayList<String>> votings,
+                  ArrayList<RecyclerViewQuestionItem> questionItems) {
         this.mContext = mContext;
         this.votings = votings;
+        this.questionItems = questionItems;
 
     }
     @NonNull
@@ -46,6 +52,7 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
                 Intent intent = new Intent(mContext, VotingResultActivity.class);
                 intent.putExtra(RC_VOTING_ID,curVotingInfo.get(0));
                 intent.putExtra(RC_VOTING_TITLE,curVotingInfo.get(1));
+                intent.putParcelableArrayListExtra(RC_QUESTION_ITEMS, questionItems);
                 mContext.startActivity(intent);
             }
         });

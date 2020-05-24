@@ -17,8 +17,6 @@
             android:orientation="vertical">
 
 
-
-
             <androidx.cardview.widget.CardView
                 android:id="@+id/main_create_voting_cardview"
                 android:layout_width="match_parent"

@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ArrayList<String>> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
+    private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
     private VotingResult newVoting;
 
     private boolean needUpdate = true;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialise fields
         mRecyclerView = findViewById(R.id.main_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mVotingAdapter = new VotingAdapter(this, votingInfo);
+        mVotingAdapter = new VotingAdapter(this, votingInfo, questionItems);
         mRecyclerView.setAdapter(mVotingAdapter);
 
         votingIdInput = findViewById(R.id.editText_do_voting);
@@ -127,15 +128,14 @@ public class MainActivity extends AppCompatActivity {
             String deadline = votingEditIntent.getStringExtra(VotingEditActivity.DEADLINE_KEY);
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
             if (newVoting != null && deadline != null && newVoting.size() > 0) {
-                Log.d("getFromEdit","hehehe");
-                saveVoting(newVoting, deadline, votingTitle);
+                questionItems = newVoting;
+                saveVoting(questionItems, deadline, votingTitle);
                 needUpdate = false;
             }
 
         }
 
         // Initialize fields
-
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

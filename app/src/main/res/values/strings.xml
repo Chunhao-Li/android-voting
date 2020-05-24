@@ -25,4 +25,5 @@
     <string name="text">text</string >
     <string name="rad" >multiple</string>
     <string name="send_do_voting">Send</string>
+    <string name="button_text_ans_detail">View detail</string>
 </resources>

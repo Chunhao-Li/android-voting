@@ -22,21 +22,28 @@ import java.util.ArrayList;
 
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
-    private LayoutInflater inflater;
+    protected Context mContext;
+    protected LayoutInflater inflater;
     // data
-    private final ArrayList<RecyclerViewQuestionItem> questionItems;
+    protected final ArrayList<RecyclerViewQuestionItem> questionItems;
     private final ArrayList<Answer> answers;
 
-    private final int TEXT_TYPE = 0;
-    private final int MULTIPLE_CHOICE_TYPE = 1;
+    protected final int TEXT_TYPE = 0;
+    protected final int MULTIPLE_CHOICE_TYPE = 1;
 
+//    protected QuestionAdapter(Context mContext) {
+//        this.mContext = mContext;
+//        this.inflater = LayoutInflater.from(mContext);
+//        questionItems = new ArrayList<>();
+//        answers = new ArrayList<>();
+//    }
+//
 
-    public QuestionAdapter(Context mContext, ArrayList<RecyclerViewQuestionItem> questionItems, ArrayList<Answer> textAnswers) {
+    public QuestionAdapter(Context mContext, ArrayList<RecyclerViewQuestionItem> questionItems, ArrayList<Answer> answers) {
         this.mContext = mContext;
         this.inflater = LayoutInflater.from(mContext);
         this.questionItems = questionItems;
-        this.answers = textAnswers;
+        this.answers = answers;
     }
 
     public QuestionAdapter(Context context, ArrayList<RecyclerViewQuestionItem> data) {
@@ -49,29 +56,29 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {// convert abstract question to view holder
-            if (viewType == TEXT_TYPE) {
-                View view = inflater.inflate(R.layout.voting_text_question_item, parent, false);
-                return new TextQuestionViewHolder(view, new TextAnswerListener());
-            } else  {
-                View view = inflater.inflate(R.layout.voting_multiple_choice_item,parent,false);
-                //TODO
-                // Create view holder per multiple choice voting layout
+        if (viewType == TEXT_TYPE) {
+            View view = inflater.inflate(R.layout.voting_text_question_item, parent, false);
+            return new TextQuestionViewHolder(view, new TextAnswerListener());
+        } else {
+            View view = inflater.inflate(R.layout.voting_multiple_choice_item, parent, false);
+            //TODO
+            // Create view holder per multiple choice voting layout
 
-                return new MultipleChoiceViewHolder(view);
-            }
+            return new MultipleChoiceViewHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TextQuestionViewHolder) {
-            String question = ((EditTextQuestion) questionItems.get(position).getData()).getQuestionString();
+            String question = questionItems.get(position).getData().getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
             ((TextQuestionViewHolder) holder).listener.updatePosition(holder.getAdapterPosition());
 
-        }else{
-            String question = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getQuestionString();
+        } else {
+            String question =  questionItems.get(position).getData().getQuestionString();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
-            ArrayList<String> choices= ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getChoices();
+            ArrayList<String> choices = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getChoices();
             ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
             for (int i = 0; i < choices.size(); i++) {
                 checkBoxes.get(i).setText(choices.get(i));
@@ -79,8 +86,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
         }
-
-
     }
 
 
@@ -102,7 +107,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return questionItems.size();
     }
 
-    class TextQuestionViewHolder extends RecyclerView.ViewHolder{
+    protected class TextQuestionViewHolder extends RecyclerView.ViewHolder {
         TextView mQuestion;
         EditText mAns;
         TextAnswerListener listener;
@@ -118,11 +123,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     }
-    private class TextAnswerListener implements TextWatcher{
+
+    private class TextAnswerListener implements TextWatcher {
         int position;   // position of the ViewHolder
+
         public void updatePosition(int pos) {
             this.position = pos;
         }
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
@@ -132,6 +140,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             TextAnswer textAnswer = (TextAnswer) answers.get(position);
             textAnswer.setAnswerText(s.toString());
         }
+
         @Override
         public void afterTextChanged(Editable s) {
 
@@ -159,6 +168,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         /**
          * Defined in viewing layout
+         *
          * @param itemView
          */
 
@@ -166,14 +176,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public MultipleChoiceViewHolder(@NonNull View itemView) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.multiple_choice_q);
-            mCheckBox0= itemView.findViewById(R.id.checkBox0);
-            mCheckBox1= itemView.findViewById(R.id.checkBox1);
-            mCheckBox2= itemView.findViewById(R.id.checkBox2);
-            mCheckBox3= itemView.findViewById(R.id.checkBox3);
-            mCheckBox4= itemView.findViewById(R.id.checkBox4);
-            mCheckBox5= itemView.findViewById(R.id.checkBox5);
-            mCheckBox6= itemView.findViewById(R.id.checkBox6);
-            mCheckBox7= itemView.findViewById(R.id.checkBox7);
+            mCheckBox0 = itemView.findViewById(R.id.checkBox0);
+            mCheckBox1 = itemView.findViewById(R.id.checkBox1);
+            mCheckBox2 = itemView.findViewById(R.id.checkBox2);
+            mCheckBox3 = itemView.findViewById(R.id.checkBox3);
+            mCheckBox4 = itemView.findViewById(R.id.checkBox4);
+            mCheckBox5 = itemView.findViewById(R.id.checkBox5);
+            mCheckBox6 = itemView.findViewById(R.id.checkBox6);
+            mCheckBox7 = itemView.findViewById(R.id.checkBox7);
             checkBoxes.add(mCheckBox0);
             checkBoxes.add(mCheckBox1);
             checkBoxes.add(mCheckBox2);

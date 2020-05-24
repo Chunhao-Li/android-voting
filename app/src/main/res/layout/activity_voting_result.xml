@@ -17,7 +17,6 @@
             android:orientation="vertical">
 
 
-
             <TextView
                 android:id="@+id/voting_result_title"
                 android:layout_width="wrap_content"
@@ -25,6 +24,7 @@
                 android:layout_gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/voting_result_id"
                 android:layout_width="wrap_content"
@@ -34,15 +34,12 @@
                 android:textSize="20sp" />
 
 
-
-
-
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/voting_result_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/voting_result_recyclerview"
-                android:nestedScrollingEnabled="false"
-                >
+                android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="false">
 
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
