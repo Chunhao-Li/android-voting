@@ -141,8 +141,13 @@ public class VotingResultActivity extends AppCompatActivity {
 //                                    // TODO MULTICHOICE answer
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     if (updateQuestionItems) {
+                                        ArrayList<String> choices = new ArrayList<>();
+                                        choices.add("test_choice1");
+                                        choices.add("test_choice2");
+                                        choices.add("test_choice3");
+                                        choices.add("test_choice4");
                                         EditMultiChoiceQuestion multiQ = new EditMultiChoiceQuestion(questionS
-                                                        , new ArrayList<String>());
+                                                        , choices);
                                         questionItems.add(new RecyclerViewQuestionItem(
                                                 multiQ, QuestionType.MULTI_CHOICE));
                                     }

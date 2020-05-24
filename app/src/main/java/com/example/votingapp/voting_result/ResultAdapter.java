@@ -1,6 +1,7 @@
 package com.example.votingapp.voting_result;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,9 @@ public class ResultAdapter extends QuestionAdapter {
         } else  {
             //TODO
             // Create view holder per multiple choice voting layout
-            return  new InnerViewHolder(inflater.inflate(R.layout.inner_viewholder_item, parent, false));
+
+            return  new InnerViewHolder(inflater.inflate(
+                    R.layout.inner_viewholder_item, parent, false));
 //            View view = inflater.inflate(R.layout.result_multi_choice_item, parent, false);
 //            return new MultiQuestionViewHolder(view);
 
@@ -63,6 +66,10 @@ public class ResultAdapter extends QuestionAdapter {
             ((TextQuestionViewHolder) holder).questionTitle.setText(question);
 
         }else{
+
+            EditMultiChoiceQuestion question = (EditMultiChoiceQuestion) questionItems.get(position).getData();
+            Log.d("ResultAdapter:", Integer.toString(question.getChoices().size()));
+            ((InnerViewHolder) holder).recyclerView.setAdapter(new InnerAdapter(question));
 //            String question = questionItems.get(position).getData().getQuestionString();
 //            ((MultiQuestionViewHolder) holder).questionTitle.setText(question);
         }
@@ -98,12 +105,20 @@ public class ResultAdapter extends QuestionAdapter {
 
     class InnerViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView recyclerView;
+        private EditMultiChoiceQuestion question;
 
         public InnerViewHolder(@NonNull View itemView) {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.inner_recyclerview);
+//            this.question = question;
             recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(),LinearLayoutManager.VERTICAL, false));
-            recyclerView.setAdapter(new InnerAdapter());
+//            recyclerView.setAdapter(new InnerAdapter(question));
+        }
+
+        public void bindData(EditMultiChoiceQuestion question) {
+            InnerAdapter innerAdapter = new InnerAdapter(question);
+            recyclerView.setAdapter(innerAdapter);
+            innerAdapter.notifyDataSetChanged();
         }
 
     }
