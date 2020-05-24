@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +38,7 @@ public class DoVotingActivity extends AppCompatActivity {
     private String votingTitle;
     private String votingId;
     private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
-    private ArrayList<Answer> textAnswers = new ArrayList<>();
+    private ArrayList<Answer> answers = new ArrayList<>();
     private static final String TAG = "DoVotingTAG";
     private int index = 0;
     private RecyclerView mRecyclerView;
@@ -67,7 +65,7 @@ public class DoVotingActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.voting_do_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new QuestionAdapter(this, questionItems, textAnswers);
+        mAdapter = new QuestionAdapter(this, questionItems, answers);
         mRecyclerView.setAdapter(mAdapter);
         Log.d(TAG, Integer.toString(index)); // 2
         index += 1;
@@ -86,10 +84,7 @@ public class DoVotingActivity extends AppCompatActivity {
 
 
         downloadQuestionItems();
-//        mRecyclerView = findViewById(R.id.recyclerview_edit);
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        mAdapter = new QuestionAdapter(this, questionItems);
-//        mRecyclerView.setAdapter(mAdapter);
+
         submitAnswers();
     }
 
@@ -145,7 +140,7 @@ public class DoVotingActivity extends AppCompatActivity {
 
                                 questionItems.add(new RecyclerViewQuestionItem(editTextQuestion,
                                         QuestionType.TEXT_QUESTION));
-                                textAnswers.add(new TextAnswer(questionString, ""));
+                                answers.add(new TextAnswer(questionString, ""));
                                 publishProgress();
                             } else if (questionType == QuestionType.MULTI_CHOICE) {
                                 ArrayList<String> choices = new ArrayList<>();
@@ -158,7 +153,7 @@ public class DoVotingActivity extends AppCompatActivity {
                                         questionString, choices);
                                 questionItems.add(new RecyclerViewQuestionItem(editMultiChoiceQuestion,
                                         QuestionType.MULTI_CHOICE));
-                                textAnswers.add(new MultipleChoiceAnswer(questionString, ""));
+                                answers.add(new MultipleChoiceAnswer(questionString, ""));
                                 publishProgress();
                             }
 //                    Log.d("test_Do_activity", questionChild.child("questionType").getValue().toString());
@@ -207,24 +202,10 @@ public class DoVotingActivity extends AppCompatActivity {
 //                Log.d("submitAnswers_test,", )
                 
                 Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
-//                ArrayList<Answer> answers = extractAnswer();
-                ArrayList<Answer> answers = textAnswers;
-                ArrayList<Answer> answerss = new ArrayList<>();
-                for( Answer item: answers){
-                    if(item.getQuestionType().equals(QuestionType.TEXT_QUESTION)){
-                        String ansText = item.getAnswerString();
-                        Log.d("answerText", item.getAnswerString());
-                        TextAnswer tmp = new TextAnswer(item.getQuestionString(),ansText);
-                        answerss.add(tmp);
-                    }
-                    else if(item.getQuestionType().equals(QuestionType.MULTI_CHOICE)){
-                        String ansChoice = item.getAnswerString();
-                        Toast.makeText(getApplicationContext(),ansChoice, Toast.LENGTH_SHORT).show();
-                        MultipleChoiceAnswer tmp = new MultipleChoiceAnswer(item.getQuestionString(),ansChoice);
-                        answerss.add(tmp);
-                    }
-                }
-                UserAnswers rtnAns = new UserAnswers(votingId,answerss);
+
+                ArrayList<Answer> answers = DoVotingActivity.this.answers;
+
+                UserAnswers rtnAns = new UserAnswers(votingId,answers);
                 Log.d("connecting to server...","...");
                 SaveAnswerOnCloud(rtnAns);
             }
