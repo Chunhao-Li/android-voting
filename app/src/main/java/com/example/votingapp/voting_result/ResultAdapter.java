@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
+import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestStat;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
@@ -73,8 +74,7 @@ public class ResultAdapter extends QuestionAdapter {
                     Intent intent = new Intent(mContext, TextResultDetailActivity.class);
                     intent.putStringArrayListExtra(GET_TEXT_STAT,
                             ((TextQuestionStatistics) questionStatistics.get(position)).getAnswers());
-                    intent.putExtra(GET_TEXT_COUNT,
-                            ((TextQuestionStatistics) questionStatistics.get(position)).getTotalVoterCount());
+                    intent.putExtra(GET_TEXT_COUNT, questionStatistics.get(position).getTotalVoterCount());
                     mContext.startActivity(intent);
                 }
             });
@@ -84,7 +84,8 @@ public class ResultAdapter extends QuestionAdapter {
             EditMultiChoiceQuestion question = (EditMultiChoiceQuestion) questionItems.get(position).getData();
             Log.d("ResultAdapter:", Integer.toString(question.getChoices().size()));
                ((InnerViewHolder) holder).questionTitle.setText(question.getQuestionString());
-            ((InnerViewHolder) holder).recyclerView.setAdapter(new InnerAdapter(question));
+               ArrayList<Integer> choiceCount = ((MultiChoiceQuestStat) questionStatistics.get(position)).getChoiceVoterCount();
+            ((InnerViewHolder) holder).recyclerView.setAdapter(new InnerAdapter(question, choiceCount));
 //            String question = questionItems.get(position).getData().getQuestionString();
 //            ((MultiQuestionViewHolder) holder).questionTitle.setText(question);
         }
@@ -123,11 +124,11 @@ public class ResultAdapter extends QuestionAdapter {
 //            recyclerView.setAdapter(new InnerAdapter(question));
         }
 
-        public void bindData(EditMultiChoiceQuestion question) {
-            InnerAdapter innerAdapter = new InnerAdapter(question);
-            recyclerView.setAdapter(innerAdapter);
-            innerAdapter.notifyDataSetChanged();
-        }
+//        public void bindData(EditMultiChoiceQuestion question) {
+//            InnerAdapter innerAdapter = new InnerAdapter(question);
+//            recyclerView.setAdapter(innerAdapter);
+//            innerAdapter.notifyDataSetChanged();
+//        }
 
     }
 

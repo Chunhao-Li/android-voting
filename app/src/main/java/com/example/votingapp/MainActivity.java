@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestionStatistics;
+import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestStat;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.User;
@@ -287,8 +287,8 @@ public class MainActivity extends AppCompatActivity {
                         new TextQuestionStatistics(((EditTextQuestion) question).getQuestionString());
                 questionStatistics.add(textQuestionStatistics);
             } else if (item.getType() == QuestionType.MULTI_CHOICE) {
-                MultiChoiceQuestionStatistics multiChoiceStatistics =
-                        new MultiChoiceQuestionStatistics(((EditMultiChoiceQuestion) question).getQuestionString(),
+                MultiChoiceQuestStat multiChoiceStatistics =
+                        new MultiChoiceQuestStat(((EditMultiChoiceQuestion) question).getQuestionString(),
                                 ((EditMultiChoiceQuestion) question).getChoices());
                 questionStatistics.add(multiChoiceStatistics);
             }
@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.MULTI_CHOICE);
-                ArrayList<String> choices = ((MultiChoiceQuestionStatistics) curQuestionStat).getChoices();
+                ArrayList<String> choices = ((MultiChoiceQuestStat) curQuestionStat).getChoices();
                 for (String choice: choices) {
                     if (!choice.isEmpty()) {
                         curQuestionStatRef.child("choices").push().setValue(choice);
