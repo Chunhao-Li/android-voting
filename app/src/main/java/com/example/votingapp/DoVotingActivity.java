@@ -216,9 +216,14 @@ public class DoVotingActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
             } else if (currentAns.getQuestionType().equals(QuestionType.MULTI_CHOICE)) {
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
-                curQuestionStatRef.child("chosen choice").setValue(((TextAnswer)currentAns).getAnswerString());
+//                curQuestionStatRef.child("chosen choices").setValue(((MultipleChoiceAnswer)currentAns).getAnswerChoice());
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
+                ArrayList<ArrayList<String>> choices = ((MultipleChoiceAnswer)currentAns).getAnswerChoice();
+                for(int j = 0;j<choices.size();j++){
+                    DatabaseReference curChoiceStatRef = curQuestionStatRef.child("choices").child(Integer.toString(j));
+                    curChoiceStatRef.child(choices.get(j).get(0)).setValue(choices.get(j).get(1));
+                }
             }
         }
         Toast.makeText(getApplicationContext(), "Successfully Submitted!" + answers.size(), Toast.LENGTH_SHORT).show();
