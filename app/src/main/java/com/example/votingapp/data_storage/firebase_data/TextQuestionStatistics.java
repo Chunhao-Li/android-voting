@@ -24,11 +24,11 @@ public class TextQuestionStatistics extends QuestionStatistics {
     }
 
 //    inherit previous status
-    public TextQuestionStatistics(String question, Integer totalNum, ArrayList<String> answers){
+    public TextQuestionStatistics(String question, Integer totalNum){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
         super.totalVoterCount = totalNum;
-        this.answers = answers;
+
     }
 
     public ArrayList<String> getAnswers(){
@@ -40,8 +40,9 @@ public class TextQuestionStatistics extends QuestionStatistics {
         return this.totalVoterCount;
     }
 
-    void update(String  ans) {
+    public void update(String  ans) {
         this.answers.add(ans);
+        this.totalVoterCount++;
     }
 
     @Override

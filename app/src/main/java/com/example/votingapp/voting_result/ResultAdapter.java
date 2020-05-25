@@ -1,6 +1,7 @@
 package com.example.votingapp.voting_result;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
 import com.example.votingapp.data_storage.firebase_data.Answer;
+import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
+import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
 import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
@@ -21,13 +24,18 @@ import java.util.ArrayList;
 
 public class ResultAdapter extends QuestionAdapter {
 
-    private ArrayList<ArrayList<Answer>> answers;
+//    private ArrayList<ArrayList<Answer>> answers;
+    private ArrayList<QuestionStatistics> questionStatistics;
 //    private ArrayList<RecyclerViewQuestionItem> questionItems;
 
+    public static final String GET_TEXT_STAT = "com.example.votingapp.voting_result.TEXT_STAT";
+    public static final String GET_TEXT_COUNT = "com.example.votingapp.voting_result.TEXT_COUNT";
 
-    public ResultAdapter(Context mContext, ArrayList<RecyclerViewQuestionItem> questionItems, ArrayList<ArrayList<Answer>> answers) {
+
+    public ResultAdapter(Context mContext, ArrayList<RecyclerViewQuestionItem> questionItems,
+                         ArrayList<QuestionStatistics> questionStatistics) {
         super(mContext, questionItems);
-        this.answers = answers;
+        this.questionStatistics = questionStatistics;
     }
 
 //    public ResultAdapter(Context context, ArrayList<RecyclerViewQuestionItem> data) {
@@ -56,10 +64,21 @@ public class ResultAdapter extends QuestionAdapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof TextQuestionViewHolder) {
             String question = questionItems.get(position).getData().getQuestionString();
             ((TextQuestionViewHolder) holder).questionTitle.setText(question);
+            ((TextQuestionViewHolder) holder).ansDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, TextResultDetail.class);
+                    intent.putStringArrayListExtra(GET_TEXT_STAT,
+                            ((TextQuestionStatistics) questionStatistics.get(position)).getAnswers());
+                    intent.putExtra(GET_TEXT_COUNT,
+                            ((TextQuestionStatistics) questionStatistics.get(position)).getTotalVoterCount());
+                    mContext.startActivity(intent);
+                }
+            });
 
         }else{
 
@@ -86,6 +105,7 @@ public class ResultAdapter extends QuestionAdapter {
             super(itemView);
             this.questionTitle = itemView.findViewById(R.id.result_text_q_title);
             this.ansDetail = itemView.findViewById(R.id.button_text_detail);
+
         }
     }
 

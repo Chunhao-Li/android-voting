@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.firebase_data.MultipleChoiceQuestionStatistics;
+import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.User;
@@ -39,7 +39,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -285,13 +284,12 @@ public class MainActivity extends AppCompatActivity {
             if (item.getType() == QuestionType.TEXT_QUESTION) {
 
                 TextQuestionStatistics textQuestionStatistics =
-                        new TextQuestionStatistics(((EditTextQuestion) question).getQuestionString(),
-                                0, new ArrayList<String>());
+                        new TextQuestionStatistics(((EditTextQuestion) question).getQuestionString());
                 questionStatistics.add(textQuestionStatistics);
             } else if (item.getType() == QuestionType.MULTI_CHOICE) {
-                MultipleChoiceQuestionStatistics multiChoiceStatistics =
-                        new MultipleChoiceQuestionStatistics(((EditMultiChoiceQuestion) question).getQuestionString(),
-                                0, ((EditMultiChoiceQuestion) question).getChoices(), new ArrayList<Integer>());
+                MultiChoiceQuestionStatistics multiChoiceStatistics =
+                        new MultiChoiceQuestionStatistics(((EditMultiChoiceQuestion) question).getQuestionString(),
+                                ((EditMultiChoiceQuestion) question).getChoices());
                 questionStatistics.add(multiChoiceStatistics);
             }
         }
@@ -338,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
                 curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.MULTI_CHOICE);
-                ArrayList<String> choices = ((MultipleChoiceQuestionStatistics) curQuestionStat).getChoices();
+                ArrayList<String> choices = ((MultiChoiceQuestionStatistics) curQuestionStat).getChoices();
                 for (String choice: choices) {
                     if (!choice.isEmpty()) {
                         curQuestionStatRef.child("choices").push().setValue(choice);

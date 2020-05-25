@@ -21,9 +21,9 @@
     <string name="default_voting_title">New Voting</string>
     <string name="hint_do_voting">Input a Voting Id</string>
     <string name="voting_id_title_text">Voting id:</string>
-    <string name="choice" >multiple</string>
-    <string name="text">text</string >
-    <string name="rad" >multiple</string>
+    <string name="choice">multiple</string>
+    <string name="text">text</string>
+    <string name="rad">multiple</string>
     <string name="send_do_voting">Send</string>
     <string name="button_text_ans_detail">View detail</string>
 </resources>

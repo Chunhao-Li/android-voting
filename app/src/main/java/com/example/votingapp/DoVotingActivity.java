@@ -137,7 +137,8 @@ public class DoVotingActivity extends AppCompatActivity {
                                     questionString, choices);
                             questionItems.add(new RecyclerViewQuestionItem(editMultiChoiceQuestion,
                                     QuestionType.MULTI_CHOICE));
-                            answers.add(new MultipleChoiceAnswer(questionString, ""));
+                            // TODO save multi choice answer
+                            answers.add(new MultipleChoiceAnswer(questionString, new ArrayList<ArrayList<String>>()));
                             publishProgress();
                         }
 //                    Log.d("test_Do_activity", questionChild.child("questionType").getValue().toString());
@@ -157,25 +158,25 @@ public class DoVotingActivity extends AppCompatActivity {
 
     }
 
-    //    extract answer from recycler view
-    public ArrayList<Answer> extractAnswer() {
-        ArrayList<Answer> answers = new ArrayList<>();
-
-        int num = mRecyclerView.getChildCount();
-        Toast.makeText(getApplicationContext(), num, Toast.LENGTH_SHORT).show();
-        for(int i=0;i<num;i++){
-            View currentAnswerView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
-            RecyclerViewQuestionItem currentQuestion = questionItems.get(i);
-            String childViewName = currentAnswerView.getClass().getSimpleName();
-            if (childViewName.equals("EditText")) {
-//                currentAnswerView = (EditText) currentAnswerView;
-                String currentAnswerText = ((EditText) currentAnswerView).getText().toString();
-                TextAnswer curAns = new TextAnswer(currentQuestion.getData().questionString, currentAnswerText);
-                answers.add(curAns);
-            }
-        }
-        return answers;
-    }
+//    //    extract answer from recycler view
+//    public ArrayList<Answer> extractAnswer() {
+//        ArrayList<Answer> answers = new ArrayList<>();
+//
+//        int num = mRecyclerView.getChildCount();
+//        Toast.makeText(getApplicationContext(), num, Toast.LENGTH_SHORT).show();
+//        for(int i=0;i<num;i++){
+//            View currentAnswerView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
+//            RecyclerViewQuestionItem currentQuestion = questionItems.get(i);
+//            String childViewName = currentAnswerView.getClass().getSimpleName();
+//            if (childViewName.equals("EditText")) {
+////                currentAnswerView = (EditText) currentAnswerView;
+//                String currentAnswerText = ((EditText) currentAnswerView).getText().toString();
+//                TextAnswer curAns = new TextAnswer(currentQuestion.getData().questionString, currentAnswerText);
+//                answers.add(curAns);
+//            }
+//        }
+//        return answers;
+//    }
 
     //  if hit submit button
     public void submitAnswers() {
@@ -210,12 +211,12 @@ public class DoVotingActivity extends AppCompatActivity {
             Answer currentAns = answers.get(i);
             if (currentAns.getQuestionType().equals(QuestionType.TEXT_QUESTION)) {
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
-                curQuestionStatRef.child("answer text").setValue(currentAns.getAnswerString());
+                curQuestionStatRef.child("answer text").setValue(((TextAnswer)currentAns).getAnswerString());
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
             } else if (currentAns.getQuestionType().equals(QuestionType.MULTI_CHOICE)) {
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
-                curQuestionStatRef.child("chosen choice").setValue(currentAns.getAnswerString());
+                curQuestionStatRef.child("chosen choice").setValue(((TextAnswer)currentAns).getAnswerString());
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
             }

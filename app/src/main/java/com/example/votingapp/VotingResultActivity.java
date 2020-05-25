@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,13 +17,11 @@ import android.widget.TextView;
 
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.data_storage.firebase_data.Answer;
-import com.example.votingapp.data_storage.firebase_data.MultipleChoiceAnswer;
-import com.example.votingapp.data_storage.firebase_data.MultipleChoiceQuestion;
+import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
-import com.example.votingapp.data_storage.firebase_data.TextAnswer;
+import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
 import com.example.votingapp.voting_edit.EditTextQuestion;
-import com.example.votingapp.voting_edit.QuestionAdapter;
 import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.example.votingapp.voting_result.ResultAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -33,10 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-import javax.xml.transform.Result;
 
 public class VotingResultActivity extends AppCompatActivity {
     private TextView votingTitle;
@@ -88,7 +82,7 @@ public class VotingResultActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.voting_result_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new ResultAdapter(this,questionItems, allAnswers);
+        mAdapter = new ResultAdapter(this, questionItems, questionStatistics);
         mRecyclerView.setAdapter(mAdapter);
 
         // Initialize
@@ -127,34 +121,49 @@ public class VotingResultActivity extends AppCompatActivity {
 
                             answerIndex++;
                             DataSnapshot answersRef = votingAns.child("answers");
+                            int questionIndex = 0;
                             for (DataSnapshot ansRef : answersRef.getChildren()) {
                                 if (ansRef.child("question type").getValue().toString()
                                         .equals(QuestionType.TEXT_QUESTION.name())) {
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     String answerText = ansRef.child("answer text").getValue().toString();
+                                    if (questionStatistics.size() <= questionIndex) {
+                                        questionStatistics.add(new TextQuestionStatistics(questionS, 1));
+                                    } else {
+                                        ((TextQuestionStatistics) questionStatistics.get(questionIndex)).update(questionS);
+                                    }
                                     if (updateQuestionItems) {
                                         EditTextQuestion textQuestion = new EditTextQuestion(questionS);
                                         questionItems.add(new RecyclerViewQuestionItem(textQuestion,
                                                 QuestionType.TEXT_QUESTION));
                                     }
-                                    allAnswers.get(answerIndex).add(new TextAnswer(questionS, answerText));
+//                                    allAnswers.get(answerIndex).add(new TextAnswer(questionS, answerText));
                                     Log.d("getanswer_text:", answerText);
                                 } else {
 //                                    // TODO MULTICHOICE answer
                                     String questionS = ansRef.child("question string").getValue().toString();
-                                    if (updateQuestionItems) {
-                                        ArrayList<String> choices = new ArrayList<>();
-                                        for (int i = 0; i < 20; i++) {
-                                            choices.add("test_choice"+i);
+                                    ArrayList<String> choices = new ArrayList<>();
+                                    for (int i = 0; i < 20; i++) {
+                                        choices.add("test_choice" + i);
 
-                                        }
+                                    }
+
+                                    if (questionStatistics.size() <= questionIndex) {
+                                        questionStatistics.add(new MultiChoiceQuestionStatistics(questionS, 1));
+                                    } else {
+                                        // TODO
+//                                        ((MultiChoiceQuestionStatistics) questionStatistics.get(questionIndex)).update("test_choice");
+                                    }
+
+                                    if (updateQuestionItems) {
 
                                         EditMultiChoiceQuestion multiQ = new EditMultiChoiceQuestion(questionS
-                                                        , choices);
+                                                , choices);
                                         questionItems.add(new RecyclerViewQuestionItem(
                                                 multiQ, QuestionType.MULTI_CHOICE));
                                     }
                                 }
+                                questionIndex++;
                                 publishProgress();
                             }
                             updateQuestionItems = false;
