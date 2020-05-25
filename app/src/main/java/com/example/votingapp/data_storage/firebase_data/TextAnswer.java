@@ -3,6 +3,7 @@ package com.example.votingapp.data_storage.firebase_data;
 import com.example.votingapp.data_storage.QuestionType;
 
 public class TextAnswer extends Answer{
+
     public void setAnswerText(String answerText) {
         this.answerText = answerText;
     }
@@ -32,7 +33,6 @@ public class TextAnswer extends Answer{
         return this.questionType;
     }
 
-    @Override
     public String getAnswerString() {
         return this.answerText;
     }
