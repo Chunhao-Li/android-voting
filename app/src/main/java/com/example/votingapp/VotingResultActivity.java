@@ -20,6 +20,7 @@ import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.data_storage.firebase_data.Answer;
 import com.example.votingapp.data_storage.firebase_data.MultipleChoiceAnswer;
 import com.example.votingapp.data_storage.firebase_data.MultipleChoiceQuestion;
+import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.TextAnswer;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
 import com.example.votingapp.voting_edit.EditTextQuestion;
@@ -45,6 +46,7 @@ public class VotingResultActivity extends AppCompatActivity {
 
     private ArrayList<ArrayList<Answer>> allAnswers = new ArrayList<>();
     private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
+    private ArrayList<QuestionStatistics> questionStatistics = new ArrayList<>();
 
     RecyclerView mRecyclerView;
     ResultAdapter mAdapter;
@@ -121,7 +123,8 @@ public class VotingResultActivity extends AppCompatActivity {
                     boolean updateQuestionItems = true;
                     for (DataSnapshot votingAns : dataSnapshot.getChildren()) {
                         if (votingAns.child("Voting UID").getValue().toString().equals(votingId)) {
-                            allAnswers.add(new ArrayList<Answer>());
+//                            allAnswers.add(new ArrayList<Answer>());
+
                             answerIndex++;
                             DataSnapshot answersRef = votingAns.child("answers");
                             for (DataSnapshot ansRef : answersRef.getChildren()) {

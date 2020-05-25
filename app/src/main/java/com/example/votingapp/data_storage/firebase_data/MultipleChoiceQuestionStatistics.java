@@ -45,15 +45,15 @@ public class MultipleChoiceQuestionStatistics extends QuestionStatistics {
         return this.totalVoterCount;
     }
 
-    @Override
-    void update(Answer ans) {
-        for(int i=0;i<this.choices.size();i++){
-            if(this.choices.get(i).equals(ans.getAnswerString())){
-                this.choiceVoterCount.set(choiceVoterCount.get(i)+1, i);
-
-            }
-        }
-    }
+//    @Override
+//    void update(Answer ans) {
+//        for(int i=0;i<this.choices.size();i++){
+//            if(this.choices.get(i).equals(ans.getAnswerString())){
+//                this.choiceVoterCount.set(choiceVoterCount.get(i)+1, i);
+//
+//            }
+//        }
+//    }
 
     @Override
     public QuestionType getQuestionType(){

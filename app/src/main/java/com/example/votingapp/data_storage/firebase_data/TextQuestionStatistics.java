@@ -3,6 +3,8 @@ package com.example.votingapp.data_storage.firebase_data;
 import android.annotation.SuppressLint;
 import android.os.Parcel;
 
+import androidx.annotation.Nullable;
+
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 
@@ -38,9 +40,8 @@ public class TextQuestionStatistics extends QuestionStatistics {
         return this.totalVoterCount;
     }
 
-    @Override
-    void update(Answer ans) {
-        this.answers.add(ans.getAnswerString());
+    void update(String  ans) {
+        this.answers.add(ans);
     }
 
     @Override
@@ -52,5 +53,6 @@ public class TextQuestionStatistics extends QuestionStatistics {
     public String getQuestionString() {
         return this.questionString;
     }
+
 
 }

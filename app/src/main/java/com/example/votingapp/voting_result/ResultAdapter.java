@@ -89,16 +89,6 @@ public class ResultAdapter extends QuestionAdapter {
         }
     }
 
-    class MultiQuestionViewHolder extends RecyclerView.ViewHolder {
-        private TextView questionTitle;
-        private Button ansDetail;
-
-        public MultiQuestionViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.questionTitle = itemView.findViewById(R.id.multi_choice_question);
-            this.ansDetail = itemView.findViewById(R.id.button_multi_choice_detail);
-        }
-    }
 
     class InnerViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView recyclerView;

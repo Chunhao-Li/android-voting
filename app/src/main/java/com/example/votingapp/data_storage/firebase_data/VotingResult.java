@@ -29,15 +29,15 @@ public class VotingResult extends Voting {
 
     }
 
-    public void addAnswers(UserAnswers answers){
-        for(int i = 0;i<answers.getAnswers().size();i++){
-            if (answers.getAnswers().get(i).questionType.equals(QuestionType.MULTI_CHOICE)){
-                this.questionStatistics.get(i).update(answers.getAnswers().get(i));
-            }else if(answers.getAnswers().get(i).questionType.equals(QuestionType.TEXT_QUESTION)){
-                this.questionStatistics.get(i).update(answers.getAnswers().get(i));
-            }
-        }
-    }
+//    public void addAnswers(UserAnswers answers){
+//        for(int i = 0;i<answers.getAnswers().size();i++){
+//            if (answers.getAnswers().get(i).questionType.equals(QuestionType.MULTI_CHOICE)){
+//                this.questionStatistics.get(i).update(answers.getAnswers().get(i));
+//            }else if(answers.getAnswers().get(i).questionType.equals(QuestionType.TEXT_QUESTION)){
+//                this.questionStatistics.get(i).update(answers.getAnswers().get(i));
+//            }
+//        }
+//    }
 
 //    if you want the whole data structure
     public ArrayList<QuestionStatistics> getQuestionStatistics(){

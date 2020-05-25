@@ -8,7 +8,6 @@ import android.os.Bundle;
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.data_storage.firebase_data.MultipleChoiceQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
-import com.example.votingapp.data_storage.firebase_data.TextAnswer;
 import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.User;
 import com.example.votingapp.data_storage.firebase_data.VotingResult;
@@ -285,8 +284,8 @@ public class MainActivity extends AppCompatActivity {
             EditQuestion question = item.getData();
             if (item.getType() == QuestionType.TEXT_QUESTION) {
 
-                TextAnswer textAnswer =
-                        new TextAnswer(((EditTextQuestion) question).getQuestionString(),
+                TextQuestionStatistics textQuestionStatistics =
+                        new TextQuestionStatistics(((EditTextQuestion) question).getQuestionString(),
                                 0, new ArrayList<String>());
                 questionStatistics.add(textQuestionStatistics);
             } else if (item.getType() == QuestionType.MULTI_CHOICE) {
