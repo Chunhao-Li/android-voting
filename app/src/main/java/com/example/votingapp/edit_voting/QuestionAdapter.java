@@ -116,6 +116,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         CheckBox mCheckBox5;
         CheckBox mCheckBox6;
         CheckBox mCheckBox7;
+
         protected CheckBox[] checkBoxes;
 
         public CheckBox[] getCheckBoxes() {
