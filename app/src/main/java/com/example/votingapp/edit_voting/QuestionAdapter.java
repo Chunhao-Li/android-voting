@@ -129,13 +129,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     protected class MultipleChoiceViewHolder extends RecyclerView.ViewHolder {
         public TextView mQuestion;
         CheckBox mCheckBox0;
-        protected CheckBox mCheckBox1;
-        protected CheckBox mCheckBox2;
-        protected CheckBox mCheckBox3;
-        protected CheckBox mCheckBox4;
-        protected CheckBox mCheckBox5;
-        protected CheckBox mCheckBox6;
-        protected CheckBox mCheckBox7;
+        CheckBox mCheckBox1;
+        CheckBox mCheckBox2;
+        CheckBox mCheckBox3;
+        CheckBox mCheckBox4;
+        CheckBox mCheckBox5;
+        CheckBox mCheckBox6;
+        CheckBox mCheckBox7;
 
         private CheckBox[] getCheckBoxes() {
             return checkBoxes;
