@@ -79,19 +79,23 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
         Delete the voting when pressed the button
          */
         votings.remove(position);
-        this.notifyItemRemoved(position);
-        DatabaseReference votingsRef = mDatabase.getReference("votings");
+
+        final DatabaseReference votingsRef = mDatabase.getReference("votings");
         DatabaseReference userRef = mDatabase.getReference("users");
         votingsRef.child(votingId).setValue(null);
         if (mAuth.getCurrentUser() != null) {
             String userId = Integer.toString(mAuth.getCurrentUser().getEmail().hashCode());
-            userRef.child(userId).child("votings").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot votingChild : dataSnapshot.getChildren()) {
-                        String curVotingId = votingChild.getValue(String.class);
-                        if (curVotingId.equals(votingId)) {
-                            votingChild.getRef().removeValue();
+                    if (dataSnapshot.hasChild("votings")) {
+                        DataSnapshot votingChild = dataSnapshot.child("votings");
+                        for (DataSnapshot curVoting: votingChild.getChildren()) {
+                            String curVotingId = curVoting.getValue(String.class);
+                            if (curVotingId.equals(votingId)) {
+                                curVoting.getRef().removeValue();
+                            }
                         }
                     }
 
@@ -103,6 +107,8 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
                 }
             });
         }
+
+        this.notifyItemRemoved(position);
     }
 
 

@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         auth.addAuthStateListener(mAuthStateListener);
     }
 
-    private void obtainAllVotingId() {
+    public void obtainAllVotingId() {
         /*
         This method will retrieve all the voting ids for doing voting.
          */
@@ -434,26 +434,30 @@ public class MainActivity extends AppCompatActivity {
             mDatabaseVotingRef.child(inputId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String deadline = dataSnapshot.child("deadline").getValue(String.class);
-                    assert deadline != null;
-                    String[] deadlineSplit = deadline.split("/");
-                    final Calendar c = Calendar.getInstance();
-                    long rightNow = c.getTimeInMillis();
-                    c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
-                    c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
-                    c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
-                    c.set(Calendar.HOUR, Integer.parseInt(deadlineSplit[3]));
-                    c.set(Calendar.MINUTE, Integer.parseInt(deadlineSplit[4]));
-                    long deadlineTime = c.getTimeInMillis();
+                    if (dataSnapshot.hasChild("deadline")) {
+                        String deadline = dataSnapshot.child("deadline").getValue(String.class);
+                        assert deadline != null;
+                        String[] deadlineSplit = deadline.split("/");
+                        final Calendar c = Calendar.getInstance();
+                        long rightNow = c.getTimeInMillis();
+                        c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
+                        c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
+                        c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
+                        c.set(Calendar.HOUR, Integer.parseInt(deadlineSplit[3]));
+                        c.set(Calendar.MINUTE, Integer.parseInt(deadlineSplit[4]));
+                        long deadlineTime = c.getTimeInMillis();
 
-                    // Check the deadline with the local time
-                    boolean isClosed = (rightNow > deadlineTime);
-                    if (isClosed) {
-                        Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
+                        // Check the deadline with the local time
+                        boolean isClosed = (rightNow > deadlineTime);
+                        if (isClosed) {
+                            Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            launchDoVoting();
+                        }
+                        mDatabaseVotingRef.removeEventListener(this);
                     } else {
-                        launchDoVoting();
+                        Toast.makeText(MainActivity.this, "Invalid voting id!", Toast.LENGTH_SHORT).show();
                     }
-                    mDatabaseVotingRef.removeEventListener(this);
                 }
 
                 @Override
