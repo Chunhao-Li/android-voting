@@ -26,6 +26,7 @@ public class TextResultDetail extends AppCompatActivity {
 
         totalCount = findViewById(R.id.text_result_detail_answer);;
 
+
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
