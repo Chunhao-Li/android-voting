@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#030A12</color>
     <color name="colorAccent">#009688</color>
     <color name="colorCreateVoting">#009688</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#1F3EE8</color>
 </resources>
