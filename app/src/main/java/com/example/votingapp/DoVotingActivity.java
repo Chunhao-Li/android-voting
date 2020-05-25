@@ -180,9 +180,9 @@ public class DoVotingActivity extends AppCompatActivity {
 
     //  if hit submit button
     public void submitAnswers() {
-        for (Answer answer: answers) {
-            answer.getQuestionString();
-        }
+//        for (Answer answer: answers) {
+//            answer.getQuestionString();
+//        }
 
         Button buttonSubmit = findViewById(R.id.button_submit);
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
@@ -193,7 +193,6 @@ public class DoVotingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
 
                 ArrayList<Answer> answers = DoVotingActivity.this.answers;
-
                 UserAnswers rtnAns = new UserAnswers(votingId,answers);
                 Log.d("connecting to server...","...");
                 SaveAnswerOnCloud(rtnAns);
@@ -225,11 +224,11 @@ public class DoVotingActivity extends AppCompatActivity {
                 ArrayList<ArrayList<String>> choices = ((MultipleChoiceAnswer)currentAns).getAnswerChoice();
                 for(int j = 0;j<choices.size();j++){
                     DatabaseReference curChoiceStatRef = curQuestionStatRef.child("choices").child(Integer.toString(j));
-                    curChoiceStatRef.child(choices.get(j).get(0)).setValue(choices.get(j).get(1));
+                    curChoiceStatRef.child("choices").child(Integer.toString(j)).child(choices.get(j).get(0)).setValue(choices.get(j).get(1));
                 }
             }
         }
-        Toast.makeText(getApplicationContext(), "Successfully Submitted!" + answers.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Successfully Submitted! W/ answer size: " + answers.size(), Toast.LENGTH_SHORT).show();
         Intent intents = new Intent(this, MainActivity.class);
         startActivity(intents);
     }
