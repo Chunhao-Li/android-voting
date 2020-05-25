@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".voting_result.TextResultDetail">
+    tools:context=".voting_result.TextResultDetailActivity">
 
 
     <TextView
@@ -16,6 +16,7 @@
          />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/text_result_detail_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/text_detail_total_count"

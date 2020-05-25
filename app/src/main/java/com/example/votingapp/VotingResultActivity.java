@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.data_storage.firebase_data.Answer;
-import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestionStatistics;
+import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestStat;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
@@ -121,16 +121,18 @@ public class VotingResultActivity extends AppCompatActivity {
 
                             answerIndex++;
                             DataSnapshot answersRef = votingAns.child("answers");
-                            int questionIndex = 0;
+                            int questIndex = 0;
                             for (DataSnapshot ansRef : answersRef.getChildren()) {
                                 if (ansRef.child("question type").getValue().toString()
                                         .equals(QuestionType.TEXT_QUESTION.name())) {
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     String answerText = ansRef.child("answer text").getValue().toString();
-                                    if (questionStatistics.size() <= questionIndex) {
-                                        questionStatistics.add(new TextQuestionStatistics(questionS, 1));
+                                    if (questionStatistics.size() <= questIndex) {
+                                        questionStatistics.add(new TextQuestionStatistics(questionS, 1, answerText));
                                     } else {
-                                        ((TextQuestionStatistics) questionStatistics.get(questionIndex)).update(questionS);
+                                        ((TextQuestionStatistics) questionStatistics.get(questIndex)).update(answerText);
+                                        Log.d("getanswer_text:", Integer.toString(((TextQuestionStatistics) questionStatistics.get(questIndex))
+                                                .getAnswers().size()));
                                     }
                                     if (updateQuestionItems) {
                                         EditTextQuestion textQuestion = new EditTextQuestion(questionS);
@@ -138,21 +140,27 @@ public class VotingResultActivity extends AppCompatActivity {
                                                 QuestionType.TEXT_QUESTION));
                                     }
 //                                    allAnswers.get(answerIndex).add(new TextAnswer(questionS, answerText));
-                                    Log.d("getanswer_text:", answerText);
+
                                 } else {
 //                                    // TODO MULTICHOICE answer
                                     String questionS = ansRef.child("question string").getValue().toString();
-                                    ArrayList<String> choices = new ArrayList<>();
-                                    for (int i = 0; i < 20; i++) {
-                                        choices.add("test_choice" + i);
-
+                                    if (questionStatistics.size() <= questIndex) {
+                                        questionStatistics.add(new MultiChoiceQuestStat(questionS));
                                     }
+                                    MultiChoiceQuestStat questStat = (MultiChoiceQuestStat) questionStatistics.get(questIndex);
+                                    ArrayList<String> choices = new ArrayList<>();
 
-                                    if (questionStatistics.size() <= questionIndex) {
-                                        questionStatistics.add(new MultiChoiceQuestionStatistics(questionS, 1));
-                                    } else {
-                                        // TODO
-//                                        ((MultiChoiceQuestionStatistics) questionStatistics.get(questionIndex)).update("test_choice");
+                                    for (DataSnapshot choicesRef : ansRef.child("choices").getChildren()) {
+                                        String choiceText = choicesRef.getKey();
+                                        choices.add(choiceText);
+                                        if (!questStat.existChoice(choiceText)) {
+                                            questStat.addChoice(choiceText);
+                                        }
+                                        if ( choicesRef.getValue().toString().equals("1")) {
+                                            questStat.update(choiceText);
+                                        }
+                                        Log.d("VotingDownload_key", choicesRef.getKey());
+                                        Log.d("VotingDownload_child", choicesRef.getValue().toString());
                                     }
 
                                     if (updateQuestionItems) {
@@ -163,7 +171,7 @@ public class VotingResultActivity extends AppCompatActivity {
                                                 multiQ, QuestionType.MULTI_CHOICE));
                                     }
                                 }
-                                questionIndex++;
+                                questIndex++;
                                 publishProgress();
                             }
                             updateQuestionItems = false;
