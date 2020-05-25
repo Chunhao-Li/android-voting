@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.example.votingapp.data_type.QuestionType;
-import com.example.votingapp.data_type.firebase_data.User;
-import com.example.votingapp.data_type.firebase_data.VotingInfo;
-import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
-import com.example.votingapp.voting_edit.QuestionParcel;
-import com.example.votingapp.voting_edit.TextQuestionParcel;
+import com.example.votingapp.data_type.question.QuestionType;
+import com.example.votingapp.data_type.user.User;
+import com.example.votingapp.data_type.voting.Voting;
+import com.example.votingapp.data_type.question.MultiChoiceParcel;
+import com.example.votingapp.data_type.question.QuestionParcel;
+import com.example.votingapp.data_type.question.TextQuestionParcel;
+import com.example.votingapp.edit_voting.VotingEditActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ArrayList<String>> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
-    private VotingInfo newVoting;
+    private Voting newVoting;
 
     private boolean needUpdate = true;
 
@@ -216,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
@@ -224,10 +226,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-          return null;
+            return null;
         }
     }
-
 
 
     private void updateUser() {
@@ -282,15 +283,15 @@ public class MainActivity extends AppCompatActivity {
                 questions.add(new TextQuestionParcel(question.getQuestionString()));
             } else if (question.getQuestionType() == QuestionType.MULTI_CHOICE) {
 
-                questions.add(new MultiChoiceQuestionParcel(question.getQuestionString(),
-                        ((MultiChoiceQuestionParcel) question).getChoices()));
+                questions.add(new MultiChoiceParcel(question.getQuestionString(),
+                        ((MultiChoiceParcel) question).getChoices()));
             }
         }
 
         if (deadline != null) {
             String[] splitDeadline = deadline.split("/");
             if (splitDeadline.length == 5) {
-                newVoting = new VotingInfo(
+                newVoting = new Voting(
                         curUserId, deadline, questions, votingTitle);
                 saveVotingOnCloud();
 
@@ -300,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveVotingOnCloud() {
         DatabaseReference newVotingRef = mDatabaseVotingRef.push();
-        String votingResultKey = newVotingRef.getKey(); // get unique id for the voting result
+        String votingId = newVotingRef.getKey(); // get unique id for the voting id
 
         // save general voting information
         Log.d("saveVotingoncloud:", curUserId);
@@ -325,22 +326,20 @@ public class MainActivity extends AppCompatActivity {
                 DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
                 curQuestionStatRef.child("question").setValue(curQuestion.getQuestionString());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.MULTI_CHOICE);
-                ArrayList<String> choices = ((MultiChoiceQuestionParcel) curQuestion).getChoices();
-                for (String choice: choices) {
+                ArrayList<String> choices = ((MultiChoiceParcel) curQuestion).getChoices();
+                for (String choice : choices) {
                     if (!choice.isEmpty()) {
                         curQuestionStatRef.child("choices").push().setValue(choice);
                     }
                 }
 
             }
-//            else if(curQuestion.getQuestionType() == QuestionType.MULTI_CHOICE){
-//                DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
-//            }
+
         }
 
         // save voting id for the creator
         mDatabaseUserRef.child(curUserId).child("votings").
-               push().setValue(votingResultKey);
+                push().setValue(votingId);
         updateUI();
 
 
@@ -465,6 +464,7 @@ public class MainActivity extends AppCompatActivity {
 
                     mDatabaseVotingRef.removeEventListener(this);
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -482,10 +482,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DoVotingActivity.class);
         Log.d("MainDoVotingTest", votingIdInputText);
         intent.putExtra(GET_VOTING_ID, votingIdInputText);
-        intent.putExtra("GET_VOTER_ID",curUserId);
+        intent.putExtra("GET_VOTER_ID", curUserId);
         startActivity(intent);
     }
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.votingapp.data_type.firebase_data;
+package com.example.votingapp.data_type.user;
 
 import java.util.ArrayList;
 

@@ -14,15 +14,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.votingapp.data_type.QuestionType;
+import com.example.votingapp.data_type.question.QuestionType;
 import com.example.votingapp.data_type.answer.Answer;
 import com.example.votingapp.data_type.answer.MultipleChoiceAnswer;
 import com.example.votingapp.data_type.answer.TextAnswer;
 import com.example.votingapp.data_type.answer.UserAnswers;
-import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
-import com.example.votingapp.voting_edit.QuestionParcel;
-import com.example.votingapp.voting_edit.TextQuestionParcel;
-import com.example.votingapp.voting_edit.QuestionAdapter;
+import com.example.votingapp.data_type.question.MultiChoiceParcel;
+import com.example.votingapp.data_type.question.QuestionParcel;
+import com.example.votingapp.data_type.question.TextQuestionParcel;
+import com.example.votingapp.edit_voting.QuestionAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +39,6 @@ public class DoVotingActivity extends AppCompatActivity {
     private ArrayList<Answer> answers = new ArrayList<>();
     private static final String TAG = "DoVotingTAG";
     private int index = 0;
-    private RecyclerView mRecyclerView;
     private QuestionAdapter mAdapter;
 
     private FirebaseDatabase mDatabase;
@@ -58,7 +57,7 @@ public class DoVotingActivity extends AppCompatActivity {
         mDatabaseAnswerRef = mDatabase.getReference("answers");
 
 
-        mRecyclerView = findViewById(R.id.voting_do_recyclerview);
+        RecyclerView mRecyclerView = findViewById(R.id.voting_do_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new QuestionAdapter(this, questionItems, answers);
         mRecyclerView.setAdapter(mAdapter);
@@ -128,7 +127,7 @@ public class DoVotingActivity extends AppCompatActivity {
                                 Log.d("dovoting choice", choiceRef.getValue().toString());
                             }
                             Log.d("choices+length", Integer.toString(choices.size()));
-                            questionItems.add(new MultiChoiceQuestionParcel(
+                            questionItems.add(new MultiChoiceParcel(
                                     questionString, choices));
                             // TODO save multi choice answer
                             ArrayList<ArrayList<String>> answerChoices = new ArrayList<>();

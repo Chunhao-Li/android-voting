@@ -1,4 +1,4 @@
-package com.example.votingapp.voting_result;
+package com.example.votingapp.view_voting;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
+import com.example.votingapp.data_type.question.MultiChoiceParcel;
 
 import java.util.ArrayList;
 
 class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHolder> {
 //    private final ArrayList<RecyclerViewQuestionItem> questionItems;
-    private final MultiChoiceQuestionParcel question;
+    private final MultiChoiceParcel question;
     private final ArrayList<Integer> choiceCount;
     private int total;
 
-    public InnerAdapter(MultiChoiceQuestionParcel multiChoiceQuestion, ArrayList<Integer> choiceCount) {
+    public InnerAdapter(MultiChoiceParcel multiChoiceQuestion, ArrayList<Integer> choiceCount) {
         this.question = multiChoiceQuestion;
         this.choiceCount = choiceCount;
         for (Integer count: choiceCount) {

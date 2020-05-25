@@ -1,39 +1,37 @@
-package com.example.votingapp.voting_edit;
+package com.example.votingapp.data_type.question;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.votingapp.data_type.QuestionType;
-
 import java.util.ArrayList;
 
-public class MultiChoiceQuestionParcel extends QuestionParcel implements Parcelable {
+public class MultiChoiceParcel extends QuestionParcel implements Parcelable {
 
     //    the name of each class
     private ArrayList<String> choices;
 
-    public MultiChoiceQuestionParcel(String question, ArrayList<String> choices){
+    public MultiChoiceParcel(String question, ArrayList<String> choices){
         super.questionString = question;
         super.questionType = QuestionType.MULTI_CHOICE;
         this.choices = choices;
     }
 
-    protected MultiChoiceQuestionParcel(Parcel in) {
+    protected MultiChoiceParcel(Parcel in) {
         questionString = in.readString();
         questionType = QuestionType.valueOf(in.readString());
         choices = in.createStringArrayList();
 
     }
 
-    public static final Creator<MultiChoiceQuestionParcel> CREATOR = new Creator<MultiChoiceQuestionParcel>() {
+    public static final Creator<MultiChoiceParcel> CREATOR = new Creator<MultiChoiceParcel>() {
         @Override
-        public MultiChoiceQuestionParcel createFromParcel(Parcel in) {
-            return new MultiChoiceQuestionParcel(in);
+        public MultiChoiceParcel createFromParcel(Parcel in) {
+            return new MultiChoiceParcel(in);
         }
 
         @Override
-        public MultiChoiceQuestionParcel[] newArray(int size) {
-            return new MultiChoiceQuestionParcel[size];
+        public MultiChoiceParcel[] newArray(int size) {
+            return new MultiChoiceParcel[size];
         }
     };
 

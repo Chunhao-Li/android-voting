@@ -1,8 +1,6 @@
-package com.example.votingapp.voting_edit;
+package com.example.votingapp.data_type.question;
 
 import android.os.Parcelable;
-
-import com.example.votingapp.data_type.firebase_data.Question;
 
 /* Notice: this abstract question class is participant-use class,
    for creator usage you should check QuestionAnalysis class

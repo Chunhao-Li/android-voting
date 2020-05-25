@@ -1,6 +1,6 @@
-package com.example.votingapp.data_type.firebase_data;
+package com.example.votingapp.data_type.answer_stat;
 
-import com.example.votingapp.data_type.QuestionType;
+import com.example.votingapp.data_type.question.QuestionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

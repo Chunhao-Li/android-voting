@@ -1,4 +1,4 @@
-package com.example.votingapp;
+package com.example.votingapp.edit_voting;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,12 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.votingapp.voting_edit.DatePickerFragment;
-import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
-import com.example.votingapp.voting_edit.QuestionParcel;
-import com.example.votingapp.voting_edit.TextQuestionParcel;
-import com.example.votingapp.voting_edit.QuestionAdapter;
-import com.example.votingapp.voting_edit.TimePickerFragment;
+import com.example.votingapp.MainActivity;
+import com.example.votingapp.R;
+import com.example.votingapp.data_type.question.MultiChoiceParcel;
+import com.example.votingapp.data_type.question.QuestionParcel;
+import com.example.votingapp.data_type.question.TextQuestionParcel;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
@@ -166,7 +165,7 @@ public class VotingEditActivity extends AppCompatActivity {
                     String textQuestion = data.getStringExtra(MultiChoiceQuestionActivity.GET_MULTI_CHOICE_QUESTION);
                     ArrayList<String> choices = data.getStringArrayListExtra(MultiChoiceQuestionActivity.GET_MULTI_CHOICE_CHOICES);
                     int oldQuestionItemsSize = questionItems.size();
-                    questionItems.add( new MultiChoiceQuestionParcel(textQuestion,choices));
+                    questionItems.add( new MultiChoiceParcel(textQuestion,choices));
                     mAdapter.notifyItemInserted(oldQuestionItemsSize);
 
                 }

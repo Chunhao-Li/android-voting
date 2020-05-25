@@ -1,4 +1,4 @@
-package com.example.votingapp.voting_result;
+package com.example.votingapp.view_voting;
 
 import android.content.Context;
 import android.util.Log;

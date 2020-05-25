@@ -1,4 +1,4 @@
-package com.example.votingapp.voting_edit;
+package com.example.votingapp.edit_voting;
 
 import android.content.Context;
 import android.text.Editable;
@@ -18,6 +18,8 @@ import com.example.votingapp.R;
 import com.example.votingapp.data_type.answer.Answer;
 import com.example.votingapp.data_type.answer.MultipleChoiceAnswer;
 import com.example.votingapp.data_type.answer.TextAnswer;
+import com.example.votingapp.data_type.question.MultiChoiceParcel;
+import com.example.votingapp.data_type.question.QuestionParcel;
 
 
 import java.util.ArrayList;
@@ -82,7 +84,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             String question =  questionItems.get(position).getQuestionString();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
-            final ArrayList<String> choices = ((MultiChoiceQuestionParcel) questionItems.get(position)).getChoices();
+            final ArrayList<String> choices = ((MultiChoiceParcel) questionItems.get(position)).getChoices();
 //            final ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
             final CheckBox[] checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
             final MultiChoiceRecorder[] recorders =   ((MultipleChoiceViewHolder) holder).getRecorders();

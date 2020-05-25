@@ -1,20 +1,15 @@
-package com.example.votingapp.voting_edit;
+package com.example.votingapp.edit_voting;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.votingapp.VotingEditActivity;
-
 import java.util.Calendar;
-import java.util.Objects;
 
 public class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {

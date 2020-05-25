@@ -1,4 +1,4 @@
-package com.example.votingapp.voting_result;
+package com.example.votingapp.view_voting;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.data_type.firebase_data.MultiChoiceQuestionStat;
-import com.example.votingapp.data_type.firebase_data.QuestionStat;
-import com.example.votingapp.data_type.firebase_data.TextQuestionStat;
-import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
-import com.example.votingapp.voting_edit.QuestionAdapter;
-import com.example.votingapp.voting_edit.QuestionParcel;
+import com.example.votingapp.data_type.answer_stat.MultiChoiceQuestionStat;
+import com.example.votingapp.data_type.answer_stat.QuestionStat;
+import com.example.votingapp.data_type.answer_stat.TextQuestionStat;
+import com.example.votingapp.data_type.question.MultiChoiceParcel;
+import com.example.votingapp.edit_voting.QuestionAdapter;
+import com.example.votingapp.data_type.question.QuestionParcel;
 
 import java.util.ArrayList;
 
@@ -81,7 +81,7 @@ public class ResultAdapter extends QuestionAdapter {
 
         }else{
 
-            MultiChoiceQuestionParcel question = (MultiChoiceQuestionParcel) questionItems.get(position);
+            MultiChoiceParcel question = (MultiChoiceParcel) questionItems.get(position);
             Log.d("ResultAdapter:", Integer.toString(question.getChoices().size()));
                ((InnerViewHolder) holder).questionTitle.setText(question.getQuestionString());
                ArrayList<Integer> choiceCount = ((MultiChoiceQuestionStat) questionStatistics.get(position)).getChoiceVoterCount();
@@ -112,7 +112,7 @@ public class ResultAdapter extends QuestionAdapter {
 
     class InnerViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView recyclerView;
-        private MultiChoiceQuestionParcel question;
+        private MultiChoiceParcel question;
          private TextView questionTitle;
 
         public InnerViewHolder(@NonNull View itemView) {

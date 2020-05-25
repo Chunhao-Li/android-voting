@@ -1,4 +1,4 @@
-package com.example.votingapp;
+package com.example.votingapp.view_voting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,15 +15,16 @@ import android.view.ContextMenu;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.votingapp.data_type.QuestionType;
+import com.example.votingapp.R;
+import com.example.votingapp.VotingAdapter;
+import com.example.votingapp.data_type.question.QuestionType;
 import com.example.votingapp.data_type.answer.Answer;
-import com.example.votingapp.data_type.firebase_data.MultiChoiceQuestionStat;
-import com.example.votingapp.data_type.firebase_data.QuestionStat;
-import com.example.votingapp.data_type.firebase_data.TextQuestionStat;
-import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
-import com.example.votingapp.voting_edit.QuestionParcel;
-import com.example.votingapp.voting_edit.TextQuestionParcel;
-import com.example.votingapp.voting_result.ResultAdapter;
+import com.example.votingapp.data_type.answer_stat.MultiChoiceQuestionStat;
+import com.example.votingapp.data_type.answer_stat.QuestionStat;
+import com.example.votingapp.data_type.answer_stat.TextQuestionStat;
+import com.example.votingapp.data_type.question.MultiChoiceParcel;
+import com.example.votingapp.data_type.question.QuestionParcel;
+import com.example.votingapp.data_type.question.TextQuestionParcel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -140,7 +141,6 @@ public class VotingResultActivity extends AppCompatActivity {
 //                                    allAnswers.get(answerIndex).add(new TextAnswer(questionS, answerText));
 
                                 } else {
-//                                    // TODO MULTICHOICE answer
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     if (questionStatistics.size() <= questIndex) {
                                         questionStatistics.add(new MultiChoiceQuestionStat(questionS));
@@ -163,7 +163,7 @@ public class VotingResultActivity extends AppCompatActivity {
 
                                     if (updateQuestionItems) {
 
-                                        questionItems.add(new MultiChoiceQuestionParcel(questionS, choices));
+                                        questionItems.add(new MultiChoiceParcel(questionS, choices));
                                     }
                                 }
                                 questIndex++;

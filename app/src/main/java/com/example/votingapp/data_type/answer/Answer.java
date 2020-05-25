@@ -1,6 +1,6 @@
 package com.example.votingapp.data_type.answer;
 
-import com.example.votingapp.data_type.QuestionType;
+import com.example.votingapp.data_type.question.QuestionType;
 
 public abstract class Answer {
     //    respondent UID

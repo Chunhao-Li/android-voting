@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".voting_result.TextResultDetailActivity"></activity>
+        <activity android:name=".view_voting.TextResultDetailActivity"></activity>
         <activity android:name=".DoVotingActivity" />
-        <activity android:name=".VotingResultActivity" />
-        <activity android:name=".MultiChoiceQuestionActivity" />
+        <activity android:name=".view_voting.VotingResultActivity" />
+        <activity android:name=".edit_voting.MultiChoiceQuestionActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".VotingEditActivity" />
-        <activity android:name=".TextQuestionActivity" />
+        <activity android:name=".edit_voting.VotingEditActivity" />
+        <activity android:name=".edit_voting.TextQuestionActivity" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.votingapp.voting_result;
+package com.example.votingapp.view_voting;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
