@@ -12,6 +12,7 @@ import com.example.votingapp.data_type.voting.Voting;
 import com.example.votingapp.data_type.question.MultiChoiceParcel;
 import com.example.votingapp.data_type.question.QuestionParcel;
 import com.example.votingapp.data_type.question.TextQuestionParcel;
+import com.example.votingapp.do_voting.DoVotingActivity;
 import com.example.votingapp.edit_voting.VotingEditActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;

@@ -10,12 +10,9 @@ import com.example.votingapp.data_type.question.Question;
 * */
 public abstract class QuestionStat extends Question {
 
-    protected Integer totalVoterCount;
-    protected abstract Integer getTotalVoterCount();
-//    abstract void update(Answer ans);
-
     @Override
     public boolean equals(@Nullable Object obj) {
+        assert obj != null;
         return ((QuestionStat) obj).getQuestionString().equals(
                 this.getQuestionString()
         );

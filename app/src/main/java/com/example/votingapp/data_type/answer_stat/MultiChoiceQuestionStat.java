@@ -3,34 +3,20 @@ package com.example.votingapp.data_type.answer_stat;
 import com.example.votingapp.data_type.question.QuestionType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class MultiChoiceQuestionStat extends QuestionStat {
-//    the name of each choice
+    //    the name of each choice
     private ArrayList<String> choices = new ArrayList<>();
-//    # of voters vote for each choice, permute the same order as choices
+    //    # of voters vote for each choice, permute the same order as choices
     private ArrayList<Integer> choiceVoterCount = new ArrayList<>();
     private HashMap<String, Integer> choiceIndex = new HashMap<>();
     private int curIndex = -1;
 
-//    inherit previous status
+    //    inherit previous status
     public MultiChoiceQuestionStat(String questionString) {
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
-
-//        super.totalVoterCount = totalNum;
-    }
-// if it's the first time to create this question, init statistics to default.
-    public MultiChoiceQuestionStat(String questionString, ArrayList<String> choices) {
-        super.questionString = questionString;
-        super.questionType = QuestionType.MULTI_CHOICE;
-        super.totalVoterCount = 0;
-        this.choices = choices;
-        int len = choices.size();
-        Integer[] cvc = new Integer[len];
-        Arrays.fill(cvc, 0);
-        this.choiceVoterCount = new ArrayList<>(Arrays.asList(cvc));
     }
 
 
@@ -38,45 +24,36 @@ public class MultiChoiceQuestionStat extends QuestionStat {
         choices.add(choice);
         curIndex++;
         choiceIndex.put(choice, curIndex);
-
         choiceVoterCount.add(0);
-    }
-    @Override
-    public Integer getTotalVoterCount(){
-        return this.totalVoterCount;
     }
 
     public void update(String choice) {
-//        for(int i=0;i<this.choices.size();i++){
-//            if(this.choices.get(i).equals(choice)) {
-//                this.choiceVoterCount.set(i, choiceVoterCount.get(i)+1);
-//            }
-//        }
         if (choiceIndex.containsKey(choice)) {
-            int index = choiceIndex.get( choice);
-            choiceVoterCount.set(index, choiceVoterCount.get(index)+1);
+            int index;
+            index = choiceIndex.get(choice);
+            choiceVoterCount.set(index, choiceVoterCount.get(index) + 1);
         }
     }
 
     public boolean existChoice(String choice) {
         return choiceIndex.containsKey(choice);
     }
+
     @Override
-    public QuestionType getQuestionType(){
+    public QuestionType getQuestionType() {
         return this.questionType;
     }
 
     @Override
-    public String getQuestionString(){
+    public String getQuestionString() {
         return this.questionString;
     }
 
-
-    public ArrayList<String> getChoices(){
+    public ArrayList<String> getChoices() {
         return this.choices;
     }
 
-    public ArrayList<Integer> getChoiceVoterCount(){
+    public ArrayList<Integer> getChoiceVoterCount() {
         return this.choiceVoterCount;
     }
 

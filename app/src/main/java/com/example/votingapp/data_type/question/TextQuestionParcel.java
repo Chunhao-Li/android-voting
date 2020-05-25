@@ -3,12 +3,12 @@ package com.example.votingapp.data_type.question;
 import android.os.Parcel;
 
 public class TextQuestionParcel extends QuestionParcel {
-    public TextQuestionParcel(String question){
+    public TextQuestionParcel(String question) {
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
     }// constructor for text q
 
-    protected TextQuestionParcel(Parcel in) {
+    private TextQuestionParcel(Parcel in) {
         questionType = QuestionType.valueOf(in.readString());
         questionString = in.readString();
     }// parcel interface
@@ -26,12 +26,12 @@ public class TextQuestionParcel extends QuestionParcel {
     };
 
     @Override
-    public QuestionType getQuestionType(){
+    public QuestionType getQuestionType() {
         return super.questionType;
     }
 
     @Override
-    public String getQuestionString(){
+    public String getQuestionString() {
         return super.questionString;
     }
 

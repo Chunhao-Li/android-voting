@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".view_voting.TextResultDetailActivity"></activity>
-        <activity android:name=".DoVotingActivity" />
+        <activity android:name=".do_voting.DoVotingActivity" />
         <activity android:name=".view_voting.VotingResultActivity" />
         <activity android:name=".edit_voting.MultiChoiceQuestionActivity" />
         <activity

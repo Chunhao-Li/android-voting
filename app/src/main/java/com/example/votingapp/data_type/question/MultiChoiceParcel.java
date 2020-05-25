@@ -10,13 +10,13 @@ public class MultiChoiceParcel extends QuestionParcel implements Parcelable {
     //    the name of each class
     private ArrayList<String> choices;
 
-    public MultiChoiceParcel(String question, ArrayList<String> choices){
+    public MultiChoiceParcel(String question, ArrayList<String> choices) {
         super.questionString = question;
         super.questionType = QuestionType.MULTI_CHOICE;
         this.choices = choices;
     }
 
-    protected MultiChoiceParcel(Parcel in) {
+    private MultiChoiceParcel(Parcel in) {
         questionString = in.readString();
         questionType = QuestionType.valueOf(in.readString());
         choices = in.createStringArrayList();
@@ -35,17 +35,17 @@ public class MultiChoiceParcel extends QuestionParcel implements Parcelable {
         }
     };
 
-    public ArrayList<String> getChoices(){
+    public ArrayList<String> getChoices() {
         return this.choices;
     }
 
     @Override
-    public QuestionType getQuestionType(){
+    public QuestionType getQuestionType() {
         return super.questionType;
     }
 
     @Override
-    public String getQuestionString(){
+    public String getQuestionString() {
         return super.questionString;
     }
 

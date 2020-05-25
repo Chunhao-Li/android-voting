@@ -11,17 +11,12 @@ public class TextAnswer extends Answer {
     //    string answer for text question
     private String answerText;
 
-    public TextAnswer(String questionString, String answerText){
+    public TextAnswer(String questionString, String answerText) {
         super.questionString = questionString;
         super.questionType = QuestionType.TEXT_QUESTION;
         this.answerText = answerText;
-//        super.respondentUid = respondentUid;
     }
 
-//    @Override
-//    public String getRespondentUid() {
-//        return this.respondentUid;
-//    }
 
     @Override
     public String getQuestionString() {

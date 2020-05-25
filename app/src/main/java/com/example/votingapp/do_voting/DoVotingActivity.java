@@ -1,4 +1,4 @@
-package com.example.votingapp;
+package com.example.votingapp.do_voting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.votingapp.MainActivity;
+import com.example.votingapp.R;
 import com.example.votingapp.data_type.question.QuestionType;
 import com.example.votingapp.data_type.answer.Answer;
 import com.example.votingapp.data_type.answer.MultipleChoiceAnswer;
@@ -39,7 +41,7 @@ public class DoVotingActivity extends AppCompatActivity {
     private ArrayList<Answer> answers = new ArrayList<>();
     private static final String TAG = "DoVotingTAG";
     private int index = 0;
-    private QuestionAdapter mAdapter;
+    private DoVotingAdapter mAdapter;
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mDatabaseVotingRef;
@@ -59,7 +61,7 @@ public class DoVotingActivity extends AppCompatActivity {
 
         RecyclerView mRecyclerView = findViewById(R.id.voting_do_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new QuestionAdapter(this, questionItems, answers);
+        mAdapter = new DoVotingAdapter(this, questionItems, answers);
         mRecyclerView.setAdapter(mAdapter);
 
         Intent intent = getIntent();
