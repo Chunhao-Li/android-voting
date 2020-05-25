@@ -11,5 +11,4 @@ public abstract class Answer {
 //    public abstract String getRespondentUid();
     public abstract String getQuestionString();
     public abstract QuestionType getQuestionType();
-    public abstract String getAnswerString();
 }

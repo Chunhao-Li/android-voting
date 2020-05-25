@@ -32,7 +32,6 @@ public class TextAnswer extends Answer{
         return this.questionType;
     }
 
-    @Override
     public String getAnswerString() {
         return this.answerText;
     }
