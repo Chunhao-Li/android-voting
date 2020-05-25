@@ -4,18 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".voting_result.TextResultDetail">
+    tools:context=".voting_result.TextResultDetailActivity">
 
 
     <TextView
         android:id="@+id/text_detail_total_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/blue"
+        android:textStyle="normal"
+        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
          />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/text_result_detail_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/text_detail_total_count"

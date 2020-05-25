@@ -24,10 +24,11 @@ public class TextQuestionStatistics extends QuestionStatistics {
     }
 
 //    inherit previous status
-    public TextQuestionStatistics(String question, Integer totalNum){
+    public TextQuestionStatistics(String question, Integer totalNum, String curAns){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
         super.totalVoterCount = totalNum;
+        answers.add(curAns);
 
     }
 

@@ -11,16 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
-import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 
 import java.util.ArrayList;
 
 class InnerAdapter extends RecyclerView.Adapter {
 //    private final ArrayList<RecyclerViewQuestionItem> questionItems;
     private final EditMultiChoiceQuestion question;
+    private final ArrayList<Integer> choiceCount;
 
-    public InnerAdapter(EditMultiChoiceQuestion multiChoiceQuestion) {
+    public InnerAdapter(EditMultiChoiceQuestion multiChoiceQuestion, ArrayList<Integer> choiceCount) {
         this.question = multiChoiceQuestion;
+        this.choiceCount = choiceCount;
     }
 
     @NonNull
@@ -34,11 +35,14 @@ class InnerAdapter extends RecyclerView.Adapter {
 //        ((InnerMultiChoiceHolder )holder).choiceText.setText("item" + position);
 //        ((InnerMultiChoiceHolder )holder).choiceCount.setText("ans" + position);
         ArrayList<String> choices = question.getChoices();
-        for (int i = 0; i < choices.size(); i++) {
-            ((InnerMultiChoiceHolder )holder).choiceText.setText(choices.get(i));
-            ((InnerMultiChoiceHolder )holder).choiceCount.setText("0");
-            Log.d("innerappder,", "here:"+Integer.toString(choices.size()));
-        }
+        ((InnerMultiChoiceHolder )holder).choiceText.setText(choices.get(position));
+        String countText= Integer.toString(choiceCount.get(position));
+        ((InnerMultiChoiceHolder )holder).choiceCount.setText(countText);
+//        for (int i = 0; i < choices.size(); i++) {
+//            ((InnerMultiChoiceHolder )holder).choiceText.setText(choices.get(i));
+//            ((InnerMultiChoiceHolder )holder).choiceCount.setText();
+//            Log.d("innerappder,", "here:"+Integer.toString(choices.size()));
+//        }
 
     }
 
@@ -48,8 +52,8 @@ class InnerAdapter extends RecyclerView.Adapter {
     }
 
     public static class InnerMultiChoiceHolder extends RecyclerView.ViewHolder {
-        private TextView choiceText;
-        private TextView choiceCount;
+         TextView choiceText;
+         TextView choiceCount;
 
         public InnerMultiChoiceHolder(@NonNull View itemView) {
             super(itemView);

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
 import com.example.votingapp.data_storage.firebase_data.Answer;
+import com.example.votingapp.data_storage.firebase_data.MultipleChoiceAnswer;
 import com.example.votingapp.data_storage.firebase_data.TextAnswer;
 
 
@@ -30,6 +32,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     protected final int TEXT_TYPE = 0;
     protected final int MULTIPLE_CHOICE_TYPE = 1;
+
+    protected final MultiChoiceListener multiChoiceListener = new MultiChoiceListener();
 
 //    protected QuestionAdapter(Context mContext) {
 //        this.mContext = mContext;
@@ -50,7 +54,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mContext = context;
         this.questionItems = data;
         this.inflater = LayoutInflater.from(mContext);
-        answers = new ArrayList<>();
+        this.answers = new ArrayList<>();
     }
 
     @NonNull
@@ -78,12 +82,38 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             String question =  questionItems.get(position).getData().getQuestionString();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
-            ArrayList<String> choices = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getChoices();
+            final ArrayList<String> choices = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getChoices();
             ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
+
+
+
+
             for (int i = 0; i < choices.size(); i++) {
                 checkBoxes.get(i).setText(choices.get(i));
                 checkBoxes.get(i).setVisibility(View.VISIBLE);
+
+
+
+                /**
+                 * This OnClickListener works to determine whether a box is selected and record the state
+                 */
+                checkBoxes.get(i).setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+
+                        if(((CompoundButton) view).isChecked()){
+                            multiChoiceListener.IfBoxSelected();
+                        } else {
+                            multiChoiceListener.IfBoxNotSelected();
+                        }
+                    }
+                });
+
+                multiChoiceListener.ConstructAnswer(choices.get(i));
             }
+
+            MultipleChoiceAnswer multipleChoiceAnswer = new MultipleChoiceAnswer(question, multiChoiceListener.MultiChoiceAnswer);
+            answers.add(multipleChoiceAnswer);
 
         }
     }
@@ -144,6 +174,28 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @Override
         public void afterTextChanged(Editable s) {
 
+        }
+    }
+
+    class MultiChoiceListener{
+        ArrayList<ArrayList<String>> MultiChoiceAnswer;
+        ArrayList<String> SingleChoice;
+
+        public void IfBoxSelected(){
+            SingleChoice.clear();
+            SingleChoice.add("1");
+        }
+
+        public void IfBoxNotSelected(){
+            SingleChoice.clear();
+            SingleChoice.add("0");
+        }
+
+        public void ConstructAnswer(String choice){
+            if(SingleChoice.size()>0){
+                SingleChoice.add(choice);
+                MultiChoiceAnswer.add(SingleChoice);
+            }
         }
     }
 

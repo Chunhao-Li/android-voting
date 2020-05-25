@@ -24,7 +24,8 @@ public class TextResultDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_result_detail);
 
-        totalCount = findViewById(R.id.text_result_detai_answer)
+        totalCount = findViewById(R.id.text_result_detail_answer);;
+
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
