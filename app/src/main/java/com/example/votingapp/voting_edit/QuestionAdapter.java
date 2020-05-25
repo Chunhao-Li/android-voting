@@ -185,6 +185,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public void RecordChoice(String choice, CheckBox checkBox){
 
+            singleChoice.add(choice);
+
             if(checkBox.isChecked()){
                 singleChoice.add("1");
             }else singleChoice.add("0");
