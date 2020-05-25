@@ -128,9 +128,11 @@ public class VotingResultActivity extends AppCompatActivity {
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     String answerText = ansRef.child("answer text").getValue().toString();
                                     if (questionStatistics.size() <= questionIndex) {
-                                        questionStatistics.add(new TextQuestionStatistics(questionS, 1));
+                                        questionStatistics.add(new TextQuestionStatistics(questionS, 1, answerText));
                                     } else {
-                                        ((TextQuestionStatistics) questionStatistics.get(questionIndex)).update(questionS);
+                                        ((TextQuestionStatistics) questionStatistics.get(questionIndex)).update(answerText);
+                                        Log.d("getanswer_text:", Integer.toString( ((TextQuestionStatistics) questionStatistics.get(questionIndex))
+                                                .getAnswers().size()));
                                     }
                                     if (updateQuestionItems) {
                                         EditTextQuestion textQuestion = new EditTextQuestion(questionS);
@@ -138,7 +140,7 @@ public class VotingResultActivity extends AppCompatActivity {
                                                 QuestionType.TEXT_QUESTION));
                                     }
 //                                    allAnswers.get(answerIndex).add(new TextAnswer(questionS, answerText));
-                                    Log.d("getanswer_text:", answerText);
+
                                 } else {
 //                                    // TODO MULTICHOICE answer
                                     String questionS = ansRef.child("question string").getValue().toString();

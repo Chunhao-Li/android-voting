@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.data_storage.firebase_data.Answer;
 import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
 import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
 import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
@@ -71,7 +70,7 @@ public class ResultAdapter extends QuestionAdapter {
             ((TextQuestionViewHolder) holder).ansDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, TextResultDetail.class);
+                    Intent intent = new Intent(mContext, TextResultDetailActivity.class);
                     intent.putStringArrayListExtra(GET_TEXT_STAT,
                             ((TextQuestionStatistics) questionStatistics.get(position)).getAnswers());
                     intent.putExtra(GET_TEXT_COUNT,
