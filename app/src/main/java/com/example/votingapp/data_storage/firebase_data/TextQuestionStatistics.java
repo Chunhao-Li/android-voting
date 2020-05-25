@@ -19,16 +19,18 @@ public class TextQuestionStatistics extends QuestionStatistics {
     public TextQuestionStatistics(String question){
     super.questionString = question;
     super.questionType = QuestionType.TEXT_QUESTION;
-    super.totalVoterCount = 0;
+//    super.totalVoterCount = 0;
     this.answers = new ArrayList<>();
     }
 
 //    inherit previous status
-    public TextQuestionStatistics(String question, Integer totalNum, String curAns){
+    public TextQuestionStatistics(String question, String curAns){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
-        super.totalVoterCount = totalNum;
-        answers.add(curAns);
+//        super.totalVoterCount = totalNum;
+        if (!curAns.isEmpty()) {
+            answers.add(curAns);
+        }
 
     }
 
@@ -42,8 +44,10 @@ public class TextQuestionStatistics extends QuestionStatistics {
     }
 
     public void update(String  ans) {
-        this.answers.add(ans);
-        this.totalVoterCount++;
+        if (!ans.isEmpty()) {
+            this.answers.add(ans);
+        }
+//        this.totalVoterCount++;
     }
 
     @Override

@@ -217,6 +217,8 @@ public class DoVotingActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
             } else if (currentAns.getQuestionType().equals(QuestionType.MULTI_CHOICE)) {
+                ArrayList<ArrayList<String>> answerChoices = ((MultipleChoiceAnswer)currentAns).getAnswerChoice();
+                Log.d("dovoting_multi", Integer.toString(answerChoices.size()));
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
 //                curQuestionStatRef.child("chosen choices").setValue(((MultipleChoiceAnswer)currentAns).getAnswerChoice());
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
