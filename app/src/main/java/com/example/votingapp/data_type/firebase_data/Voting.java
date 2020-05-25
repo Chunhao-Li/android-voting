@@ -1,8 +1,4 @@
-package com.example.votingapp.data_storage.firebase_data;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+package com.example.votingapp.data_type.firebase_data;
 
 abstract class Voting{
 //    Voting UID

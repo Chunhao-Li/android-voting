@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.votingapp.VotingEditActivity;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {
@@ -24,7 +25,7 @@ public class DatePickerFragment extends DialogFragment
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return new DatePickerDialog(requireActivity(), this, year, month, day);
     }
 
     @Override

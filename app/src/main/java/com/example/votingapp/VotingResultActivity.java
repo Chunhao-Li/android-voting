@@ -15,14 +15,14 @@ import android.view.ContextMenu;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.firebase_data.Answer;
-import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestStat;
-import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
-import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
-import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
-import com.example.votingapp.voting_edit.EditTextQuestion;
-import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
+import com.example.votingapp.data_type.QuestionType;
+import com.example.votingapp.data_type.answer.Answer;
+import com.example.votingapp.data_type.firebase_data.MultiChoiceQuestionStat;
+import com.example.votingapp.data_type.firebase_data.QuestionStat;
+import com.example.votingapp.data_type.firebase_data.TextQuestionStat;
+import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
+import com.example.votingapp.voting_edit.QuestionParcel;
+import com.example.votingapp.voting_edit.TextQuestionParcel;
 import com.example.votingapp.voting_result.ResultAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,8 +39,8 @@ public class VotingResultActivity extends AppCompatActivity {
     private String votingId;
 
     private ArrayList<ArrayList<Answer>> allAnswers = new ArrayList<>();
-    private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
-    private ArrayList<QuestionStatistics> questionStatistics = new ArrayList<>();
+    private ArrayList<QuestionParcel> questionItems = new ArrayList<>();
+    private ArrayList<QuestionStat> questionStatistics = new ArrayList<>();
 
     RecyclerView mRecyclerView;
     ResultAdapter mAdapter;
@@ -128,16 +128,14 @@ public class VotingResultActivity extends AppCompatActivity {
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     String answerText = ansRef.child("answer text").getValue().toString();
                                     if (questionStatistics.size() <= questIndex) {
-                                        questionStatistics.add(new TextQuestionStatistics(questionS,  answerText));
+                                        questionStatistics.add(new TextQuestionStat(questionS,  answerText));
                                     } else {
-                                        ((TextQuestionStatistics) questionStatistics.get(questIndex)).update(answerText);
-                                        Log.d("getanswer_text:", Integer.toString(((TextQuestionStatistics) questionStatistics.get(questIndex))
+                                        ((TextQuestionStat) questionStatistics.get(questIndex)).update(answerText);
+                                        Log.d("getanswer_text:", Integer.toString(((TextQuestionStat) questionStatistics.get(questIndex))
                                                 .getAnswers().size()));
                                     }
                                     if (updateQuestionItems) {
-                                        EditTextQuestion textQuestion = new EditTextQuestion(questionS);
-                                        questionItems.add(new RecyclerViewQuestionItem(textQuestion,
-                                                QuestionType.TEXT_QUESTION));
+                                        questionItems.add(new TextQuestionParcel(questionS));
                                     }
 //                                    allAnswers.get(answerIndex).add(new TextAnswer(questionS, answerText));
 
@@ -145,9 +143,9 @@ public class VotingResultActivity extends AppCompatActivity {
 //                                    // TODO MULTICHOICE answer
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     if (questionStatistics.size() <= questIndex) {
-                                        questionStatistics.add(new MultiChoiceQuestStat(questionS));
+                                        questionStatistics.add(new MultiChoiceQuestionStat(questionS));
                                     }
-                                    MultiChoiceQuestStat questStat = (MultiChoiceQuestStat) questionStatistics.get(questIndex);
+                                    MultiChoiceQuestionStat questStat = (MultiChoiceQuestionStat) questionStatistics.get(questIndex);
                                     ArrayList<String> choices = new ArrayList<>();
 
                                     for (DataSnapshot choicesRef : ansRef.child("choices").getChildren()) {
@@ -165,10 +163,7 @@ public class VotingResultActivity extends AppCompatActivity {
 
                                     if (updateQuestionItems) {
 
-                                        EditMultiChoiceQuestion multiQ = new EditMultiChoiceQuestion(questionS
-                                                , choices);
-                                        questionItems.add(new RecyclerViewQuestionItem(
-                                                multiQ, QuestionType.MULTI_CHOICE));
+                                        questionItems.add(new MultiChoiceQuestionParcel(questionS, choices));
                                     }
                                 }
                                 questIndex++;

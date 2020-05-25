@@ -5,27 +5,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.firebase_data.Answer;
-import com.example.votingapp.data_storage.firebase_data.MultipleChoiceAnswer;
-import com.example.votingapp.data_storage.firebase_data.TextAnswer;
-import com.example.votingapp.data_storage.firebase_data.UserAnswers;
-import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
-import com.example.votingapp.voting_edit.EditTextQuestion;
+import com.example.votingapp.data_type.QuestionType;
+import com.example.votingapp.data_type.answer.Answer;
+import com.example.votingapp.data_type.answer.MultipleChoiceAnswer;
+import com.example.votingapp.data_type.answer.TextAnswer;
+import com.example.votingapp.data_type.answer.UserAnswers;
+import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
+import com.example.votingapp.voting_edit.QuestionParcel;
+import com.example.votingapp.voting_edit.TextQuestionParcel;
 import com.example.votingapp.voting_edit.QuestionAdapter;
-import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +35,7 @@ public class DoVotingActivity extends AppCompatActivity {
     private TextView votingTitleTextView;
     private String votingTitle;
     private String votingId;
-    private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
+    private ArrayList<QuestionParcel> questionItems = new ArrayList<>();
     private ArrayList<Answer> answers = new ArrayList<>();
     private static final String TAG = "DoVotingTAG";
     private int index = 0;
@@ -120,10 +117,8 @@ public class DoVotingActivity extends AppCompatActivity {
 //                            textAnswers.add("");
 
                         if (questionType == QuestionType.TEXT_QUESTION) {
-                            EditTextQuestion editTextQuestion = new EditTextQuestion(questionString);
 
-                            questionItems.add(new RecyclerViewQuestionItem(editTextQuestion,
-                                    QuestionType.TEXT_QUESTION));
+                            questionItems.add(new TextQuestionParcel(questionString));
                             answers.add(new TextAnswer(questionString, ""));
                             publishProgress();
                         } else if (questionType == QuestionType.MULTI_CHOICE) {
@@ -133,12 +128,16 @@ public class DoVotingActivity extends AppCompatActivity {
                                 Log.d("dovoting choice", choiceRef.getValue().toString());
                             }
                             Log.d("choices+length", Integer.toString(choices.size()));
-                            EditMultiChoiceQuestion editMultiChoiceQuestion = new EditMultiChoiceQuestion(
-                                    questionString, choices);
-                            questionItems.add(new RecyclerViewQuestionItem(editMultiChoiceQuestion,
-                                    QuestionType.MULTI_CHOICE));
+                            questionItems.add(new MultiChoiceQuestionParcel(
+                                    questionString, choices));
                             // TODO save multi choice answer
-                            answers.add(new MultipleChoiceAnswer(questionString, new ArrayList<ArrayList<String>>()));
+                            ArrayList<ArrayList<String>> answerChoices = new ArrayList<>();
+                            for (int i = 0; i < choices.size(); i++) {
+                                answerChoices.add(new ArrayList<String>());
+                                answerChoices.get(i).add(choices.get(i));
+                                answerChoices.get(i).add("0");  // default: all unchecked
+                            }
+                            answers.add(new MultipleChoiceAnswer(questionString, answerChoices));
                             publishProgress();
                         }
 //                    Log.d("test_Do_activity", questionChild.child("questionType").getValue().toString());
@@ -218,19 +217,17 @@ public class DoVotingActivity extends AppCompatActivity {
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
             } else if (currentAns.getQuestionType().equals(QuestionType.MULTI_CHOICE)) {
                 ArrayList<ArrayList<String>> answerChoices = ((MultipleChoiceAnswer)currentAns).getAnswerChoice();
-                Log.d("dovoting_multi", Integer.toString(answerChoices.size()));
+                Log.d("dovoting_multi", answerChoices.get(0).get(1));
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
-//                curQuestionStatRef.child("chosen choices").setValue(((MultipleChoiceAnswer)currentAns).getAnswerChoice());
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
                 ArrayList<ArrayList<String>> choices = ((MultipleChoiceAnswer)currentAns).getAnswerChoice();
                 for(int j = 0;j<choices.size();j++){
-                    DatabaseReference curChoiceStatRef = curQuestionStatRef.child("choices").child(Integer.toString(j));
-                    curChoiceStatRef.child("choices").child(Integer.toString(j)).child(choices.get(j).get(0)).setValue(choices.get(j).get(1));
+                    curQuestionStatRef.child("choices").child(choices.get(j).get(0)).setValue(choices.get(j).get(1));
                 }
             }
         }
-        Toast.makeText(getApplicationContext(), "Successfully Submitted! W/ answer size: " + answers.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Successfully Submitted! ", Toast.LENGTH_SHORT).show();
         Intent intents = new Intent(this, MainActivity.class);
         startActivity(intents);
     }

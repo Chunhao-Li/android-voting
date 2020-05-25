@@ -15,12 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.votingapp.data_storage.QuestionType;
 import com.example.votingapp.voting_edit.DatePickerFragment;
-import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
-import com.example.votingapp.voting_edit.EditTextQuestion;
+import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
+import com.example.votingapp.voting_edit.QuestionParcel;
+import com.example.votingapp.voting_edit.TextQuestionParcel;
 import com.example.votingapp.voting_edit.QuestionAdapter;
-import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
 import com.example.votingapp.voting_edit.TimePickerFragment;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -36,7 +35,7 @@ public class VotingEditActivity extends AppCompatActivity {
     public static final String VOTING_INFO_KEY = "com.example.votingapp.VOTING_INFO";
     public static final String DEADLINE_KEY = "com.example.votingapp.DEADLINE";
     public static final String GET_VOTING_TITLE = "com.example.votingapp.VOTING_TITLE";
-    private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
+    private ArrayList<QuestionParcel> questionItems = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private QuestionAdapter mAdapter;
     private boolean isOriginStatus = true;   // are fabs in their origin status
@@ -131,7 +130,7 @@ public class VotingEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ((FloatingActionMenu) findViewById(R.id.fab_menu)).close(true);
-                Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestion.class);
+                Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestionActivity.class);
                 startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
             }
         });
@@ -154,9 +153,8 @@ public class VotingEditActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     String text_question = data.getStringExtra(TextQuestionActivity.GET_TEXT_QUESTION);
-                    EditTextQuestion textQuestion = new EditTextQuestion(text_question);
                     int oldQuestionItemsSize = questionItems.size();
-                    questionItems.add(new RecyclerViewQuestionItem(textQuestion, QuestionType.TEXT_QUESTION));
+                    questionItems.add(new TextQuestionParcel(text_question));
                     mAdapter.notifyItemInserted(oldQuestionItemsSize);
                 }
 
@@ -164,13 +162,11 @@ public class VotingEditActivity extends AppCompatActivity {
 
         } else if (requestCode == RC_MULTICHOICE_QUESTION) {
             if (resultCode == RESULT_OK) {
-                //TODO
                 if (data!=null) {
-                    String textQuestion = data.getStringExtra("key");
-                    ArrayList<String> choices = data.getStringArrayListExtra("key_choices");
-                    EditMultiChoiceQuestion multipleChoiceQuestion = new EditMultiChoiceQuestion(textQuestion,choices);
+                    String textQuestion = data.getStringExtra(MultiChoiceQuestionActivity.GET_MULTI_CHOICE_QUESTION);
+                    ArrayList<String> choices = data.getStringArrayListExtra(MultiChoiceQuestionActivity.GET_MULTI_CHOICE_CHOICES);
                     int oldQuestionItemsSize = questionItems.size();
-                    questionItems.add(new RecyclerViewQuestionItem(multipleChoiceQuestion,QuestionType.MULTI_CHOICE));
+                    questionItems.add( new MultiChoiceQuestionParcel(textQuestion,choices));
                     mAdapter.notifyItemInserted(oldQuestionItemsSize);
 
                 }

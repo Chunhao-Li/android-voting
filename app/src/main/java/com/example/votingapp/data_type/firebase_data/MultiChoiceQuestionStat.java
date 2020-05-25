@@ -1,14 +1,12 @@
-package com.example.votingapp.data_storage.firebase_data;
+package com.example.votingapp.data_type.firebase_data;
 
-import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
+import com.example.votingapp.data_type.QuestionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 
-public class MultiChoiceQuestStat extends QuestionStatistics {
+public class MultiChoiceQuestionStat extends QuestionStat {
 //    the name of each choice
     private ArrayList<String> choices = new ArrayList<>();
 //    # of voters vote for each choice, permute the same order as choices
@@ -17,14 +15,14 @@ public class MultiChoiceQuestStat extends QuestionStatistics {
     private int curIndex = -1;
 
 //    inherit previous status
-    public MultiChoiceQuestStat(String questionString) {
+    public MultiChoiceQuestionStat(String questionString) {
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
 
 //        super.totalVoterCount = totalNum;
     }
 // if it's the first time to create this question, init statistics to default.
-    public MultiChoiceQuestStat(String questionString, ArrayList<String> choices) {
+    public MultiChoiceQuestionStat(String questionString, ArrayList<String> choices) {
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
         super.totalVoterCount = 0;

@@ -7,17 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MultiChoiceQuestion extends AppCompatActivity {
+public class MultiChoiceQuestionActivity extends AppCompatActivity {
     //Passing data to VotingEditActivity
     private Button saveButton;
     private Button cancelButton;
     private String textQuestion;
     private EditText questionFiled;
     public static final int choiceSize=8;
-    private final String choiceIDFormat = "editText_choice";
+    public static final String GET_MULTI_CHOICE_QUESTION= "MultiChoiceQuestion.question";
+    public static final String GET_MULTI_CHOICE_CHOICES= "MultiChoiceQuestion.choices";
     private ArrayList<String> choices = new ArrayList<>();
     private EditText tempChoiceID;
 
@@ -63,11 +65,16 @@ public class MultiChoiceQuestion extends AppCompatActivity {
 
 
                 Intent replyIntent = new Intent();
-                replyIntent.putExtra("key", textQuestion);
-                replyIntent.putStringArrayListExtra("key_choices", removeEmptyChoices);
+                replyIntent.putExtra(GET_MULTI_CHOICE_QUESTION, textQuestion);
+                replyIntent.putStringArrayListExtra(GET_MULTI_CHOICE_CHOICES, removeEmptyChoices);
                 //  passing to voting edit
+                if (removeEmptyChoices.size() == 0 || textQuestion.isEmpty()) {
+                    Toast.makeText(MultiChoiceQuestionActivity.this, "Invalid questions!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_CANCELED);
+                } else {
 
-                setResult(RESULT_OK, replyIntent);
+                    setResult(RESULT_OK, replyIntent);
+                }
                 finish();
             }
         });

@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
+import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
 
 import java.util.ArrayList;
 
 class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHolder> {
 //    private final ArrayList<RecyclerViewQuestionItem> questionItems;
-    private final EditMultiChoiceQuestion question;
+    private final MultiChoiceQuestionParcel question;
     private final ArrayList<Integer> choiceCount;
     private int total;
 
-    public InnerAdapter(EditMultiChoiceQuestion multiChoiceQuestion, ArrayList<Integer> choiceCount) {
+    public InnerAdapter(MultiChoiceQuestionParcel multiChoiceQuestion, ArrayList<Integer> choiceCount) {
         this.question = multiChoiceQuestion;
         this.choiceCount = choiceCount;
         for (Integer count: choiceCount) {

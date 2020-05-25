@@ -1,22 +1,15 @@
-package com.example.votingapp.data_storage.firebase_data;
+package com.example.votingapp.data_type.firebase_data;
 
-import android.annotation.SuppressLint;
-import android.os.Parcel;
-
-import androidx.annotation.Nullable;
-
-import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
+import com.example.votingapp.data_type.QuestionType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class TextQuestionStatistics extends QuestionStatistics {
+public class TextQuestionStat extends QuestionStat {
 //    a hash map that stores all answer strings with user UID as key
     private ArrayList<String> answers = new ArrayList<>();
 
 //    if it's the first time to create this question, init statistics to default.
-    public TextQuestionStatistics(String question){
+    public TextQuestionStat(String question){
     super.questionString = question;
     super.questionType = QuestionType.TEXT_QUESTION;
 //    super.totalVoterCount = 0;
@@ -24,7 +17,7 @@ public class TextQuestionStatistics extends QuestionStatistics {
     }
 
 //    inherit previous status
-    public TextQuestionStatistics(String question, String curAns){
+    public TextQuestionStat(String question, String curAns){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
 //        super.totalVoterCount = totalNum;

@@ -1,4 +1,4 @@
-package com.example.votingapp.data_storage.firebase_data;
+package com.example.votingapp.data_type.firebase_data;
 
 
 import androidx.annotation.Nullable;
@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 /*Here is QuestionStatistics class which should give statistics data for questionnaire creator,
   for participant-use class you should see non-statistic one.
 * */
-public abstract class QuestionStatistics extends Question {
+public abstract class QuestionStat extends Question {
 
     Integer totalVoterCount;
     public abstract Integer getTotalVoterCount();
@@ -14,7 +14,7 @@ public abstract class QuestionStatistics extends Question {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        return ((QuestionStatistics) obj).getQuestionString().equals(
+        return ((QuestionStat) obj).getQuestionString().equals(
                 this.getQuestionString()
         );
     }

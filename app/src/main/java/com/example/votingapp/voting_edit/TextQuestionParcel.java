@@ -2,28 +2,28 @@ package com.example.votingapp.voting_edit;
 
 import android.os.Parcel;
 
-import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.data_type.QuestionType;
 
-public class EditTextQuestion extends EditQuestion  {
-    public EditTextQuestion(String question){
+public class TextQuestionParcel extends QuestionParcel {
+    public TextQuestionParcel(String question){
         super.questionString = question;
         super.questionType = QuestionType.TEXT_QUESTION;
     }// constructor for text q
 
-    protected EditTextQuestion(Parcel in) {
+    protected TextQuestionParcel(Parcel in) {
         questionType = QuestionType.valueOf(in.readString());
         questionString = in.readString();
     }// parcel interface
 
-    public static final Creator<EditTextQuestion> CREATOR = new Creator<EditTextQuestion>() {
+    public static final Creator<TextQuestionParcel> CREATOR = new Creator<TextQuestionParcel>() {
         @Override
-        public EditTextQuestion createFromParcel(Parcel in) {
-            return new EditTextQuestion(in);
+        public TextQuestionParcel createFromParcel(Parcel in) {
+            return new TextQuestionParcel(in);
         }
 
         @Override
-        public EditTextQuestion[] newArray(int size) {
-            return new EditTextQuestion[size];
+        public TextQuestionParcel[] newArray(int size) {
+            return new TextQuestionParcel[size];
         }
     };
 

@@ -1,31 +1,22 @@
-package com.example.votingapp.data_storage.firebase_data;
+package com.example.votingapp.data_type.firebase_data;
 
-import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.voting_edit.QuestionParcel;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
-public class VotingResult extends Voting {
+public class VotingInfo extends Voting {
 //    for creator only main structure
-    private ArrayList<QuestionStatistics> questionStatistics;
+    private ArrayList<QuestionParcel> questions;
 
-    public void setVotingResultId(String votingResultId) {
-        this.votingResultId = votingResultId;
-    }
 
-    public String getVotingResultId() {
-        return votingResultId;
-    }
 
-    private String votingResultId;
 //      the result of each question has been stored in questionStatistics class.
-    public VotingResult(String creatorUid, String deadline, ArrayList<QuestionStatistics> questions, String title) {
+    public VotingInfo(String creatorUid, String deadline, ArrayList<QuestionParcel> questions, String title) {
         super.VotingUid = Integer.toString(questions.hashCode());
         super.creatorUid = creatorUid;
         super.deadline = deadline;
         super.votingTitle = title;
-        this.questionStatistics =questions;
+        this.questions =questions;
 
     }
 
@@ -40,8 +31,8 @@ public class VotingResult extends Voting {
 //    }
 
 //    if you want the whole data structure
-    public ArrayList<QuestionStatistics> getQuestionStatistics(){
-        return this.questionStatistics;
+    public ArrayList<QuestionParcel> getQuestions(){
+        return this.questions;
     }
 
     @Override

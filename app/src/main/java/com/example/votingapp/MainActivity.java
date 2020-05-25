@@ -6,16 +6,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.example.votingapp.data_storage.QuestionType;
-import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestStat;
-import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
-import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
-import com.example.votingapp.data_storage.firebase_data.User;
-import com.example.votingapp.data_storage.firebase_data.VotingResult;
-import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
-import com.example.votingapp.voting_edit.EditQuestion;
-import com.example.votingapp.voting_edit.EditTextQuestion;
-import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
+import com.example.votingapp.data_type.QuestionType;
+import com.example.votingapp.data_type.firebase_data.User;
+import com.example.votingapp.data_type.firebase_data.VotingInfo;
+import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
+import com.example.votingapp.voting_edit.QuestionParcel;
+import com.example.votingapp.voting_edit.TextQuestionParcel;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ArrayList<String>> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
-    private VotingResult newVoting;
+    private VotingInfo newVoting;
 
     private boolean needUpdate = true;
 
@@ -121,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         final Intent votingEditIntent = getIntent();
         if (votingEditIntent.getExtras() != null &&
                 votingEditIntent.hasExtra(VotingEditActivity.VOTING_INFO_KEY)) {
-            ArrayList<RecyclerViewQuestionItem> newVotingQuestions =
+            ArrayList<QuestionParcel> newVotingQuestions =
                     votingEditIntent.getParcelableArrayListExtra(VotingEditActivity.VOTING_INFO_KEY);
             String deadline = votingEditIntent.getStringExtra(VotingEditActivity.DEADLINE_KEY);
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
@@ -276,30 +272,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void saveVoting(ArrayList<RecyclerViewQuestionItem> newVotingQuestions, String deadline, String votingTitle) {
+    private void saveVoting(ArrayList<QuestionParcel> newVotingQuestions, String deadline, String votingTitle) {
         // save the new Voting to votingResultList
-        ArrayList<QuestionStatistics> questionStatistics = new ArrayList<>();
-        for (RecyclerViewQuestionItem item : newVotingQuestions) {
-            EditQuestion question = item.getData();
-            if (item.getType() == QuestionType.TEXT_QUESTION) {
+        ArrayList<QuestionParcel> questions = new ArrayList<>();
+        for (QuestionParcel question : newVotingQuestions) {
+//            QuestionParcel question = item.getData();
+            if (question.getQuestionType() == QuestionType.TEXT_QUESTION) {
 
-                TextQuestionStatistics textQuestionStatistics =
-                        new TextQuestionStatistics(((EditTextQuestion) question).getQuestionString());
-                questionStatistics.add(textQuestionStatistics);
-            } else if (item.getType() == QuestionType.MULTI_CHOICE) {
-                MultiChoiceQuestStat multiChoiceStatistics =
-                        new MultiChoiceQuestStat(((EditMultiChoiceQuestion) question).getQuestionString(),
-                                ((EditMultiChoiceQuestion) question).getChoices());
-                questionStatistics.add(multiChoiceStatistics);
+                questions.add(new TextQuestionParcel(question.getQuestionString()));
+            } else if (question.getQuestionType() == QuestionType.MULTI_CHOICE) {
+
+                questions.add(new MultiChoiceQuestionParcel(question.getQuestionString(),
+                        ((MultiChoiceQuestionParcel) question).getChoices()));
             }
         }
 
         if (deadline != null) {
             String[] splitDeadline = deadline.split("/");
-            // ensures the date and time are both set
             if (splitDeadline.length == 5) {
-                newVoting = new VotingResult(
-                        curUserId, deadline, questionStatistics, votingTitle);
+                newVoting = new VotingInfo(
+                        curUserId, deadline, questions, votingTitle);
                 saveVotingOnCloud();
 
             }
@@ -309,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
     private void saveVotingOnCloud() {
         DatabaseReference newVotingRef = mDatabaseVotingRef.push();
         String votingResultKey = newVotingRef.getKey(); // get unique id for the voting result
-        newVoting.setVotingResultId(votingResultKey);
 
         // save general voting information
         Log.d("saveVotingoncloud:", curUserId);
@@ -317,26 +308,24 @@ public class MainActivity extends AppCompatActivity {
         newVotingRef.child("creatorUid").setValue(newVoting.getCreatorUid());
         newVotingRef.child("deadline").setValue(newVoting.getDeadline());
 
-        ArrayList<QuestionStatistics> questionStatistics = newVoting.getQuestionStatistics();
+        ArrayList<QuestionParcel> questions = newVoting.getQuestions();
         // save question on the server
         // TODO store multiple choice questions
-        for (int i = 0; i < questionStatistics.size(); i++) {
-            QuestionStatistics curQuestionStat = questionStatistics.get(i);
-            if (curQuestionStat.getQuestionType() == QuestionType.TEXT_QUESTION) {
+        for (int i = 0; i < questions.size(); i++) {
+            QuestionParcel curQuestion = questions.get(i);
+            if (curQuestion.getQuestionType() == QuestionType.TEXT_QUESTION) {
                 DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
-                curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
-                curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
+                curQuestionStatRef.child("question").setValue(curQuestion.getQuestionString());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.TEXT_QUESTION);
-//                ArrayList<String> answers = ((TextQuestionStatistics) curQuestionStat).getAnwsers();
+//                ArrayList<String> answers = ((TextQuestionStatistics) curQuestion).getAnwsers();
 //                for (String ans : answers) {
 //                    curQuestionStatRef.child("answer").push().setValue(ans);
 //                }
-            } else if (curQuestionStat.getQuestionType() == QuestionType.MULTI_CHOICE) {
+            } else if (curQuestion.getQuestionType() == QuestionType.MULTI_CHOICE) {
                 DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
-                curQuestionStatRef.child("question").setValue(curQuestionStat.getQuestionString());
-                curQuestionStatRef.child("totalVoterCount").setValue(curQuestionStat.getTotalVoterCount());
+                curQuestionStatRef.child("question").setValue(curQuestion.getQuestionString());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.MULTI_CHOICE);
-                ArrayList<String> choices = ((MultiChoiceQuestStat) curQuestionStat).getChoices();
+                ArrayList<String> choices = ((MultiChoiceQuestionParcel) curQuestion).getChoices();
                 for (String choice: choices) {
                     if (!choice.isEmpty()) {
                         curQuestionStatRef.child("choices").push().setValue(choice);
@@ -344,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-//            else if(curQuestionStat.getQuestionType() == QuestionType.MULTI_CHOICE){
+//            else if(curQuestion.getQuestionType() == QuestionType.MULTI_CHOICE){
 //                DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
 //            }
         }

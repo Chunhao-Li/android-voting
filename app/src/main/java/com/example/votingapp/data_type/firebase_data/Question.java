@@ -1,6 +1,6 @@
-package com.example.votingapp.data_storage.firebase_data;
+package com.example.votingapp.data_type.firebase_data;
 
-import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.data_type.QuestionType;
 
 public abstract class Question {
     protected QuestionType questionType;

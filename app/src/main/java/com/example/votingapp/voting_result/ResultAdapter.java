@@ -13,27 +13,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.data_storage.firebase_data.MultiChoiceQuestStat;
-import com.example.votingapp.data_storage.firebase_data.QuestionStatistics;
-import com.example.votingapp.data_storage.firebase_data.TextQuestionStatistics;
-import com.example.votingapp.voting_edit.EditMultiChoiceQuestion;
+import com.example.votingapp.data_type.firebase_data.MultiChoiceQuestionStat;
+import com.example.votingapp.data_type.firebase_data.QuestionStat;
+import com.example.votingapp.data_type.firebase_data.TextQuestionStat;
+import com.example.votingapp.voting_edit.MultiChoiceQuestionParcel;
 import com.example.votingapp.voting_edit.QuestionAdapter;
-import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
+import com.example.votingapp.voting_edit.QuestionParcel;
 
 import java.util.ArrayList;
 
 public class ResultAdapter extends QuestionAdapter {
 
 //    private ArrayList<ArrayList<Answer>> answers;
-    private ArrayList<QuestionStatistics> questionStatistics;
+    private ArrayList<QuestionStat> questionStatistics;
 //    private ArrayList<RecyclerViewQuestionItem> questionItems;
 
     public static final String GET_TEXT_STAT = "com.example.votingapp.voting_result.TEXT_STAT";
     public static final String GET_TEXT_COUNT = "com.example.votingapp.voting_result.TEXT_COUNT";
 
 
-    public ResultAdapter(Context mContext, ArrayList<RecyclerViewQuestionItem> questionItems,
-                         ArrayList<QuestionStatistics> questionStatistics) {
+    public ResultAdapter(Context mContext, ArrayList<QuestionParcel> questionItems,
+                         ArrayList<QuestionStat> questionStatistics) {
         super(mContext, questionItems);
         this.questionStatistics = questionStatistics;
     }
@@ -66,14 +66,14 @@ public class ResultAdapter extends QuestionAdapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof TextQuestionViewHolder) {
-            String question = questionItems.get(position).getData().getQuestionString();
+            String question = questionItems.get(position).getQuestionString();
             ((TextQuestionViewHolder) holder).questionTitle.setText(question);
             ((TextQuestionViewHolder) holder).ansDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, TextResultDetailActivity.class);
                     intent.putStringArrayListExtra(GET_TEXT_STAT,
-                            ((TextQuestionStatistics) questionStatistics.get(position)).getAnswers());
+                            ((TextQuestionStat) questionStatistics.get(position)).getAnswers());
 //                    intent.putExtra(GET_TEXT_COUNT, questionStatistics.get(position).getTotalVoterCount());
                     mContext.startActivity(intent);
                 }
@@ -81,10 +81,10 @@ public class ResultAdapter extends QuestionAdapter {
 
         }else{
 
-            EditMultiChoiceQuestion question = (EditMultiChoiceQuestion) questionItems.get(position).getData();
+            MultiChoiceQuestionParcel question = (MultiChoiceQuestionParcel) questionItems.get(position);
             Log.d("ResultAdapter:", Integer.toString(question.getChoices().size()));
                ((InnerViewHolder) holder).questionTitle.setText(question.getQuestionString());
-               ArrayList<Integer> choiceCount = ((MultiChoiceQuestStat) questionStatistics.get(position)).getChoiceVoterCount();
+               ArrayList<Integer> choiceCount = ((MultiChoiceQuestionStat) questionStatistics.get(position)).getChoiceVoterCount();
             ((InnerViewHolder) holder).recyclerView.setAdapter(new InnerAdapter(question, choiceCount));
 //            String question = questionItems.get(position).getData().getQuestionString();
 //            ((MultiQuestionViewHolder) holder).questionTitle.setText(question);
@@ -112,7 +112,7 @@ public class ResultAdapter extends QuestionAdapter {
 
     class InnerViewHolder extends RecyclerView.ViewHolder {
         private RecyclerView recyclerView;
-        private EditMultiChoiceQuestion question;
+        private MultiChoiceQuestionParcel question;
          private TextView questionTitle;
 
         public InnerViewHolder(@NonNull View itemView) {

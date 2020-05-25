@@ -15,9 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.data_storage.firebase_data.Answer;
-import com.example.votingapp.data_storage.firebase_data.MultipleChoiceAnswer;
-import com.example.votingapp.data_storage.firebase_data.TextAnswer;
+import com.example.votingapp.data_type.answer.Answer;
+import com.example.votingapp.data_type.answer.MultipleChoiceAnswer;
+import com.example.votingapp.data_type.answer.TextAnswer;
 
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     protected Context mContext;
     protected LayoutInflater inflater;
     // data
-    protected final ArrayList<RecyclerViewQuestionItem> questionItems;
+    protected final ArrayList<QuestionParcel> questionItems;
     private final ArrayList<Answer> answers;
 
     protected final int TEXT_TYPE = 0;
@@ -43,14 +43,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //    }
 //
 
-    public QuestionAdapter(Context mContext, ArrayList<RecyclerViewQuestionItem> questionItems, ArrayList<Answer> answers) {
+    public QuestionAdapter(Context mContext, ArrayList<QuestionParcel> questionItems, ArrayList<Answer> answers) {
         this.mContext = mContext;
         this.inflater = LayoutInflater.from(mContext);
         this.questionItems = questionItems;
         this.answers = answers;
     }
 
-    public QuestionAdapter(Context context, ArrayList<RecyclerViewQuestionItem> data) {
+    public QuestionAdapter(Context context, ArrayList<QuestionParcel> data) {
         this.mContext = context;
         this.questionItems = data;
         this.inflater = LayoutInflater.from(mContext);
@@ -75,46 +75,44 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TextQuestionViewHolder) {
-            String question = questionItems.get(position).getData().getQuestionString();
+            String question = questionItems.get(position).getQuestionString();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
             ((TextQuestionViewHolder) holder).listener.updatePosition(holder.getAdapterPosition());
 
         } else {
-            String question =  questionItems.get(position).getData().getQuestionString();
+            String question =  questionItems.get(position).getQuestionString();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
-            final ArrayList<String> choices = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getChoices();
-            final ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
-            int checkBoxCheckedCounter=0;
+            final ArrayList<String> choices = ((MultiChoiceQuestionParcel) questionItems.get(position)).getChoices();
+//            final ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
+            final CheckBox[] checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
+            final MultiChoiceRecorder[] recorders =   ((MultipleChoiceViewHolder) holder).getRecorders();
+//            int checkBoxCheckedCounter=0;
 
 
-
-
+//            for (int i = 0; i < recorders.length; i++) {
+//                recorders[i].updatePosition(position);
+//            }
             for (int i = 0; i < choices.size(); i++) {
-                checkBoxes.get(i).setText(choices.get(i));
-                checkBoxes.get(i).setVisibility(View.VISIBLE);
-                if(checkBoxes.get(i).isChecked()) {
-                    checkBoxCheckedCounter++;
-                }
+                checkBoxes[i].setText(choices.get(i));
+                checkBoxes[i].setVisibility(View.VISIBLE);
+                recorders[i].updatePosition(position, i);
+//                if(checkBoxes[i].isChecked()) {
+//                    checkBoxCheckedCounter++;
+//                }
+//                recorders[i].updatePosition();
             }
 
             /**
              * This OnClickListener works to determine whether a box is selected and record the state
              */
-            MultiChoiceRecorder multiChoiceRecorder = new MultiChoiceRecorder();
-            if(checkBoxCheckedCounter>0){
-                for(int i=0;i<checkBoxes.size();i++){
-                    multiChoiceRecorder.RecordChoice(choices.get(i),checkBoxes.get(i));
-                }
-                MultipleChoiceAnswer multipleChoiceAnswer = new MultipleChoiceAnswer(question, multiChoiceRecorder.multiChoiceAnswer);
-                answers.add(multipleChoiceAnswer);
-            }
-
-
-
-
-
-
-
+//            MultiChoiceRecorder multiChoiceRecorder = new MultiChoiceRecorder();
+//            if(checkBoxCheckedCounter>0){
+//                for(int i=0;i<checkBoxes.size();i++){
+//                    multiChoiceRecorder.RecordChoice(choices.get(i),checkBoxes.get(i));
+//                }
+//                MultipleChoiceAnswer multipleChoiceAnswer = new MultipleChoiceAnswer(question, multiChoiceRecorder.multiChoiceAnswer);
+//                answers.add(multipleChoiceAnswer);
+//            }
 
 
         }
@@ -123,7 +121,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        switch (questionItems.get(position).getType()) {
+        switch (questionItems.get(position).getQuestionType()) {
             case TEXT_QUESTION:
                 return TEXT_TYPE;
             case MULTI_CHOICE:
@@ -159,7 +157,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private class TextAnswerListener implements TextWatcher {
         int position;   // position of the ViewHolder
 
-        public void updatePosition(int pos) {
+        private void updatePosition(int pos) {
             this.position = pos;
         }
 
@@ -179,9 +177,21 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private class MultiChoiceRecorder{
+    private class MultiChoiceRecorder implements CompoundButton.OnCheckedChangeListener {
         ArrayList<ArrayList<String>> multiChoiceAnswer;
         ArrayList<String> singleChoice;
+        private int checkboxItem;
+        private int questionPos;
+        private int choicePos;
+
+        private void updatePosition(int questionPos, int choicePos) {
+            this.questionPos = questionPos;
+            this.choicePos = choicePos;
+        }
+
+        public MultiChoiceRecorder(int checkboxItem) {
+            this.checkboxItem = checkboxItem;
+        }
 
         public void RecordChoice(String choice, CheckBox checkBox){
 
@@ -195,6 +205,22 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             singleChoice.clear();
         }
 
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (buttonView.getId() == checkboxItem) {
+                MultipleChoiceAnswer choiceAnswer = (MultipleChoiceAnswer) answers.get(questionPos);
+                if (isChecked) {
+
+                    choiceAnswer.getAnswerChoice().get(choicePos).set(1, "1");
+                } else {
+                    choiceAnswer.getAnswerChoice().get(choicePos).set(1, "0");
+                }
+//
+
+            }
+
+        }
     }
 
 
@@ -210,11 +236,17 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         CheckBox mCheckBox6;
         CheckBox mCheckBox7;
 
-        public ArrayList<CheckBox> getCheckBoxes() {
+        private CheckBox[] getCheckBoxes() {
             return checkBoxes;
         }
 
-        ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+        private MultiChoiceRecorder[] getRecorders() {
+            return recorders;
+        }
+
+        //        ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+        CheckBox[] checkBoxes;
+        MultiChoiceRecorder[] recorders;
 
         //TODO
 
@@ -236,14 +268,16 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mCheckBox5 = itemView.findViewById(R.id.checkBox5);
             mCheckBox6 = itemView.findViewById(R.id.checkBox6);
             mCheckBox7 = itemView.findViewById(R.id.checkBox7);
-            checkBoxes.add(mCheckBox0);
-            checkBoxes.add(mCheckBox1);
-            checkBoxes.add(mCheckBox2);
-            checkBoxes.add(mCheckBox3);
-            checkBoxes.add(mCheckBox4);
-            checkBoxes.add(mCheckBox5);
-            checkBoxes.add(mCheckBox6);
-            checkBoxes.add(mCheckBox7);
+            checkBoxes = new CheckBox[] {mCheckBox0, mCheckBox1, mCheckBox2, mCheckBox3,
+                                mCheckBox4, mCheckBox5, mCheckBox6, mCheckBox7};
+            recorders = new MultiChoiceRecorder[] {new MultiChoiceRecorder(R.id.checkBox0),
+                    new MultiChoiceRecorder(R.id.checkBox1), new MultiChoiceRecorder(R.id.checkBox2),
+                    new MultiChoiceRecorder(R.id.checkBox3),new MultiChoiceRecorder(R.id.checkBox4),
+                    new MultiChoiceRecorder(R.id.checkBox5),new MultiChoiceRecorder(R.id.checkBox6),
+                    new MultiChoiceRecorder(R.id.checkBox7)};
+            for (int i = 0; i < checkBoxes.length; i++) {
+                checkBoxes[i].setOnCheckedChangeListener(recorders[i]);
+            }
         }
     }
 

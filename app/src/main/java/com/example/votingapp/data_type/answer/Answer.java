@@ -1,6 +1,6 @@
-package com.example.votingapp.data_storage.firebase_data;
+package com.example.votingapp.data_type.answer;
 
-import com.example.votingapp.data_storage.QuestionType;
+import com.example.votingapp.data_type.QuestionType;
 
 public abstract class Answer {
     //    respondent UID

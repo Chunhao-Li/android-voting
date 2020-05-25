@@ -7,14 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class TextQuestionActivity extends AppCompatActivity {
-    private String text_question;
+    private String textQuestion;
     public static final String GET_TEXT_QUESTION = "com.example.votingapp.GET_QUESTION";
     private EditText mQuestion;
-    private Button saveButton;
-    private Button cancelButton;
-
 
 
     @Override
@@ -23,16 +21,22 @@ public class TextQuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_text_question);
 
         mQuestion = findViewById(R.id.text_q_editText);
-        saveButton = findViewById(R.id.button_save);
-        cancelButton = findViewById(R.id.button_cancel);
+        Button saveButton = findViewById(R.id.button_save);
+        Button cancelButton = findViewById(R.id.button_cancel);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                text_question = mQuestion.getText().toString();
+                textQuestion = mQuestion.getText().toString();
                 Intent replyIntent = new Intent();
-                replyIntent.putExtra(GET_TEXT_QUESTION, text_question);
-                setResult(RESULT_OK, replyIntent);
+                replyIntent.putExtra(GET_TEXT_QUESTION, textQuestion);
+                if (textQuestion.isEmpty()) {
+                    Toast.makeText(TextQuestionActivity.this,
+                            "Invalid question!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_CANCELED);
+                } else {
+                    setResult(RESULT_OK, replyIntent);
+                }
                 finish();
 
             }

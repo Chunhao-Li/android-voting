@@ -12,7 +12,7 @@
         <activity android:name=".voting_result.TextResultDetailActivity"></activity>
         <activity android:name=".DoVotingActivity" />
         <activity android:name=".VotingResultActivity" />
-        <activity android:name=".MultiChoiceQuestion" />
+        <activity android:name=".MultiChoiceQuestionActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
