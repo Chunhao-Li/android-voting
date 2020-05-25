@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialise fields
         mRecyclerView = findViewById(R.id.main_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mVotingAdapter = new VotingAdapter(this, votingInfo, questionItems);
+        mVotingAdapter = new VotingAdapter(this, votingInfo);
         mRecyclerView.setAdapter(mVotingAdapter);
 
         votingIdInput = findViewById(R.id.editText_do_voting);
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (mUser != null) {
             updateUser();
-            Log.d("Oncreate:", "eraer");
+
         }
 
 
