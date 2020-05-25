@@ -33,7 +33,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     protected final int TEXT_TYPE = 0;
     protected final int MULTIPLE_CHOICE_TYPE = 1;
 
-    protected final MultiChoiceListener multiChoiceListener = new MultiChoiceListener();
+
 
 //    protected QuestionAdapter(Context mContext) {
 //        this.mContext = mContext;
@@ -83,7 +83,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String question =  questionItems.get(position).getData().getQuestionString();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
             final ArrayList<String> choices = ((EditMultiChoiceQuestion) questionItems.get(position).getData()).getChoices();
-            ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
+            final ArrayList<CheckBox> checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
+            int checkBoxCheckedCounter=0;
 
 
 
@@ -91,29 +92,30 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             for (int i = 0; i < choices.size(); i++) {
                 checkBoxes.get(i).setText(choices.get(i));
                 checkBoxes.get(i).setVisibility(View.VISIBLE);
-
-
-
-                /**
-                 * This OnClickListener works to determine whether a box is selected and record the state
-                 */
-                checkBoxes.get(i).setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-
-                        if(((CompoundButton) view).isChecked()){
-                            multiChoiceListener.IfBoxSelected();
-                        } else {
-                            multiChoiceListener.IfBoxNotSelected();
-                        }
-                    }
-                });
-
-                multiChoiceListener.ConstructAnswer(choices.get(i));
+                if(checkBoxes.get(i).isChecked()) {
+                    checkBoxCheckedCounter++;
+                }
             }
 
-            MultipleChoiceAnswer multipleChoiceAnswer = new MultipleChoiceAnswer(question, multiChoiceListener.MultiChoiceAnswer);
-            answers.add(multipleChoiceAnswer);
+            /**
+             * This OnClickListener works to determine whether a box is selected and record the state
+             */
+            MultiChoiceRecorder multiChoiceRecorder = new MultiChoiceRecorder();
+            if(checkBoxCheckedCounter>0){
+                for(int i=0;i<checkBoxes.size();i++){
+                    multiChoiceRecorder.RecordChoice(choices.get(i),checkBoxes.get(i));
+                }
+                MultipleChoiceAnswer multipleChoiceAnswer = new MultipleChoiceAnswer(question, multiChoiceRecorder.multiChoiceAnswer);
+                answers.add(multipleChoiceAnswer);
+            }
+
+
+
+
+
+
+
+
 
         }
     }
@@ -177,27 +179,25 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    class MultiChoiceListener{
-        ArrayList<ArrayList<String>> MultiChoiceAnswer;
-        ArrayList<String> SingleChoice;
+    private class MultiChoiceRecorder{
+        ArrayList<ArrayList<String>> multiChoiceAnswer;
+        ArrayList<String> singleChoice;
 
-        public void IfBoxSelected(){
-            SingleChoice.clear();
-            SingleChoice.add("1");
+        public void RecordChoice(String choice, CheckBox checkBox){
+
+            singleChoice.add(choice);
+
+            if(checkBox.isChecked()){
+                singleChoice.add("1");
+            }else singleChoice.add("0");
+
+            multiChoiceAnswer.add(singleChoice);
+            singleChoice.clear();
         }
 
-        public void IfBoxNotSelected(){
-            SingleChoice.clear();
-            SingleChoice.add("0");
-        }
-
-        public void ConstructAnswer(String choice){
-            if(SingleChoice.size()>0){
-                SingleChoice.add(choice);
-                MultiChoiceAnswer.add(SingleChoice);
-            }
-        }
     }
+
+
 
     class MultipleChoiceViewHolder extends RecyclerView.ViewHolder {
         TextView mQuestion;
