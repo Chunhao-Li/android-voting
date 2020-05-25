@@ -74,7 +74,7 @@ public class ResultAdapter extends QuestionAdapter {
                     Intent intent = new Intent(mContext, TextResultDetailActivity.class);
                     intent.putStringArrayListExtra(GET_TEXT_STAT,
                             ((TextQuestionStatistics) questionStatistics.get(position)).getAnswers());
-                    intent.putExtra(GET_TEXT_COUNT, questionStatistics.get(position).getTotalVoterCount());
+//                    intent.putExtra(GET_TEXT_COUNT, questionStatistics.get(position).getTotalVoterCount());
                     mContext.startActivity(intent);
                 }
             });

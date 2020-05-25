@@ -15,9 +15,7 @@ import java.util.ArrayList;
 
 public class TextResultDetailActivity extends AppCompatActivity {
 
-    private RecyclerView mRecyclerView;
-    private TextAnswerDetailAdapter mAdapter;
-    private  int mVoterCount;
+    private int mVoterCount = 0;
     private ArrayList<String> allAnswers;
 
 
@@ -33,23 +31,21 @@ public class TextResultDetailActivity extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if (bundle.containsKey(ResultAdapter.GET_TEXT_STAT)) {
                 allAnswers = bundle.getStringArrayList(ResultAdapter.GET_TEXT_STAT);
-                mVoterCount = allAnswers.size();
+                if (allAnswers != null) {
+                    mVoterCount = allAnswers.size();
+
+                }
             }
-//            if (bundle.containsKey(ResultAdapter.GET_TEXT_COUNT)) {
-//                mVoterCount = bundle.getInt(ResultAdapter.GET_TEXT_COUNT);
-//            }
+            Log.d("TextResult", Integer.toString(allAnswers.size()));
+            String showCount = getString(R.string.text_voter_count_title) + mVoterCount;
+            totalCount.setText(showCount);
+
+            RecyclerView mRecyclerView = findViewById(R.id.text_result_detail_recyclerview);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            TextAnswerDetailAdapter mAdapter = new TextAnswerDetailAdapter(this, allAnswers);
+            mRecyclerView.setAdapter(mAdapter);
+
+
         }
-        Log.d("TextResult", allAnswers.get(0));
-        String showCount = getString(R.string.text_voter_count_title) + mVoterCount;
-        totalCount.setText(showCount);
-
-        mRecyclerView = findViewById(R.id.text_result_detail_recyclerview);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new TextAnswerDetailAdapter(this, allAnswers);
-        mRecyclerView.setAdapter(mAdapter);
-
-
-
-
     }
 }

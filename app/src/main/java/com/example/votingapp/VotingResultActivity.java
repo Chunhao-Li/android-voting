@@ -128,7 +128,7 @@ public class VotingResultActivity extends AppCompatActivity {
                                     String questionS = ansRef.child("question string").getValue().toString();
                                     String answerText = ansRef.child("answer text").getValue().toString();
                                     if (questionStatistics.size() <= questIndex) {
-                                        questionStatistics.add(new TextQuestionStatistics(questionS, 1, answerText));
+                                        questionStatistics.add(new TextQuestionStatistics(questionS,  answerText));
                                     } else {
                                         ((TextQuestionStatistics) questionStatistics.get(questIndex)).update(answerText);
                                         Log.d("getanswer_text:", Integer.toString(((TextQuestionStatistics) questionStatistics.get(questIndex))
