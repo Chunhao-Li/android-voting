@@ -14,8 +14,11 @@ import com.example.votingapp.R;
 import java.util.ArrayList;
 
 public class TextResultDetailActivity extends AppCompatActivity {
+    /**
+     * This activity will show all the answers of a text question.
+     */
 
-    private int mVoterCount = 0;
+    private int answerCount = 0;
     private ArrayList<String> allAnswers;
 
 
@@ -24,28 +27,25 @@ public class TextResultDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_result_detail);
 
+        // Initialize
         TextView totalCount = findViewById(R.id.text_detail_total_count);
-
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
             if (bundle.containsKey(ResultAdapter.GET_TEXT_STAT)) {
                 allAnswers = bundle.getStringArrayList(ResultAdapter.GET_TEXT_STAT);
                 if (allAnswers != null) {
-                    mVoterCount = allAnswers.size();
-
+                    answerCount = allAnswers.size();
                 }
             }
-            Log.d("TextResult", Integer.toString(allAnswers.size()));
-            String showCount = getString(R.string.text_voter_count_title) + mVoterCount;
+            // show how many answers the users have collected
+            String showCount = getString(R.string.text_voter_count_title) + answerCount;
             totalCount.setText(showCount);
 
             RecyclerView mRecyclerView = findViewById(R.id.text_result_detail_recyclerview);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             TextAnswerDetailAdapter mAdapter = new TextAnswerDetailAdapter(this, allAnswers);
             mRecyclerView.setAdapter(mAdapter);
-
-
         }
     }
 }

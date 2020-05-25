@@ -29,4 +29,5 @@
     <string name="text_voter_count_title">Total voters: </string>
     <string name="button_delete_voting">Delete voting</string>
     <string name="button_view_voting">View voting</string>
+    <string name="button_submit_text">Submit!</string>
 </resources>

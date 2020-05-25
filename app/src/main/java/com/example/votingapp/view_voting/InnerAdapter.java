@@ -15,15 +15,17 @@ import com.example.votingapp.data_type.question.MultiChoiceParcel;
 import java.util.ArrayList;
 
 class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHolder> {
-//    private final ArrayList<RecyclerViewQuestionItem> questionItems;
+    /**
+     * This adapter is for showing the stat of a multi choice question in the VotingResultActivity
+     */
     private final MultiChoiceParcel question;
     private final ArrayList<Integer> choiceCount;
-    private int total;
+    private int total;  // record all the choices of the current question
 
-    public InnerAdapter(MultiChoiceParcel multiChoiceQuestion, ArrayList<Integer> choiceCount) {
+    InnerAdapter(MultiChoiceParcel multiChoiceQuestion, ArrayList<Integer> choiceCount) {
         this.question = multiChoiceQuestion;
         this.choiceCount = choiceCount;
-        for (Integer count: choiceCount) {
+        for (Integer count : choiceCount) {
             total += count;
         }
     }
@@ -31,45 +33,33 @@ class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHol
     @NonNull
     @Override
     public InnerMultiChoiceHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new InnerMultiChoiceHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.inner_multi_choice_item, parent, false));
+        return new InnerMultiChoiceHolder(LayoutInflater.from(
+                parent.getContext()).inflate(R.layout.inner_multi_choice_item, parent, false));
     }
 
 
     @Override
     public void onBindViewHolder(@NonNull InnerMultiChoiceHolder holder, int position) {
-//        ((InnerMultiChoiceHolder )holder).choiceText.setText("item" + position);
-//        ((InnerMultiChoiceHolder )holder).choiceCount.setText("ans" + position);
         ArrayList<String> choices = question.getChoices();
         holder.choiceText.setText(choices.get(position));
-        String countText= Integer.toString(choiceCount.get(position));
+        String countText = Integer.toString(choiceCount.get(position));
         holder.choiceCount.setText(countText);
+
+        // calculate the percentage of a choice
         double percentage = 0;
         if (total != 0) {
-             percentage = round(choiceCount.get(position) / (double) total * 100.0, 1);
+            percentage = round(choiceCount.get(position) / (double) total * 100.0, 1);
         }
-//        String percentageText;
-//        if (percentage < 10) {
-//            percentageText = " " + percentage + "%";
-//        } else {
-//            percentageText = percentage + "%";
-//        }
-        String percentageText   =percentage+"%";
-        Log.d("InnerAdapter", percentageText);
+
+        String percentageText = percentage + "%";
         holder.choicePercent.setText(percentageText);
-
-
-//        for (int i = 0; i < choices.size(); i++) {
-//            ((InnerMultiChoiceHolder )holder).choiceText.setText(choices.get(i));
-//            ((InnerMultiChoiceHolder )holder).choiceCount.setText();
-//            Log.d("innerappder,", "here:"+Integer.toString(choices.size()));
-//        }
 
     }
 
     /*/
         Round the percentage to a certain precision
      */
-    private static double round (double value, int precision) { // TODO reference: https://stackoverflow.com/a/22186845/10400661
+    private static double round(double value, int precision) { // TODO reference: https://stackoverflow.com/a/22186845/10400661
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
     }
@@ -79,12 +69,12 @@ class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHol
         return question.getChoices().size();
     }
 
-    public static class InnerMultiChoiceHolder extends RecyclerView.ViewHolder {
-         TextView choiceText;
-         TextView choiceCount;
-         TextView choicePercent;
+    static class InnerMultiChoiceHolder extends RecyclerView.ViewHolder {
+        TextView choiceText;
+        TextView choiceCount;
+        TextView choicePercent;
 
-        public InnerMultiChoiceHolder(@NonNull View itemView) {
+        InnerMultiChoiceHolder(@NonNull View itemView) {
             super(itemView);
             choiceText = itemView.findViewById(R.id.inner_choice_text);
             choiceCount = itemView.findViewById(R.id.inner_choice_count);

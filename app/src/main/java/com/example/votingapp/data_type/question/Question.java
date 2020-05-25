@@ -9,5 +9,5 @@ public abstract class Question {
 
     public abstract QuestionType getQuestionType();
 
-    public abstract String getQuestionString();
+    public abstract String getQuestionTitle();
 }

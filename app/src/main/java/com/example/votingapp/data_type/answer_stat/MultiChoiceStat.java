@@ -5,7 +5,7 @@ import com.example.votingapp.data_type.question.QuestionType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MultiChoiceQuestionStat extends QuestionStat {
+public class MultiChoiceStat extends QuestionStat {
     //    the name of each choice
     private ArrayList<String> choices = new ArrayList<>();
     //    # of voters vote for each choice, permute the same order as choices
@@ -14,7 +14,7 @@ public class MultiChoiceQuestionStat extends QuestionStat {
     private int curIndex = -1;
 
     //    inherit previous status
-    public MultiChoiceQuestionStat(String questionString) {
+    public MultiChoiceStat(String questionString) {
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
     }
@@ -45,7 +45,7 @@ public class MultiChoiceQuestionStat extends QuestionStat {
     }
 
     @Override
-    public String getQuestionString() {
+    public String getQuestionTitle() {
         return this.questionString;
     }
 

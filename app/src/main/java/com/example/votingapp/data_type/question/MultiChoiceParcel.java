@@ -45,7 +45,7 @@ public class MultiChoiceParcel extends QuestionParcel implements Parcelable {
     }
 
     @Override
-    public String getQuestionString() {
+    public String getQuestionTitle() {
         return super.questionString;
     }
 

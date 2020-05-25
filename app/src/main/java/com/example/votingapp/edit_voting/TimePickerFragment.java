@@ -12,13 +12,16 @@ import androidx.fragment.app.DialogFragment;
 import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment
-    implements TimePickerDialog.OnTimeSetListener {
+        implements TimePickerDialog.OnTimeSetListener {
+    /**
+     * A Dialog for picking the time of the deadline.
+     */
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         VotingEditActivity activity = (VotingEditActivity) getActivity();
         if (activity != null) {
             dismiss();
-            activity.processTimePicker(hourOfDay, minute);
+            activity.processTimePickerAndSave(hourOfDay, minute);
         }
     }
 

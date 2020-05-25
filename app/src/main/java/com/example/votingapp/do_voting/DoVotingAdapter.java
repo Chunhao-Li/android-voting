@@ -24,9 +24,13 @@ import com.example.votingapp.edit_voting.QuestionAdapter;
 import java.util.ArrayList;
 
 public class DoVotingAdapter extends QuestionAdapter {
+    /**
+     * This class is for showing the questions when users do a voting, and will save the
+     * answer for saving on the cloud later.
+     */
     private final ArrayList<Answer> answers;
 
-    public DoVotingAdapter(Context mContext, ArrayList<QuestionParcel> questionItems, ArrayList<Answer> answers) {
+     DoVotingAdapter(Context mContext, ArrayList<QuestionParcel> questionItems, ArrayList<Answer> answers) {
         super(mContext, questionItems);
         this.answers = answers;
     }
@@ -39,9 +43,6 @@ public class DoVotingAdapter extends QuestionAdapter {
             return new TextQuestionViewHolder(view, new TextAnswerListener());
         } else {
             View view = inflater.inflate(R.layout.voting_multiple_choice_item, parent, false);
-            //TODO
-            // Create view holder per multiple choice voting layout
-
             return new MultipleChoiceViewHolder(view);
         }
     }
@@ -49,44 +50,41 @@ public class DoVotingAdapter extends QuestionAdapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TextQuestionViewHolder) {
-            String question = questionItems.get(position).getQuestionString();
+            // set question title and update position for the listener
+            String question = questionItems.get(position).getQuestionTitle();
             ((TextQuestionViewHolder) holder).mQuestion.setText(question);
             ((TextQuestionViewHolder) holder).listener.updatePosition(holder.getAdapterPosition());
 
         } else {
-            String question =  questionItems.get(position).getQuestionString();
+            // set title and choices for the multiChoice problem, and update position
+            String question =  questionItems.get(position).getQuestionTitle();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
             final ArrayList<String> choices = ((MultiChoiceParcel) questionItems.get(position)).getChoices();
             final CheckBox[] checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
             final MultiChoiceRecorder[] recorders =   ((MultipleChoiceViewHolder) holder).getRecorders();
 
+            // show the available checkboxes and update positions
             for (int i = 0; i < choices.size(); i++) {
                 checkBoxes[i].setText(choices.get(i));
                 checkBoxes[i].setVisibility(View.VISIBLE);
                 recorders[i].updatePosition(position, i);
-
             }
-
         }
     }
 
     class TextAnswerListener implements TextWatcher {
         int position;   // position of the ViewHolder
-
         private void updatePosition(int pos) {
             this.position = pos;
         }
-
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
-
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             TextAnswer textAnswer = (TextAnswer) answers.get(position);
             textAnswer.setAnswerText(s.toString());
         }
-
         @Override
         public void afterTextChanged(Editable s) {
 
@@ -97,52 +95,35 @@ public class DoVotingAdapter extends QuestionAdapter {
         TextView mQuestion;
         EditText mAns;
         TextAnswerListener listener;
-
-        public TextQuestionViewHolder(@NonNull View itemView, TextAnswerListener listener) {
+         TextQuestionViewHolder(@NonNull View itemView, TextAnswerListener listener) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.text_q_question);
             mAns = itemView.findViewById(R.id.text_q_editText);
             this.listener = listener;
             mAns.addTextChangedListener(listener);
-
         }
-
     }
 
 
 
     private class MultiChoiceRecorder implements CompoundButton.OnCheckedChangeListener {
-        ArrayList<ArrayList<String>> multiChoiceAnswer;
-        ArrayList<String> singleChoice;
-        private int checkboxItem;
-        private int questionPos;
-        private int choicePos;
+        private int checkboxId;
+        private int questionPos;    // position of the question
+        private int choicePos;  // position of the choice
 
         private void updatePosition(int questionPos, int choicePos) {
             this.questionPos = questionPos;
             this.choicePos = choicePos;
         }
 
-        public MultiChoiceRecorder(int checkboxItem) {
-            this.checkboxItem = checkboxItem;
+         MultiChoiceRecorder(int checkboxId) {
+            this.checkboxId = checkboxId;
         }
-
-        public void RecordChoice(String choice, CheckBox checkBox){
-
-            singleChoice.add(choice);
-
-            if(checkBox.isChecked()){
-                singleChoice.add("1");
-            }else singleChoice.add("0");
-
-            multiChoiceAnswer.add(singleChoice);
-            singleChoice.clear();
-        }
-
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (buttonView.getId() == checkboxItem) {
+            // save answer
+            if (buttonView.getId() == checkboxId) {
                 MultipleChoiceAnswer choiceAnswer = (MultipleChoiceAnswer) answers.get(questionPos);
                 if (isChecked) {
                     choiceAnswer.getAnswerChoice().get(choicePos).set(1, "1");
@@ -150,45 +131,20 @@ public class DoVotingAdapter extends QuestionAdapter {
                     choiceAnswer.getAnswerChoice().get(choicePos).set(1, "0");
                 }
             }
-
         }
     }
 
     class MultipleChoiceViewHolder extends QuestionAdapter.MultipleChoiceViewHolder {
-//        TextView mQuestion;
-//        CheckBox mCheckBox0;
-//        CheckBox mCheckBox1;
-//        CheckBox mCheckBox2;
-//        CheckBox mCheckBox3;
-//        CheckBox mCheckBox4;
-//        CheckBox mCheckBox5;
-//        CheckBox mCheckBox6;
-//        CheckBox mCheckBox7;
+        MultiChoiceRecorder[] recorders;
 
-        private CheckBox[] getCheckBoxes() {
-            return checkBoxes;
-        }
+
 
         private MultiChoiceRecorder[] getRecorders() {
             return recorders;
         }
 
-        CheckBox[] checkBoxes;
-        MultiChoiceRecorder[] recorders;
-
-        public MultipleChoiceViewHolder(@NonNull View itemView) {
+         MultipleChoiceViewHolder(@NonNull View itemView) {
             super(itemView);
-//            mQuestion = itemView.findViewById(R.id.multiple_choice_q);
-//            mCheckBox0 = itemView.findViewById(R.id.checkBox0);
-//            mCheckBox1 = itemView.findViewById(R.id.checkBox1);
-//            mCheckBox2 = itemView.findViewById(R.id.checkBox2);
-//            mCheckBox3 = itemView.findViewById(R.id.checkBox3);
-//            mCheckBox4 = itemView.findViewById(R.id.checkBox4);
-//            mCheckBox5 = itemView.findViewById(R.id.checkBox5);
-//            mCheckBox6 = itemView.findViewById(R.id.checkBox6);
-//            mCheckBox7 = itemView.findViewById(R.id.checkBox7);
-//            checkBoxes = new CheckBox[] {mCheckBox0, mCheckBox1, mCheckBox2, mCheckBox3,
-//                    mCheckBox4, mCheckBox5, mCheckBox6, mCheckBox7};
             recorders = new MultiChoiceRecorder[] {new MultiChoiceRecorder(R.id.checkBox0),
                     new MultiChoiceRecorder(R.id.checkBox1), new MultiChoiceRecorder(R.id.checkBox2),
                     new MultiChoiceRecorder(R.id.checkBox3),new MultiChoiceRecorder(R.id.checkBox4),

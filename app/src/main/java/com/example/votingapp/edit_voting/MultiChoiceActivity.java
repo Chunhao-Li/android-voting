@@ -13,13 +13,12 @@ import com.example.votingapp.R;
 
 import java.util.ArrayList;
 
-public class MultiChoiceQuestionActivity extends AppCompatActivity {
-    //Passing data to VotingEditActivity
-    private Button saveButton;
-    private Button cancelButton;
+public class MultiChoiceActivity extends AppCompatActivity {
+    /**
+     * Activity for creating a multiple choice question.
+     */
     private String textQuestion;
     private EditText questionFiled;
-    public static final int choiceSize=8;
     public static final String GET_MULTI_CHOICE_QUESTION= "MultiChoiceQuestion.question";
     public static final String GET_MULTI_CHOICE_CHOICES= "MultiChoiceQuestion.choices";
     private ArrayList<String> choices = new ArrayList<>();
@@ -30,8 +29,9 @@ public class MultiChoiceQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_choice_question);
         questionFiled = findViewById(R.id.editText_question);
-        saveButton = findViewById(R.id.multi_button_save);
-        cancelButton = findViewById(R.id.multi_button_cancel);
+        //Passing data to VotingEditActivity
+        Button saveButton = findViewById(R.id.multi_button_save);
+        Button cancelButton = findViewById(R.id.multi_button_cancel);
 
 
 
@@ -71,7 +71,7 @@ public class MultiChoiceQuestionActivity extends AppCompatActivity {
                 replyIntent.putStringArrayListExtra(GET_MULTI_CHOICE_CHOICES, removeEmptyChoices);
                 //  passing to voting edit
                 if (removeEmptyChoices.size() == 0 || textQuestion.isEmpty()) {
-                    Toast.makeText(MultiChoiceQuestionActivity.this, "Invalid questions!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MultiChoiceActivity.this, "Invalid questions!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_CANCELED);
                 } else {
 

@@ -15,10 +15,13 @@ import com.example.votingapp.R;
 import java.util.ArrayList;
 
 public class TextAnswerDetailAdapter extends RecyclerView.Adapter<TextAnswerDetailAdapter.AnswerViewHolder> {
+    /**
+     * This is to show all the answers of a text question.
+     */
     private final ArrayList<String> allAnswers;
     private Context mContext;
 
-    public TextAnswerDetailAdapter(Context context, ArrayList<String> allAnswers) {
+    TextAnswerDetailAdapter(Context context, ArrayList<String> allAnswers) {
         this.allAnswers = allAnswers;
         mContext = context;
     }
@@ -42,10 +45,10 @@ public class TextAnswerDetailAdapter extends RecyclerView.Adapter<TextAnswerDeta
         return allAnswers.size();
     }
 
-    public class AnswerViewHolder extends RecyclerView.ViewHolder{
+    static class AnswerViewHolder extends RecyclerView.ViewHolder {
         private TextView ans;
 
-        public AnswerViewHolder(@NonNull View itemView) {
+        AnswerViewHolder(@NonNull View itemView) {
             super(itemView);
             ans = itemView.findViewById(R.id.text_result_detail_answer);
         }

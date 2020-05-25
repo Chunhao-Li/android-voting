@@ -31,7 +31,7 @@ public class TextQuestionParcel extends QuestionParcel {
     }
 
     @Override
-    public String getQuestionString() {
+    public String getQuestionTitle() {
         return super.questionString;
     }
 

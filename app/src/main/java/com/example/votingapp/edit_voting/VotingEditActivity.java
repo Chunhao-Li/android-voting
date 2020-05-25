@@ -26,22 +26,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class VotingEditActivity extends AppCompatActivity {
-//    FloatingActionButton mAddButton;
-//    FloatingActionButton mChoiceButton;
-//    FloatingActionButton mTextButton;
+    /**
+     * This activity is for creating a voting.
+     */
+
     private final int RC_TEXT_QUESTION = 243;
-    private final int RC_MULTICHOICE_QUESTION = 245;
+    private final int RC_MULTI_CHOICE_QUESTION = 245;
     public static final String VOTING_INFO_KEY = "com.example.votingapp.VOTING_INFO";
     public static final String DEADLINE_KEY = "com.example.votingapp.DEADLINE";
     public static final String GET_VOTING_TITLE = "com.example.votingapp.VOTING_TITLE";
     private ArrayList<QuestionParcel> questionItems = new ArrayList<>();
-    private RecyclerView mRecyclerView;
     private QuestionAdapter mAdapter;
-    private boolean isOriginStatus = true;   // are fabs in their origin status
     private String deadline;
     private String votingTitle;
-
-
 
 
     @Override
@@ -53,10 +50,13 @@ public class VotingEditActivity extends AppCompatActivity {
     }
 
     private void saveVoting() {
+        /*
+        This method will enable creators to pick up a deadline for the voting,
+        and save the created voting on the cloud.
+         */
         Toast.makeText(this,  "Choose a deadline",
                 Toast.LENGTH_SHORT).show();
         pickDeadline();
-
     }
 
     private void pickDeadline() {
@@ -71,7 +71,6 @@ public class VotingEditActivity extends AppCompatActivity {
     private void pickTime() {
         DialogFragment dialogFragment = new TimePickerFragment();
         dialogFragment.show(getSupportFragmentManager(), "timePicker");
-
     }
 
 
@@ -88,18 +87,18 @@ public class VotingEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voting_edit);
 
         // Initialize fields
-        mRecyclerView = findViewById(R.id.recyclerview_edit);
+        RecyclerView mRecyclerView = findViewById(R.id.recyclerview_edit);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new QuestionAdapter(this, questionItems);
         mRecyclerView.setAdapter(mAdapter);
+
+        // Creators need to set the title before editing questions
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey(MainActivity.GET_VOTING_TITLE)) {
             votingTitle = bundle.getString(MainActivity.GET_VOTING_TITLE);
         }
 
-
-
-        // enable item to swipe(delete) or move(change order)
+        // Enable questions to swipe(delete) or move(change order)
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.LEFT |
                 ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
@@ -129,8 +128,8 @@ public class VotingEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ((FloatingActionMenu) findViewById(R.id.fab_menu)).close(true);
-                Intent intent = new Intent(VotingEditActivity.this, MultiChoiceQuestionActivity.class);
-                startActivityForResult(intent, RC_MULTICHOICE_QUESTION);
+                Intent intent = new Intent(VotingEditActivity.this, MultiChoiceActivity.class);
+                startActivityForResult(intent, RC_MULTI_CHOICE_QUESTION);
             }
         });
 
@@ -150,6 +149,7 @@ public class VotingEditActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_TEXT_QUESTION) {
             if (resultCode == RESULT_OK) {
+                // Create a text question
                 if (data != null) {
                     String text_question = data.getStringExtra(TextQuestionActivity.GET_TEXT_QUESTION);
                     int oldQuestionItemsSize = questionItems.size();
@@ -159,11 +159,12 @@ public class VotingEditActivity extends AppCompatActivity {
 
             }
 
-        } else if (requestCode == RC_MULTICHOICE_QUESTION) {
+        } else if (requestCode == RC_MULTI_CHOICE_QUESTION) {
             if (resultCode == RESULT_OK) {
                 if (data!=null) {
-                    String textQuestion = data.getStringExtra(MultiChoiceQuestionActivity.GET_MULTI_CHOICE_QUESTION);
-                    ArrayList<String> choices = data.getStringArrayListExtra(MultiChoiceQuestionActivity.GET_MULTI_CHOICE_CHOICES);
+                    // create a multi choice quesiton
+                    String textQuestion = data.getStringExtra(MultiChoiceActivity.GET_MULTI_CHOICE_QUESTION);
+                    ArrayList<String> choices = data.getStringArrayListExtra(MultiChoiceActivity.GET_MULTI_CHOICE_CHOICES);
                     int oldQuestionItemsSize = questionItems.size();
                     questionItems.add( new MultiChoiceParcel(textQuestion,choices));
                     mAdapter.notifyItemInserted(oldQuestionItemsSize);
@@ -175,6 +176,9 @@ public class VotingEditActivity extends AppCompatActivity {
     }
 
     public void processDatePicker(int year, int month, int dayOfMonth) {
+        /*
+        This method will update the deadline of the selected date
+         */
         String month_str = Integer.toString(month+1);
         String day_str = Integer.toString(dayOfMonth);
         String year_str  = Integer.toString(year);
@@ -183,7 +187,11 @@ public class VotingEditActivity extends AppCompatActivity {
 
     }
 
-    public void processTimePicker(int hour, int minute) {
+    public void processTimePickerAndSave(int hour, int minute) {
+        /*
+        This method will update the deadline of the selected time,
+        and save the voting.
+         */
         String hour_str = Integer.toString(hour);
         String minute_str = Integer.toString(minute);
         deadline = deadline + "/" + hour_str + "/" + minute_str;
@@ -198,7 +206,6 @@ public class VotingEditActivity extends AppCompatActivity {
         toMainIntent.putExtra(DEADLINE_KEY, deadline);
         toMainIntent.putExtra(GET_VOTING_TITLE, votingTitle);
         startActivity(toMainIntent);
-
 
     }
 }

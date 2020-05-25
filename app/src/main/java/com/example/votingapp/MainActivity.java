@@ -50,35 +50,31 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    /**
+     * The main class of this app.
+     */
 
     private VotingAdapter mVotingAdapter;
-
-    private EditText votingIdInput;
-    private String votingIdInputText;
+    private EditText votingIdInput; // this is for doing voting
+    private String votingIdInputText; // for doing voting
 
     private static final int RC_SIGN_IN = 3425;
-    private static final int RC_VOTING_EDIT = 2983;
-    private static final String TAG = "MainActivity";
     public static final String GET_VOTING_TITLE = "com.example.votingapp.GET_VOTING_TITLE";
     public static final String GET_VOTING_ID = "com.example.votingapp.GET_VOTING_ID";
 
     private MenuItem mSignIn;
     private MenuItem mSignOut;
 
-
-    private ArrayList<ArrayList<String>> votingInfo = new ArrayList<>();
+    private ArrayList<ArrayList<String>> votingInfo = new ArrayList<>();    // store users' voting
     private HashSet<String> allVotingId = new HashSet<>();
     private Voting newVoting;
 
-    private boolean needUpdate = true;
+    private boolean needUpdateUi = true;
 
     // firebase reference
     FirebaseDatabase mDatabase;
     DatabaseReference mDatabaseUserRef;
     DatabaseReference mDatabaseVotingRef;
-    DatabaseReference mDatabaseAnswerRef;
-
-    //    DatabaseReference mDatabaseVotingRef;
     FirebaseAuth auth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
     FirebaseUser mUser;
@@ -97,25 +93,24 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mVotingAdapter = new VotingAdapter(this, votingInfo);
         mRecyclerView.setAdapter(mVotingAdapter);
-
         votingIdInput = findViewById(R.id.editText_do_voting);
+
         // Initialise firebase reference
         mDatabase = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         mDatabaseUserRef = mDatabase.getReference("users");
         mDatabaseVotingRef = mDatabase.getReference("votings");
-
         mUser = auth.getCurrentUser();
+
+        // collect all voting ids for doing voting
         if (allVotingId.size() == 0) {
             obtainAllVotingId();
         }
-
         if (mUser != null) {
-            updateUser();
-
+            addUpdateUserInfo();
         }
 
-
+        // If the user has created a new voting
         final Intent votingEditIntent = getIntent();
         if (votingEditIntent.getExtras() != null &&
                 votingEditIntent.hasExtra(VotingEditActivity.VOTING_INFO_KEY)) {
@@ -125,43 +120,41 @@ public class MainActivity extends AppCompatActivity {
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
             if (newVotingQuestions != null && deadline != null && newVotingQuestions.size() > 0) {
                 saveVoting(newVotingQuestions, deadline, votingTitle);
-                needUpdate = false;
+                needUpdateUi = false;   // do not need to update the UI of the main
             }
 
         }
 
-        // Initialize fields
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
                 mUser = firebaseAuth.getCurrentUser();
                 if (mUser != null) {
-                    // signed in user
-                    updateUser();
-
+                    // already signed in
+                    addUpdateUserInfo();
                 } else {
                     curUserId = null;
                 }
-                if (needUpdate) {
+                if (needUpdateUi) {
                     updateUI();
                 } else {
-                    needUpdate = true;
+                    // when user's status change, need to update the Ui
+                    needUpdateUi = true;
                 }
             }
         };
         auth.addAuthStateListener(mAuthStateListener);
-
     }
 
     private void obtainAllVotingId() {
+        /*
+        This method will retrieve all the voting ids for doing voting.
+         */
         mDatabaseVotingRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 for (DataSnapshot childVotingId : dataSnapshot.getChildren()) {
-                    String votingId = childVotingId.getKey().toString();
-                    Log.d("obtainAllVotingId", votingId);
+                    String votingId = childVotingId.getKey();
                     allVotingId.add(votingId);
                 }
             }
@@ -170,27 +163,28 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
-
     }
 
     private void updateUI() {
+        /*
+        Update the Ui of MainActivity
+         */
         new UpdateUiTask().execute();
     }
 
     @SuppressLint("StaticFieldLeak")
     private class UpdateUiTask extends AsyncTask<Void, Void, Void> {
-
+        /**
+         * This class will download the voting ids and titles created by
+         * the current user, and update the Ui synchronously
+         */
         @Override
         protected void onProgressUpdate(Void... values) {
-            Log.d("onProgressUpdate", Integer.toString(votingInfo.size()));
             mVotingAdapter.notifyDataSetChanged();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            // when signing out
-            Log.d("onPostExecute", Integer.toString(votingInfo.size()));
             mVotingAdapter.notifyDataSetChanged();
         }
 
@@ -204,9 +198,12 @@ public class MainActivity extends AppCompatActivity {
                         if (dataSnapshot.child("users").child(curUserId).hasChild("votings")) {
                             for (DataSnapshot childVotingId :
                                     dataSnapshot.child("users").child(curUserId).child("votings").getChildren()) {
-                                String votingRId = childVotingId.getValue().toString();
-                                String votingTitle = dataSnapshot.child("votings").child(votingRId)
-                                        .child("votingTitle").getValue().toString();
+                                String votingRId = childVotingId.getValue(String.class);
+                                String votingTitle = null;
+                                if (votingRId != null) {
+                                    votingTitle = dataSnapshot.child("votings").child(votingRId)
+                                            .child("votingTitle").getValue(String.class);
+                                }
                                 ArrayList<String> curVotingInfo = new ArrayList<>();
                                 curVotingInfo.add(votingRId);
                                 curVotingInfo.add(votingTitle);
@@ -216,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
-
                 }
 
                 @Override
@@ -232,8 +228,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void updateUser() {
-        // update or add the user on the server
+    private void addUpdateUserInfo() {
+        /*
+        This method will update the curUserId, and add the
+        user to the server if not exists.
+         */
         String email = mUser.getEmail();
         String name = mUser.getDisplayName();
         assert email != null;
@@ -251,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         mSignIn = menu.findItem(R.id.sign_in_item);
         mSignOut = menu.findItem(R.id.sign_out_item);
-        if (mUser != null) {
+        if (mUser != null) {    // only show signOut button when signed in
             mSignIn.setVisible(false);
             mSignOut.setVisible(true);
         }
@@ -261,7 +260,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("onACtivi,requestCode", Integer.toString(requestCode));
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
@@ -275,74 +273,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveVoting(ArrayList<QuestionParcel> newVotingQuestions, String deadline, String votingTitle) {
-        // save the new Voting to votingResultList
+        /*
+        This method will save the newly created voting
+         */
         ArrayList<QuestionParcel> questions = new ArrayList<>();
         for (QuestionParcel question : newVotingQuestions) {
-//            QuestionParcel question = item.getData();
             if (question.getQuestionType() == QuestionType.TEXT_QUESTION) {
-
-                questions.add(new TextQuestionParcel(question.getQuestionString()));
+                questions.add(new TextQuestionParcel(question.getQuestionTitle()));
             } else if (question.getQuestionType() == QuestionType.MULTI_CHOICE) {
-
-                questions.add(new MultiChoiceParcel(question.getQuestionString(),
+                questions.add(new MultiChoiceParcel(question.getQuestionTitle(),
                         ((MultiChoiceParcel) question).getChoices()));
             }
         }
 
-        if (deadline != null) {
+        if (deadline != null) { // deadline must be set, otherwise the voting is invalid
             String[] splitDeadline = deadline.split("/");
-            if (splitDeadline.length == 5) {
-                newVoting = new Voting(
-                        curUserId, deadline, questions, votingTitle);
+            if (splitDeadline.length == 5) {    // date and time must be set
+                newVoting = new Voting(curUserId, deadline, questions, votingTitle);
                 saveVotingOnCloud();
-
             }
         }
     }
 
     private void saveVotingOnCloud() {
+        /*
+        This method will save the newly created voting on the cloud. It will only be
+        called inside the saveVoting.
+         */
         DatabaseReference newVotingRef = mDatabaseVotingRef.push();
         String votingId = newVotingRef.getKey(); // get unique id for the voting id
 
-        // save general voting information
-        Log.d("saveVotingoncloud:", curUserId);
+        // save voting information
         newVotingRef.child("votingTitle").setValue(newVoting.getVotingTitle());
         newVotingRef.child("creatorUid").setValue(newVoting.getCreatorUid());
         newVotingRef.child("deadline").setValue(newVoting.getDeadline());
 
         ArrayList<QuestionParcel> questions = newVoting.getQuestions();
-        // save question on the server
-        // TODO store multiple choice questions
+        // save questions on the server
         for (int i = 0; i < questions.size(); i++) {
             QuestionParcel curQuestion = questions.get(i);
             if (curQuestion.getQuestionType() == QuestionType.TEXT_QUESTION) {
                 DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
-                curQuestionStatRef.child("question").setValue(curQuestion.getQuestionString());
+                curQuestionStatRef.child("question").setValue(curQuestion.getQuestionTitle());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.TEXT_QUESTION);
-//                ArrayList<String> answers = ((TextQuestionStatistics) curQuestion).getAnwsers();
-//                for (String ans : answers) {
-//                    curQuestionStatRef.child("answer").push().setValue(ans);
-//                }
             } else if (curQuestion.getQuestionType() == QuestionType.MULTI_CHOICE) {
                 DatabaseReference curQuestionStatRef = newVotingRef.child("questions").child(Integer.toString(i));
-                curQuestionStatRef.child("question").setValue(curQuestion.getQuestionString());
+                curQuestionStatRef.child("question").setValue(curQuestion.getQuestionTitle());
                 curQuestionStatRef.child("questionType").setValue(QuestionType.MULTI_CHOICE);
                 ArrayList<String> choices = ((MultiChoiceParcel) curQuestion).getChoices();
                 for (String choice : choices) {
-                    if (!choice.isEmpty()) {
-                        curQuestionStatRef.child("choices").push().setValue(choice);
-                    }
+                    curQuestionStatRef.child("choices").push().setValue(choice);
                 }
 
             }
 
         }
-
         // save voting id for the creator
-        mDatabaseUserRef.child(curUserId).child("votings").
-                push().setValue(votingId);
-        updateUI();
-
+        mDatabaseUserRef.child(curUserId).child("votings").push().setValue(votingId);
+        updateUI(); // update the ui to show the user's created voting
 
     }
 
@@ -350,8 +338,7 @@ public class MainActivity extends AppCompatActivity {
         AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                // change back to sign in
-                Log.d("signOut", "here");
+                // Only show signIn button if signed out
                 mSignIn.setVisible(true);
                 mSignOut.setVisible(false);
 
@@ -368,7 +355,6 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.sign_in_item:
                 popToSignIn();
-
             case R.id.sign_out_item:
                 signOut();
         }
@@ -377,6 +363,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void popToSignIn() {
+        /*
+        It uses the firebase UI for signing in
+         */
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -389,28 +378,29 @@ public class MainActivity extends AppCompatActivity {
                 setIsSmartLockEnabled(false).
                 setAvailableProviders(providers).
                 build(), RC_SIGN_IN);
-
     }
 
 
     public void launchVotingEdit(View view) {
+        /*
+        This method will launch the VotingEditActivity for creating a new voting
+         */
         if (mUser == null) {
-            // not signed in
+            // anonymous users are not allowed to create a voting
             popToSignIn();
         } else {
-            // Build a dialog for title
+            // Build a dialog for input title of the voting
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Title for your voting  ");
             final EditText votingTitleInput = new EditText(this);
             votingTitleInput.setInputType(InputType.TYPE_CLASS_TEXT);
             votingTitleInput.setText(R.string.default_voting_title);
             builder.setView(votingTitleInput);
-
             builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String title = votingTitleInput.getText().toString();
-                    if (title.length() > 0) {
+                    if (title.length() > 0) {   // voting title should not be empty
                         Intent intent = new Intent(MainActivity.this, VotingEditActivity.class);
                         intent.putExtra(GET_VOTING_TITLE, title);
                         dialog.dismiss();
@@ -425,13 +415,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             builder.show();
-
         }
     }
 
 
-    public void doVoting(View view) {
-        // check voting id first, if it is valid, launch DoVotingActivity
+    public void checkDoVoting(View view) {
+        /*
+        This method will check the voting id and the deadline for input voting id.
+         */
         final String inputId = votingIdInput.getText().toString();
         votingIdInputText = inputId;
         votingIdInput.getText().clear();
@@ -439,16 +430,15 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Input is empty!", Toast.LENGTH_SHORT).show();
         } else if (!allVotingId.contains(inputId)) {
             Toast.makeText(this, "Invalid voting id!", Toast.LENGTH_SHORT).show();
-        } else {
+        } else {    // voting Id should be stored in the server
             mDatabaseVotingRef.child(inputId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String deadline = dataSnapshot.child("deadline").getValue().toString();
+                    String deadline = dataSnapshot.child("deadline").getValue(String.class);
+                    assert deadline != null;
                     String[] deadlineSplit = deadline.split("/");
-                    Log.d("currentDeadline, ", deadline);
                     final Calendar c = Calendar.getInstance();
                     long rightNow = c.getTimeInMillis();
-                    Log.d("isClosed rightnow", Long.toString(rightNow));
                     c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
                     c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
                     c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
@@ -456,13 +446,13 @@ public class MainActivity extends AppCompatActivity {
                     c.set(Calendar.MINUTE, Integer.parseInt(deadlineSplit[4]));
                     long deadlineTime = c.getTimeInMillis();
 
+                    // Check the deadline with the local time
                     boolean isClosed = (rightNow > deadlineTime);
                     if (isClosed) {
                         Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
                     } else {
                         launchDoVoting();
                     }
-
                     mDatabaseVotingRef.removeEventListener(this);
                 }
 
@@ -478,12 +468,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchDoVoting() {
-        // do voting
-//        String curId = votingIdInput.getText().toString();
+        /*
+        This method will launch DoVotingActivity
+         */
         Intent intent = new Intent(this, DoVotingActivity.class);
-        Log.d("MainDoVotingTest", votingIdInputText);
         intent.putExtra(GET_VOTING_ID, votingIdInputText);
-        intent.putExtra("GET_VOTER_ID", curUserId);
         startActivity(intent);
     }
 

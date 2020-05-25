@@ -2,7 +2,6 @@ package com.example.votingapp.view_voting;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.data_type.answer_stat.MultiChoiceQuestionStat;
+import com.example.votingapp.data_type.answer_stat.MultiChoiceStat;
 import com.example.votingapp.data_type.answer_stat.QuestionStat;
 import com.example.votingapp.data_type.answer_stat.TextQuestionStat;
 import com.example.votingapp.data_type.question.MultiChoiceParcel;
@@ -23,25 +22,20 @@ import com.example.votingapp.data_type.question.QuestionParcel;
 import java.util.ArrayList;
 
 public class ResultAdapter extends QuestionAdapter {
+    /**
+     * This adapter helps show the result/stat of the users' created voting
+     */
 
-//    private ArrayList<ArrayList<Answer>> answers;
     private ArrayList<QuestionStat> questionStatistics;
-//    private ArrayList<RecyclerViewQuestionItem> questionItems;
 
-    public static final String GET_TEXT_STAT = "com.example.votingapp.voting_result.TEXT_STAT";
-    public static final String GET_TEXT_COUNT = "com.example.votingapp.voting_result.TEXT_COUNT";
+    static final String GET_TEXT_STAT = "com.example.votingapp.voting_result.TEXT_STAT";
 
 
-    public ResultAdapter(Context mContext, ArrayList<QuestionParcel> questionItems,
-                         ArrayList<QuestionStat> questionStatistics) {
+    ResultAdapter(Context mContext, ArrayList<QuestionParcel> questionItems,
+                  ArrayList<QuestionStat> questionStatistics) {
         super(mContext, questionItems);
         this.questionStatistics = questionStatistics;
     }
-
-//    public ResultAdapter(Context context, ArrayList<RecyclerViewQuestionItem> data) {
-//        super(context, data);
-//    }
-
 
 
     @NonNull
@@ -50,23 +44,17 @@ public class ResultAdapter extends QuestionAdapter {
         if (viewType == TEXT_TYPE) {
             View view = inflater.inflate(R.layout.result_text_question_item, parent, false);
             return new TextQuestionViewHolder(view);
-        } else  {
-            //TODO
-            // Create view holder per multiple choice voting layout
-
-            return  new InnerViewHolder(inflater.inflate(
+        } else {
+            return new MultiChoiceStatHolder(inflater.inflate(
                     R.layout.result_multi_choice_item, parent, false));
-//            View view = inflater.inflate(R.layout.result_multi_choice_item, parent, false);
-//            return new MultiQuestionViewHolder(view);
-
-//            return new MultipleChoiceViewHolder(view);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof TextQuestionViewHolder) {
-            String question = questionItems.get(position).getQuestionString();
+            // show the question title and initialize the "View Detail" button
+            String question = questionItems.get(position).getQuestionTitle();
             ((TextQuestionViewHolder) holder).questionTitle.setText(question);
             ((TextQuestionViewHolder) holder).ansDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -74,20 +62,18 @@ public class ResultAdapter extends QuestionAdapter {
                     Intent intent = new Intent(mContext, TextResultDetailActivity.class);
                     intent.putStringArrayListExtra(GET_TEXT_STAT,
                             ((TextQuestionStat) questionStatistics.get(position)).getAnswers());
-//                    intent.putExtra(GET_TEXT_COUNT, questionStatistics.get(position).getTotalVoterCount());
                     mContext.startActivity(intent);
                 }
             });
 
-        }else{
-
+        } else {
+            // show the question title and choices of the multi choice question,
+            // and then the inner recycler view will show the stat.
             MultiChoiceParcel question = (MultiChoiceParcel) questionItems.get(position);
-            Log.d("ResultAdapter:", Integer.toString(question.getChoices().size()));
-               ((InnerViewHolder) holder).questionTitle.setText(question.getQuestionString());
-               ArrayList<Integer> choiceCount = ((MultiChoiceQuestionStat) questionStatistics.get(position)).getChoiceVoterCount();
-            ((InnerViewHolder) holder).recyclerView.setAdapter(new InnerAdapter(question, choiceCount));
-//            String question = questionItems.get(position).getData().getQuestionString();
-//            ((MultiQuestionViewHolder) holder).questionTitle.setText(question);
+            ((MultiChoiceStatHolder) holder).questionTitle.setText(question.getQuestionTitle());
+            ArrayList<Integer> choiceCount = ((MultiChoiceStat) questionStatistics.get(position)).getChoiceVoterCount();
+            ((MultiChoiceStatHolder) holder).recyclerView.setAdapter(new InnerAdapter(question, choiceCount));
+
         }
 
     }
@@ -97,41 +83,29 @@ public class ResultAdapter extends QuestionAdapter {
         return super.getItemCount();
     }
 
-    class TextQuestionViewHolder extends RecyclerView.ViewHolder {
+    static class TextQuestionViewHolder extends RecyclerView.ViewHolder {
         private TextView questionTitle;
         private Button ansDetail;
 
-        public TextQuestionViewHolder(@NonNull View itemView) {
+        TextQuestionViewHolder(@NonNull View itemView) {
             super(itemView);
             this.questionTitle = itemView.findViewById(R.id.result_text_q_title);
             this.ansDetail = itemView.findViewById(R.id.button_text_detail);
-
         }
     }
 
 
-    class InnerViewHolder extends RecyclerView.ViewHolder {
+    static class MultiChoiceStatHolder extends RecyclerView.ViewHolder {
+        // This holder contains a recycler view for showing the stat
         private RecyclerView recyclerView;
-        private MultiChoiceParcel question;
-         private TextView questionTitle;
+        private TextView questionTitle;
 
-        public InnerViewHolder(@NonNull View itemView) {
+        MultiChoiceStatHolder(@NonNull View itemView) {
             super(itemView);
             questionTitle = itemView.findViewById(R.id.result_multi_title);
             recyclerView = itemView.findViewById(R.id.inner_recyclerview);
-//            this.question = question;
-            recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(),LinearLayoutManager.VERTICAL, false));
-//            recyclerView.setAdapter(new InnerAdapter(question));
+            recyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext(),
+                    LinearLayoutManager.VERTICAL, false));
         }
-
-//        public void bindData(EditMultiChoiceQuestion question) {
-//            InnerAdapter innerAdapter = new InnerAdapter(question);
-//            recyclerView.setAdapter(innerAdapter);
-//            innerAdapter.notifyDataSetChanged();
-//        }
-
     }
-
-
-
 }

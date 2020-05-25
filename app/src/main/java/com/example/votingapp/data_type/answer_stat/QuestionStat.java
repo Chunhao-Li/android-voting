@@ -13,8 +13,8 @@ public abstract class QuestionStat extends Question {
     @Override
     public boolean equals(@Nullable Object obj) {
         assert obj != null;
-        return ((QuestionStat) obj).getQuestionString().equals(
-                this.getQuestionString()
+        return ((QuestionStat) obj).getQuestionTitle().equals(
+                this.getQuestionTitle()
         );
     }
 }

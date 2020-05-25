@@ -6,7 +6,6 @@ import android.os.Parcelable;
    for creator usage you should check QuestionAnalysis class
 * */
 
-// abstract question class for any question
 public abstract class QuestionParcel extends Question implements Parcelable {
 
 }

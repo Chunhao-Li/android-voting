@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import com.example.votingapp.data_type.answer.UserAnswers;
 import com.example.votingapp.data_type.question.MultiChoiceParcel;
 import com.example.votingapp.data_type.question.QuestionParcel;
 import com.example.votingapp.data_type.question.TextQuestionParcel;
-import com.example.votingapp.edit_voting.QuestionAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,16 +34,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class DoVotingActivity extends AppCompatActivity {
+    /**
+     * This activity will be launched when users do a voting.
+     */
     private TextView votingTitleTextView;
     private String votingTitle;
     private String votingId;
     private ArrayList<QuestionParcel> questionItems = new ArrayList<>();
     private ArrayList<Answer> answers = new ArrayList<>();
-    private static final String TAG = "DoVotingTAG";
-    private int index = 0;
     private DoVotingAdapter mAdapter;
 
-    private FirebaseDatabase mDatabase;
     private DatabaseReference mDatabaseVotingRef;
     private DatabaseReference mDatabaseAnswerRef;
 
@@ -51,14 +51,13 @@ public class DoVotingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_voting);
-        Log.d(TAG, Integer.toString(index)); // 0
-        index += 1;
+
         // Initialize firebase fields
-        mDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         mDatabaseVotingRef = mDatabase.getReference("votings");
         mDatabaseAnswerRef = mDatabase.getReference("answers");
 
-
+        // Initialize UI
         RecyclerView mRecyclerView = findViewById(R.id.voting_do_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new DoVotingAdapter(this, questionItems, answers);
@@ -70,24 +69,23 @@ public class DoVotingActivity extends AppCompatActivity {
             votingId = intent.getExtras().getString(MainActivity.GET_VOTING_ID);
         }
 
-
-
-
         downloadQuestionItems();
 
-        submitAnswers();
     }
 
 
     private void downloadQuestionItems() {
+        /*
+        This method will download all the questions and update the UI synchronously
+         */
         DownloadQuestionTask downloadQuestionTask = new DownloadQuestionTask();
         downloadQuestionTask.execute();
 
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     class DownloadQuestionTask extends AsyncTask<Void, Void, Void> {
-
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -104,53 +102,39 @@ public class DoVotingActivity extends AppCompatActivity {
             mDatabaseVotingRef.child(votingId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d("test_titleaaaa", dataSnapshot.child("votingTitle").getValue().toString());
-                    votingTitle = dataSnapshot.child("votingTitle").getValue().toString();
+                    votingTitle = dataSnapshot.child("votingTitle").getValue(String.class);
                     votingTitleTextView.setText(votingTitle);
                     DataSnapshot questionRef = dataSnapshot.child("questions");
 
+                    // Download questions (question title and choices(multiChoice problem))
                     for (DataSnapshot questionChild : questionRef.getChildren()) {
-
                         QuestionType questionType = QuestionType.valueOf(questionChild.
-                                child("questionType").getValue().toString());
-                        String questionString = questionChild.child("question").getValue().toString();
-                        Log.d("dovoting download", questionType.name());
-//                            textAnswers.add("");
+                                child("questionType").getValue(String.class));
+                        String questionString = questionChild.child("question").getValue(String.class);
 
                         if (questionType == QuestionType.TEXT_QUESTION) {
-
                             questionItems.add(new TextQuestionParcel(questionString));
                             answers.add(new TextAnswer(questionString, ""));
-                            publishProgress();
                         } else if (questionType == QuestionType.MULTI_CHOICE) {
-                            ArrayList<String> choices = new ArrayList<>();
+                            ArrayList<String> choices = new ArrayList<>();  // get all choices
                             for (DataSnapshot choiceRef : questionChild.child("choices").getChildren()) {
-                                choices.add(choiceRef.getValue().toString());
-                                Log.d("dovoting choice", choiceRef.getValue().toString());
+                                choices.add(choiceRef.getValue(String.class));
                             }
-                            Log.d("choices+length", Integer.toString(choices.size()));
-                            questionItems.add(new MultiChoiceParcel(
-                                    questionString, choices));
-                            // TODO save multi choice answer
-                            ArrayList<ArrayList<String>> answerChoices = new ArrayList<>();
+                            questionItems.add(new MultiChoiceParcel(questionString, choices));
+                            ArrayList<ArrayList<String>> answerChoices = new ArrayList<>(); // initialize answer
                             for (int i = 0; i < choices.size(); i++) {
                                 answerChoices.add(new ArrayList<String>());
                                 answerChoices.get(i).add(choices.get(i));
-                                answerChoices.get(i).add("0");  // default: all unchecked
+                                answerChoices.get(i).add("0");  // default: all unchecked ("0")
                             }
                             answers.add(new MultipleChoiceAnswer(questionString, answerChoices));
-                            publishProgress();
                         }
-//                    Log.d("test_Do_activity", questionChild.child("questionType").getValue().toString());
+                        publishProgress();
                     }
-//
-//                    Log.d("DoDataActivity", questionType.name());
-//                    }
-                }
 
+                }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                 }
             });
             return null;
@@ -158,46 +142,17 @@ public class DoVotingActivity extends AppCompatActivity {
 
     }
 
-//    //    extract answer from recycler view
-//    public ArrayList<Answer> extractAnswer() {
-//        ArrayList<Answer> answers = new ArrayList<>();
-//
-//        int num = mRecyclerView.getChildCount();
-//        Toast.makeText(getApplicationContext(), num, Toast.LENGTH_SHORT).show();
-//        for(int i=0;i<num;i++){
-//            View currentAnswerView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
-//            RecyclerViewQuestionItem currentQuestion = questionItems.get(i);
-//            String childViewName = currentAnswerView.getClass().getSimpleName();
-//            if (childViewName.equals("EditText")) {
-////                currentAnswerView = (EditText) currentAnswerView;
-//                String currentAnswerText = ((EditText) currentAnswerView).getText().toString();
-//                TextAnswer curAns = new TextAnswer(currentQuestion.getData().questionString, currentAnswerText);
-//                answers.add(curAns);
-//            }
-//        }
-//        return answers;
-//    }
 
     //  if hit submit button
-    public void submitAnswers() {
-//        for (Answer answer: answers) {
-//            answer.getQuestionString();
-//        }
+    public void submitAnswers(View view) {
+        if (view.getId() == R.id.button_submit) {
 
-        Button buttonSubmit = findViewById(R.id.button_submit);
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Log.d("submitAnswers_test,", )
-
-                Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
-
-                ArrayList<Answer> answers = DoVotingActivity.this.answers;
-                UserAnswers rtnAns = new UserAnswers(votingId,answers);
-                Log.d("connecting to server...","...");
-                SaveAnswerOnCloud(rtnAns);
-            }
-        });
+            Toast.makeText(getApplicationContext(), "Submit Button Triggered!", Toast.LENGTH_SHORT).show();
+            ArrayList<Answer> answers = DoVotingActivity.this.answers;
+            UserAnswers rtnAns = new UserAnswers(votingId, answers);
+            Log.d("connecting to server...", "...");
+            SaveAnswerOnCloud(rtnAns);
+        }
     }
 
     //    save user's answer to server
@@ -213,17 +168,17 @@ public class DoVotingActivity extends AppCompatActivity {
             Answer currentAns = answers.get(i);
             if (currentAns.getQuestionType().equals(QuestionType.TEXT_QUESTION)) {
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
-                curQuestionStatRef.child("answer text").setValue(((TextAnswer)currentAns).getAnswerString());
+                curQuestionStatRef.child("answer text").setValue(((TextAnswer) currentAns).getAnswerString());
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
             } else if (currentAns.getQuestionType().equals(QuestionType.MULTI_CHOICE)) {
-                ArrayList<ArrayList<String>> answerChoices = ((MultipleChoiceAnswer)currentAns).getAnswerChoice();
+                ArrayList<ArrayList<String>> answerChoices = ((MultipleChoiceAnswer) currentAns).getAnswerChoice();
                 Log.d("dovoting_multi", answerChoices.get(0).get(1));
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
                 curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
-                ArrayList<ArrayList<String>> choices = ((MultipleChoiceAnswer)currentAns).getAnswerChoice();
-                for(int j = 0;j<choices.size();j++){
+                ArrayList<ArrayList<String>> choices = ((MultipleChoiceAnswer) currentAns).getAnswerChoice();
+                for (int j = 0; j < choices.size(); j++) {
                     curQuestionStatRef.child("choices").child(choices.get(j).get(0)).setValue(choices.get(j).get(1));
                 }
             }

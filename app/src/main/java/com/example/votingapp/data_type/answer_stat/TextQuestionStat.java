@@ -36,7 +36,7 @@ public class TextQuestionStat extends QuestionStat {
     }
 
     @Override
-    public String getQuestionString() {
+    public String getQuestionTitle() {
         return this.questionString;
     }
 
