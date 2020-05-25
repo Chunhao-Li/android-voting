@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class MultipleChoiceAnswer extends Answer {
 //    which choice, use choice str instead of index to represent
-    private String answerChoice;
+    private ArrayList<ArrayList<String>>  answerChoice;
 
-    public MultipleChoiceAnswer(String questionString, String answerChoice){
+    public MultipleChoiceAnswer(String questionString,  ArrayList<ArrayList<String>> answerChoice){
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
 //        super.respondentUid = respondentUid;
@@ -30,8 +30,7 @@ public class MultipleChoiceAnswer extends Answer {
         return this.questionType;
     }
 
-    @Override
-    public String getAnswerString() {
+    public ArrayList<ArrayList<String>> getAnswerChoice() {
         return this.answerChoice;
     }
 }
