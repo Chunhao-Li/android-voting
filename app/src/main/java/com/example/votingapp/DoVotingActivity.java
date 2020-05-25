@@ -180,6 +180,9 @@ public class DoVotingActivity extends AppCompatActivity {
 
     //  if hit submit button
     public void submitAnswers() {
+        for (Answer answer: answers) {
+            answer.getQuestionString();
+        }
 
         Button buttonSubmit = findViewById(R.id.button_submit);
         buttonSubmit.setOnClickListener(new View.OnClickListener() {

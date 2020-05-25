@@ -1,5 +1,6 @@
 package com.example.votingapp;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -52,7 +53,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView mRecyclerView;
     private VotingAdapter mVotingAdapter;
 
     private EditText votingIdInput;
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<ArrayList<String>> votingInfo = new ArrayList<>();
     private HashSet<String> allVotingId = new HashSet<>();
-    private ArrayList<RecyclerViewQuestionItem> questionItems = new ArrayList<>();
     private VotingResult newVoting;
 
     private boolean needUpdate = true;
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         // Initialise fields
-        mRecyclerView = findViewById(R.id.main_recyclerview);
+        RecyclerView mRecyclerView = findViewById(R.id.main_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mVotingAdapter = new VotingAdapter(this, votingInfo);
         mRecyclerView.setAdapter(mVotingAdapter);
@@ -122,13 +121,12 @@ public class MainActivity extends AppCompatActivity {
         final Intent votingEditIntent = getIntent();
         if (votingEditIntent.getExtras() != null &&
                 votingEditIntent.hasExtra(VotingEditActivity.VOTING_INFO_KEY)) {
-            ArrayList<RecyclerViewQuestionItem> newVoting =
+            ArrayList<RecyclerViewQuestionItem> newVotingQuestions =
                     votingEditIntent.getParcelableArrayListExtra(VotingEditActivity.VOTING_INFO_KEY);
             String deadline = votingEditIntent.getStringExtra(VotingEditActivity.DEADLINE_KEY);
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
-            if (newVoting != null && deadline != null && newVoting.size() > 0) {
-                questionItems = newVoting;
-                saveVoting(questionItems, deadline, votingTitle);
+            if (newVotingQuestions != null && deadline != null && newVotingQuestions.size() > 0) {
+                saveVoting(newVotingQuestions, deadline, votingTitle);
                 needUpdate = false;
             }
 
@@ -182,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         new UpdateUiTask().execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UpdateUiTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -239,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         // update or add the user on the server
         String email = mUser.getEmail();
         String name = mUser.getDisplayName();
+        assert email != null;
         User newUser = new User(name, email);
         curUserId = newUser.getUserId();
         Map<String, Object> userUpdate = new HashMap<>();
