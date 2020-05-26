@@ -2,7 +2,6 @@ package com.example.votingapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.votingapp.voting_edit.RecyclerViewQuestionItem;
+import com.example.votingapp.view_voting.VotingResultActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,12 +23,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHolder> {
+    /**
+     * This adapter helps show all the voting created by the current user
+     */
     private Context mContext;
-    FirebaseDatabase mDatabase;
-    FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
+    private FirebaseAuth mAuth;
     // data
     private final ArrayList<ArrayList<String>> votings;
-//    private final ArrayList<RecyclerViewQuestionItem> questionItems;
     public static final String RC_VOTING_ID = "com.example.votingapp.VotingAdapterId";
     public static final String RC_VOTING_TITLE = "com.example.votingapp.VotingAdapterTitle";
 
@@ -37,12 +38,11 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
     VotingAdapter(Context mContext, ArrayList<ArrayList<String>> votings) {
         this.mContext = mContext;
         this.votings = votings;
-//        this.questionItems = questionItems;
-        this.mDatabase = mDatabase;
         mDatabase = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
     }
+
     @NonNull
     @Override
     public VotingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,7 +52,7 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
 
     @Override
     public void onBindViewHolder(@NonNull VotingHolder holder, final int position) {
-//        final String[] votingInfo = votings.get(position).split(",");
+        // set voting title and initialize the buttons
         final ArrayList<String> curVotingInfo = votings.get(position);
         String title = curVotingInfo.get(1);
         holder.votingTitle.setText(title);
@@ -60,8 +60,8 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, VotingResultActivity.class);
-                intent.putExtra(RC_VOTING_ID,curVotingInfo.get(0));
-                intent.putExtra(RC_VOTING_TITLE,curVotingInfo.get(1));
+                intent.putExtra(RC_VOTING_ID, curVotingInfo.get(0));
+                intent.putExtra(RC_VOTING_TITLE, curVotingInfo.get(1));
                 mContext.startActivity(intent);
             }
         });
@@ -75,20 +75,27 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
     }
 
     private void deleteVoting(int position, final String votingId) {
+        /*
+        Delete the voting when pressed the button
+         */
         votings.remove(position);
-        this.notifyItemRemoved(position);
-        DatabaseReference votingsRef = mDatabase.getReference("votings");
+
+        final DatabaseReference votingsRef = mDatabase.getReference("votings");
         DatabaseReference userRef = mDatabase.getReference("users");
         votingsRef.child(votingId).setValue(null);
         if (mAuth.getCurrentUser() != null) {
             String userId = Integer.toString(mAuth.getCurrentUser().getEmail().hashCode());
-            userRef.child(userId).child("votings").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            userRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot votingChild: dataSnapshot.getChildren()) {
-                        String curVotingId = votingChild.getValue().toString();
-                        if (curVotingId.equals(votingId)) {
-                            votingChild.getRef().removeValue();
+                    if (dataSnapshot.hasChild("votings")) {
+                        DataSnapshot votingChild = dataSnapshot.child("votings");
+                        for (DataSnapshot curVoting: votingChild.getChildren()) {
+                            String curVotingId = curVoting.getValue(String.class);
+                            if (curVotingId.equals(votingId)) {
+                                curVoting.getRef().removeValue();
+                            }
                         }
                     }
 
@@ -99,10 +106,9 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
 
                 }
             });
-
         }
 
-
+        this.notifyItemRemoved(position);
     }
 
 
@@ -112,21 +118,17 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
     }
 
 
-    class VotingHolder extends RecyclerView.ViewHolder {
+    static class VotingHolder extends RecyclerView.ViewHolder {
         TextView votingTitle;
         Button viewVoting;
         Button deleteVoting;
 
-        public VotingHolder(@NonNull View itemView) {
+        VotingHolder(@NonNull View itemView) {
             super(itemView);
             votingTitle = itemView.findViewById(R.id.voting_title);
             viewVoting = itemView.findViewById(R.id.button_view_voting);
             deleteVoting = itemView.findViewById(R.id.button_delete_voting);
-
-
         }
     }
-
-
 
 }
