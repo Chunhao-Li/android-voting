@@ -33,10 +33,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * This activity can show all the result of a created voting
+ */
 public class VotingResultActivity extends AppCompatActivity {
-    /**
-     * This activity can show all the result of a created voting
-     */
+
     private TextView votingIdText;
     private String title;
     private String votingId;

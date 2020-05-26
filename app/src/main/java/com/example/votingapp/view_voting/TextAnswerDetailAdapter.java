@@ -14,10 +14,11 @@ import com.example.votingapp.R;
 
 import java.util.ArrayList;
 
+/**
+ * This is to show all the answers of a text question.
+ */
 public class TextAnswerDetailAdapter extends RecyclerView.Adapter<TextAnswerDetailAdapter.AnswerViewHolder> {
-    /**
-     * This is to show all the answers of a text question.
-     */
+
     private final ArrayList<String> allAnswers;
     private Context mContext;
 

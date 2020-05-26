@@ -11,11 +11,12 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
+/**
+ * A Dialog for picking the time of the deadline.
+ */
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
-    /**
-     * A Dialog for picking the time of the deadline.
-     */
+
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         VotingEditActivity activity = (VotingEditActivity) getActivity();

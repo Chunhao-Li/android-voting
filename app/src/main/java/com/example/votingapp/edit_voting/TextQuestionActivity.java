@@ -11,10 +11,11 @@ import android.widget.Toast;
 
 import com.example.votingapp.R;
 
+/**
+ * Activity for creating a text question.
+ */
 public class TextQuestionActivity extends AppCompatActivity {
-    /**
-     * Activity for creating a text question.
-     */
+
     private String textQuestion;
     public static final String GET_TEXT_QUESTION = "com.example.votingapp.GET_QUESTION";
     private EditText mQuestion;
