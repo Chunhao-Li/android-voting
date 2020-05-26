@@ -36,7 +36,6 @@ public class TextAnswerDetailAdapter extends RecyclerView.Adapter<TextAnswerDeta
     @Override
     public void onBindViewHolder(@NonNull AnswerViewHolder holder, int position) {
         String curAns = allAnswers.get(position);
-        Log.d("TextAnswerDeteiar", curAns);
         holder.ans.setText(curAns);
     }
 

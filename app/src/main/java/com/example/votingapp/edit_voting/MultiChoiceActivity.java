@@ -71,7 +71,7 @@ public class MultiChoiceActivity extends AppCompatActivity {
                 replyIntent.putStringArrayListExtra(GET_MULTI_CHOICE_CHOICES, removeEmptyChoices);
                 //  passing to voting edit
                 if (removeEmptyChoices.size() == 0 || textQuestion.isEmpty()) {
-                    Toast.makeText(MultiChoiceActivity.this, "Invalid questions!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MultiChoiceActivity.this, "Invalid question!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_CANCELED);
                 } else {
 
