@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="10dp"
+    android:layout_margin="5sp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -15,7 +15,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:maxLines="100"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:ellipsize="end"
+        android:textSize="20sp"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp" />
 

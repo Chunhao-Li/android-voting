@@ -26,7 +26,7 @@
     <string name="rad">multiple</string>
     <string name="send_do_voting">Send</string>
     <string name="button_text_ans_detail">View detail</string>
-    <string name="text_voter_count_title">Total answers: </string>
+    <string name="text_voter_count_title">Total answers :\u0020 </string>
     <string name="button_delete_voting">Delete voting</string>
     <string name="button_view_voting">View voting</string>
     <string name="button_submit_text">Submit!</string>

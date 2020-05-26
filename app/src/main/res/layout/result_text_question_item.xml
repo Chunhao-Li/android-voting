@@ -12,6 +12,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:textSize="20sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBaseline_toBaselineOf="@+id/button_text_detail"
         app:layout_constraintStart_toStartOf="parent" />
@@ -24,6 +25,7 @@
         android:layout_marginRight="30dp"
         android:background="@color/colorAccent"
         android:text="@string/button_text_ans_detail"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
