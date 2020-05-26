@@ -8,7 +8,7 @@
     tools:context=".edit_voting.TextQuestionActivity">
 
     <EditText
-        android:id="@+id/text_q_editText"
+        android:id="@+id/editText_text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button_cancel"
+        android:id="@+id/button_cancel_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -31,11 +31,11 @@
         android:background="#009688"
         android:text="@string/text_q_cancel"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button_save"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_save_text"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button_save"
+        android:id="@+id/button_save_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -45,8 +45,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.589"
-        app:layout_constraintStart_toEndOf="@+id/button_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/text_q_editText" />
+        app:layout_constraintStart_toEndOf="@+id/button_cancel_text"
+        app:layout_constraintTop_toBottomOf="@+id/editText_text_title" />
 
     <TextView
         android:id="@+id/textView"

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
-import com.example.votingapp.data_type.answer.Answer;
 import com.example.votingapp.data_type.question.MultiChoiceParcel;
 import com.example.votingapp.data_type.question.QuestionParcel;
 
@@ -101,7 +100,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TextQuestionViewHolder(@NonNull View itemView) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.text_q_question);
-            mAns = itemView.findViewById(R.id.text_q_editText);
+            mAns = itemView.findViewById(R.id.editText_text_title);
 
         }
     }
@@ -127,7 +126,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public MultipleChoiceViewHolder(@NonNull View itemView) {
             super(itemView);
-            mQuestion = itemView.findViewById(R.id.multiple_choice_q);
+            mQuestion = itemView.findViewById(R.id.multiple_choice_title);
             mCheckBox0 = itemView.findViewById(R.id.checkBox0);
             mCheckBox1 = itemView.findViewById(R.id.checkBox1);
             mCheckBox2 = itemView.findViewById(R.id.checkBox2);

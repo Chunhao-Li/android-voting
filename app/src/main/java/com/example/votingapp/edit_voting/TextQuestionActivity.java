@@ -26,9 +26,9 @@ public class TextQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_question);
 
-        mQuestion = findViewById(R.id.text_q_editText);
-        Button saveButton = findViewById(R.id.button_save);
-        Button cancelButton = findViewById(R.id.button_cancel);
+        mQuestion = findViewById(R.id.editText_text_title);
+        Button saveButton = findViewById(R.id.button_save_text);
+        Button cancelButton = findViewById(R.id.button_cancel_text);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 package com.example.votingapp;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -183,10 +184,12 @@ public class MainActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
             mVotingAdapter.notifyDataSetChanged();
         }
+
         @Override
         protected void onPostExecute(Void aVoid) {
             mVotingAdapter.notifyDataSetChanged();
         }
+
         @Override
         protected void onPreExecute() {
             votingInfo.clear();
@@ -371,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.GoogleBuilder().build()
         );
 
+
         // Create and launch sign-in intent
         startActivityForResult(AuthUI.getInstance().
                 createSignInIntentBuilder().
@@ -379,18 +383,17 @@ public class MainActivity extends AppCompatActivity {
                 build(), RC_SIGN_IN);
     }
 
-
-    public void launchVotingEdit(View view) {
-        /*
+    /*
         This method will launch the VotingEditActivity for creating a new voting
          */
+    public void launchVotingEdit(View view) {
         if (mUser == null) {
             // anonymous users are not allowed to create a voting
             popToSignIn();
         } else {
             // Build a dialog for input title of the voting
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Title for your voting  ");
+            builder.setTitle("Title for your voting:");
             final EditText votingTitleInput = new EditText(this);
             votingTitleInput.setInputType(InputType.TYPE_CLASS_TEXT);
             votingTitleInput.setText(R.string.default_voting_title);

@@ -104,7 +104,7 @@ public class DoVotingAdapter extends QuestionAdapter {
         TextQuestionViewHolder(@NonNull View itemView, TextAnswerListener listener) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.text_q_question);
-            mAns = itemView.findViewById(R.id.text_q_editText);
+            mAns = itemView.findViewById(R.id.editText_text_title);
             this.listener = listener;
             mAns.addTextChangedListener(listener);
         }

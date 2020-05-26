@@ -9,7 +9,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/multiple_choice_q"
+            android:id="@+id/multiple_choice_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -28,7 +28,7 @@
             android:textSize="17sp"
             android:textColor="@color/colorPrimaryDark"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            app:layout_constraintTop_toBottomOf="@id/multiple_choice_q"
+            app:layout_constraintTop_toBottomOf="@id/multiple_choice_title"
             app:layout_constraintStart_toStartOf="parent"
             android:text="Select: choice"
             android:visibility="gone"

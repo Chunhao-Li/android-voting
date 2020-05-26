@@ -29,10 +29,10 @@ public class MultiChoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiple_choice_question);
-        questionFiled = findViewById(R.id.editText_question);
+        questionFiled = findViewById(R.id.editText_multi_choice_title);
         //Passing data to VotingEditActivity
-        Button saveButton = findViewById(R.id.multi_button_save);
-        Button cancelButton = findViewById(R.id.multi_button_cancel);
+        Button saveButton = findViewById(R.id.button_multi_save);
+        Button cancelButton = findViewById(R.id.button_multi_cancel);
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {

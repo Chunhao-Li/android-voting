@@ -40,7 +40,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     <EditText
-        android:id="@+id/editText_question"
+        android:id="@+id/editText_multi_choice_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -58,7 +58,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/editText_question" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_multi_choice_title" />
 
     <EditText
         android:id="@+id/editText_choice0"
@@ -141,19 +141,19 @@
         app:layout_constraintStart_toStartOf="@+id/guideline3" />
 
     <Button
-        android:id="@+id/multi_button_cancel"
+        android:id="@+id/button_multi_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:background="#009688"
         android:text="@string/text_q_cancel"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBaseline_toBaselineOf="@+id/multi_button_save"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_multi_save"
         app:layout_constraintStart_toStartOf="@id/guideline3"
         android:layout_marginLeft="50dp" />
 
     <Button
-        android:id="@+id/multi_button_save"
+        android:id="@+id/button_multi_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -162,7 +162,7 @@
         android:text="@string/text_q_save"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/multi_button_cancel"
+        app:layout_constraintStart_toEndOf="@+id/button_multi_cancel"
         app:layout_constraintBottom_toBottomOf="@+id/guideline5" />
 
 
