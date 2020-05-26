@@ -33,10 +33,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * This activity will be launched when users do a voting.
+ */
 public class DoVotingActivity extends AppCompatActivity {
-    /**
-     * This activity will be launched when users do a voting.
-     */
+
     private TextView votingTitleTextView;
     private String votingTitle;
     private String votingId;
@@ -133,6 +134,7 @@ public class DoVotingActivity extends AppCompatActivity {
                     }
 
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }

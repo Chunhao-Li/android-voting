@@ -1,6 +1,7 @@
 package com.example.votingapp;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -49,10 +50,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The main class of this app.
+ */
 public class MainActivity extends AppCompatActivity {
-    /**
-     * The main class of this app.
-     */
 
     private VotingAdapter mVotingAdapter;
     private EditText votingIdInput; // this is for doing voting
@@ -120,10 +121,10 @@ public class MainActivity extends AppCompatActivity {
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
             if (newVotingQuestions != null && deadline != null && newVotingQuestions.size() > 0) {
                 saveVoting(newVotingQuestions, deadline, votingTitle);
-                needUpdateUi = false;   // do not need to update the UI of the main
+                needUpdateUi = false;   // avoid updating twice
             }
-
         }
+
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -165,29 +166,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUI() {
+    public void updateUI() {
         /*
         Update the Ui of MainActivity
          */
         new UpdateUiTask().execute();
     }
 
+    /**
+     * This class will download the voting ids and titles created by
+     * the current user, and update the Ui synchronously
+     */
     @SuppressLint("StaticFieldLeak")
     private class UpdateUiTask extends AsyncTask<Void, Void, Void> {
-        /**
-         * This class will download the voting ids and titles created by
-         * the current user, and update the Ui synchronously
-         */
         @Override
         protected void onProgressUpdate(Void... values) {
             mVotingAdapter.notifyDataSetChanged();
         }
-
         @Override
         protected void onPostExecute(Void aVoid) {
             mVotingAdapter.notifyDataSetChanged();
         }
-
         @Override
         protected void onPreExecute() {
             votingInfo.clear();

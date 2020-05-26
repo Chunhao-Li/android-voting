@@ -19,10 +19,11 @@ import com.example.votingapp.data_type.question.QuestionParcel;
 
 import java.util.ArrayList;
 
+/**
+ * Basic adapter for showing the questions.
+ */
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    /**
-     * Basic adapter for showing the questions.
-     */
+
 
     protected Context mContext;
     protected LayoutInflater inflater;

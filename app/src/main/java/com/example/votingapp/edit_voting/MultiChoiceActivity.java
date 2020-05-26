@@ -13,14 +13,15 @@ import com.example.votingapp.R;
 
 import java.util.ArrayList;
 
+/**
+ * Activity for creating a multiple choice question.
+ */
 public class MultiChoiceActivity extends AppCompatActivity {
-    /**
-     * Activity for creating a multiple choice question.
-     */
+
     private String textQuestion;
     private EditText questionFiled;
-    public static final String GET_MULTI_CHOICE_QUESTION= "MultiChoiceQuestion.question";
-    public static final String GET_MULTI_CHOICE_CHOICES= "MultiChoiceQuestion.choices";
+    public static final String GET_MULTI_CHOICE_QUESTION = "MultiChoiceQuestion.question";
+    public static final String GET_MULTI_CHOICE_CHOICES = "MultiChoiceQuestion.choices";
     private ArrayList<String> choices = new ArrayList<>();
     private EditText tempChoiceID;
 
@@ -34,32 +35,31 @@ public class MultiChoiceActivity extends AppCompatActivity {
         Button cancelButton = findViewById(R.id.multi_button_cancel);
 
 
-
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 textQuestion = questionFiled.getText().toString();
 
 
-                tempChoiceID=findViewById(R.id.editText_choice0);
+                tempChoiceID = findViewById(R.id.editText_choice0);
                 choices.add(tempChoiceID.getText().toString());
-                tempChoiceID=findViewById(R.id.editText_choice1);
+                tempChoiceID = findViewById(R.id.editText_choice1);
                 choices.add(tempChoiceID.getText().toString());
-                tempChoiceID=findViewById(R.id.editText_choice2);
+                tempChoiceID = findViewById(R.id.editText_choice2);
                 choices.add(tempChoiceID.getText().toString());
-                tempChoiceID=findViewById(R.id.editText_choice3);
+                tempChoiceID = findViewById(R.id.editText_choice3);
                 choices.add(tempChoiceID.getText().toString());
-                tempChoiceID=findViewById(R.id.editText_choice4);
+                tempChoiceID = findViewById(R.id.editText_choice4);
                 choices.add(tempChoiceID.getText().toString());
-                tempChoiceID=findViewById(R.id.editText_choice5);
+                tempChoiceID = findViewById(R.id.editText_choice5);
                 choices.add(tempChoiceID.getText().toString());
-                tempChoiceID=findViewById(R.id.editText_choice6);
+                tempChoiceID = findViewById(R.id.editText_choice6);
                 choices.add(tempChoiceID.getText().toString());
-                tempChoiceID=findViewById(R.id.editText_choice7);
+                tempChoiceID = findViewById(R.id.editText_choice7);
                 choices.add(tempChoiceID.getText().toString());
 
                 ArrayList<String> removeEmptyChoices = new ArrayList<>();
-                for (String choice: choices) {
+                for (String choice : choices) {
                     if (!choice.isEmpty()) {
                         removeEmptyChoices.add(choice);
                     }

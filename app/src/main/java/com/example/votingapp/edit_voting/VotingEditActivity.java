@@ -25,10 +25,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * This activity is for creating a voting.
+ */
 public class VotingEditActivity extends AppCompatActivity {
-    /**
-     * This activity is for creating a voting.
-     */
+
 
     private final int RC_TEXT_QUESTION = 243;
     private final int RC_MULTI_CHOICE_QUESTION = 245;
@@ -54,13 +55,13 @@ public class VotingEditActivity extends AppCompatActivity {
         This method will enable creators to pick up a deadline for the voting,
         and save the created voting on the cloud.
          */
-        Toast.makeText(this,  "Choose a deadline",
+        Toast.makeText(this, "Choose a deadline",
                 Toast.LENGTH_SHORT).show();
         pickDeadline();
     }
 
     private void pickDeadline() {
-       pickDate();
+        pickDate();
     }
 
     private void pickDate() {
@@ -161,12 +162,12 @@ public class VotingEditActivity extends AppCompatActivity {
 
         } else if (requestCode == RC_MULTI_CHOICE_QUESTION) {
             if (resultCode == RESULT_OK) {
-                if (data!=null) {
+                if (data != null) {
                     // create a multi choice quesiton
                     String textQuestion = data.getStringExtra(MultiChoiceActivity.GET_MULTI_CHOICE_QUESTION);
                     ArrayList<String> choices = data.getStringArrayListExtra(MultiChoiceActivity.GET_MULTI_CHOICE_CHOICES);
                     int oldQuestionItemsSize = questionItems.size();
-                    questionItems.add( new MultiChoiceParcel(textQuestion,choices));
+                    questionItems.add(new MultiChoiceParcel(textQuestion, choices));
                     mAdapter.notifyItemInserted(oldQuestionItemsSize);
 
                 }
@@ -179,10 +180,10 @@ public class VotingEditActivity extends AppCompatActivity {
         /*
         This method will update the deadline of the selected date
          */
-        String month_str = Integer.toString(month+1);
+        String month_str = Integer.toString(month + 1);
         String day_str = Integer.toString(dayOfMonth);
-        String year_str  = Integer.toString(year);
-        deadline = (year_str+"/" + month_str + "/" + day_str);
+        String year_str = Integer.toString(year);
+        deadline = (year_str + "/" + month_str + "/" + day_str);
         pickTime();
 
     }
