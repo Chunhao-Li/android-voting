@@ -5,7 +5,8 @@
     android:id="@+id/edit_text"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TextQuestionActivity">
+    tools:context=".TextQuestionActivity"
+    android:background = "@drawable/bgimage">
 
     <EditText
         android:id="@+id/text_q_editText"
