@@ -88,7 +88,7 @@ public class SignedInMainTest {
 //    }
 
     @Test
-    public void signedInLaunchVotingEditTest() {
+    public void launchVotingEditTest() {
         onView(withId(R.id.button_create_voting)).perform(click());
         onView(withText("Title for your voting:")).check(matches(isDisplayed()));
 

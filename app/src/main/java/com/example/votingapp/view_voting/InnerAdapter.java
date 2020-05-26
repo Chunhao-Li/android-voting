@@ -56,10 +56,10 @@ class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHol
 
     }
 
-    /*/
-        Round the percentage to a certain precision
+    /**
+     * Source: https://stackoverflow.com/a/22186845/10400661
      */
-    private static double round(double value, int precision) { // TODO reference: https://stackoverflow.com/a/22186845/10400661
+    private static double round(double value, int precision) {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
     }
