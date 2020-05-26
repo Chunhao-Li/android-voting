@@ -2,6 +2,7 @@ package com.example.votingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,8 +109,7 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
                 }
             });
         }
-
-        this.notifyItemRemoved(position);
+        this.notifyDataSetChanged();
     }
 
 

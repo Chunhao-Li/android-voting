@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
             if (newVotingQuestions != null && deadline != null && newVotingQuestions.size() > 0) {
                 saveVoting(newVotingQuestions, deadline, votingTitle);
-                needUpdateUi = false;   // do not need to update the UI of the main
+                needUpdateUi = false;   // avoid updating twice
             }
         }
 
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUI() {
+    public void updateUI() {
         /*
         Update the Ui of MainActivity
          */
