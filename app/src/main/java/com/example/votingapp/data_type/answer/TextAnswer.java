@@ -18,12 +18,10 @@ public class TextAnswer extends Answer {
     }
 
 
-    @Override
-    public String getQuestionString() {
+    public String getQuestionTitle() {
         return this.questionString;
     }
 
-    @Override
     public QuestionType getQuestionType() {
         return this.questionType;
     }

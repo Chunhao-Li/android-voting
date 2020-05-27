@@ -18,17 +18,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.*;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.*;
 
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 
-import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -40,6 +35,7 @@ import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -52,6 +48,7 @@ public class SignedInMainTest {
 
     FirebaseAuth auth;
     private CountDownLatch authSignal = new CountDownLatch(1);
+
     @Before
     public void initializeFields() throws InterruptedException {
         auth = FirebaseAuth.getInstance();
@@ -60,7 +57,7 @@ public class SignedInMainTest {
                     new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                                authSignal.countDown();
+                            authSignal.countDown();
                         }
                     }
             );
@@ -70,22 +67,6 @@ public class SignedInMainTest {
         authSignal.await(5, TimeUnit.SECONDS);
     }
 
-//    @Rule
-//    public IntentsTestRule<MainActivity> mainIntentRule = new IntentsTestRule<>(MainActivity.class);
-
-//    @Test
-//    public void unSignedInLaunchVotingEditTest() {
-//        if (auth.getCurrentUser() == null) {
-//            onView(withId(R.id.button_create_voting)).perform(click());
-//            intended(filterEquals(AuthUI.getInstance().
-//                    createSignInIntentBuilder().
-//                    setIsSmartLockEnabled(false).
-//                    setAvailableProviders(Arrays.asList(
-//                            new AuthUI.IdpConfig.EmailBuilder().build(),
-//                            new AuthUI.IdpConfig.GoogleBuilder().build())).
-//                    build()));
-//        }
-//    }
 
     @Test
     public void launchVotingEditTest() {

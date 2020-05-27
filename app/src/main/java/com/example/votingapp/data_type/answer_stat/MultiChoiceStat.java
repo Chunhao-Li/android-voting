@@ -5,7 +5,7 @@ import com.example.votingapp.data_type.question.QuestionType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MultiChoiceStat extends QuestionStat {
+public class MultiChoiceStat extends AnswerStat {
     //    the name of each choice
     private ArrayList<String> choices = new ArrayList<>();
     //    # of voters vote for each choice, permute the same order as choices

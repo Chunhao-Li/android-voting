@@ -168,9 +168,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI() {
-        /*
-        Update the Ui of MainActivity
-         */
         new UpdateUiTask().execute();
     }
 
@@ -211,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                                 curVotingInfo.add(votingTitle);
                                 votingInfo.add(curVotingInfo);
                                 allVotingId.add(votingRId);
+                                Log.d("mainUpdateUi", votingRId);
                                 publishProgress();
                             }
                         }
@@ -229,12 +227,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private void addUpdateUserInfo() {
-        /*
+    /*
         This method will update the curUserId, and add the
         user to the server if not exists.
-         */
+    */
+    private void addUpdateUserInfo() {
+
         String email = mUser.getEmail();
         String name = mUser.getDisplayName();
         assert email != null;
@@ -297,11 +295,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void saveVotingOnCloud() {
-        /*
+    /*
         This method will save the newly created voting on the cloud. It will only be
         called inside the saveVoting.
          */
+    private void saveVotingOnCloud() {
+
         DatabaseReference newVotingRef = mDatabaseVotingRef.push();
         String votingId = newVotingRef.getKey(); // get unique id for the voting id
 
@@ -365,9 +364,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void popToSignIn() {
-        /*
-        It uses the firebase UI for signing in
-         */
+        //It uses the firebase UI for signing in
+
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -420,17 +418,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /*
+    This method will check the voting id and the deadline for input voting id.
+     */
     public void checkDoVoting(View view) {
-        /*
-        This method will check the voting id and the deadline for input voting id.
-         */
         final String inputId = votingIdInput.getText().toString();
-        votingIdInputText = inputId;
+        votingIdInputText = inputId;    // store id for transferring to DoVoting
         votingIdInput.getText().clear();
-        if (inputId.length() == 0) {
+        String checkId = checkVotingIdValid(allVotingId, inputId);
+        if (checkId.equals("Empty")) {
             Toast.makeText(this, "Input is empty!", Toast.LENGTH_SHORT).show();
-        } else if (!allVotingId.contains(inputId)) {
+        } else if (checkId.equals("Invalid")) {
             Toast.makeText(this, "Invalid voting id!", Toast.LENGTH_SHORT).show();
         } else {    // voting Id should be stored in the server
             mDatabaseVotingRef.child(inputId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -439,18 +437,8 @@ public class MainActivity extends AppCompatActivity {
                     if (dataSnapshot.hasChild("deadline")) {
                         String deadline = dataSnapshot.child("deadline").getValue(String.class);
                         assert deadline != null;
-                        String[] deadlineSplit = deadline.split("/");
-                        final Calendar c = Calendar.getInstance();
-                        long rightNow = c.getTimeInMillis();
-                        c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
-                        c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
-                        c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
-                        c.set(Calendar.HOUR, Integer.parseInt(deadlineSplit[3]));
-                        c.set(Calendar.MINUTE, Integer.parseInt(deadlineSplit[4]));
-                        long deadlineTime = c.getTimeInMillis();
-
+                        boolean isClosed = isOverDeadline(deadline);
                         // Check the deadline with the local time
-                        boolean isClosed = (rightNow > deadlineTime);
                         if (isClosed) {
                             Toast.makeText(MainActivity.this, "The voting is closed!", Toast.LENGTH_SHORT).show();
                         } else {
@@ -469,14 +457,46 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
+    }
 
 
+    /**
+     * This method will check whether the voting Id is valid.
+     * @param allVotingId a set of all voting ids from the server
+     * @param curId the id to be tested
+     * @return a string gives the correlating message
+     */
+    static String checkVotingIdValid(HashSet<String> allVotingId, String curId) {
+        if (curId.isEmpty()) {
+            return "Empty";
+        } else if (!allVotingId.contains(curId)) {
+            return "Invalid";
+        } else {
+            return "Valid";
+        }
+    }
+
+    /**
+     * This method will check the deadline with the local time
+     *
+     * @param deadline: year/month/day/hour/minute
+     * @return a boolean value indicates whether the current time is over deadline
+     */
+
+    static boolean isOverDeadline(String deadline) {
+        String[] deadlineSplit = deadline.split("/");
+        final Calendar c = Calendar.getInstance();
+        long rightNow = c.getTimeInMillis();
+        c.set(Calendar.YEAR, Integer.parseInt(deadlineSplit[0]));
+        c.set(Calendar.MONTH, Integer.parseInt(deadlineSplit[1]) - 1);
+        c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(deadlineSplit[2]));
+        c.set(Calendar.HOUR, Integer.parseInt(deadlineSplit[3]));
+        c.set(Calendar.MINUTE, Integer.parseInt(deadlineSplit[4]));
+        long deadlineTime = c.getTimeInMillis();
+        return rightNow > deadlineTime;
     }
 
     private void launchDoVoting() {
-        /*
-        This method will launch DoVotingActivity
-         */
         Intent intent = new Intent(this, DoVotingActivity.class);
         intent.putExtra(GET_VOTING_ID, votingIdInputText);
         startActivity(intent);

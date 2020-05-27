@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,8 +71,10 @@ public class MultiChoiceActivity extends AppCompatActivity {
                 replyIntent.putExtra(GET_MULTI_CHOICE_QUESTION, textQuestion);
                 replyIntent.putStringArrayListExtra(GET_MULTI_CHOICE_CHOICES, removeEmptyChoices);
                 //  passing to voting edit
-                if (removeEmptyChoices.size() == 0 || textQuestion.isEmpty()) {
-                    Toast.makeText(MultiChoiceActivity.this, "Invalid question!", Toast.LENGTH_SHORT).show();
+                boolean isValid = isValidMultiQuestion(textQuestion, choices);
+                if (!isValid) {
+                    Toast.makeText(MultiChoiceActivity.this, "Invalid question!",
+                            Toast.LENGTH_SHORT).show();
                     setResult(RESULT_CANCELED);
                 } else {
 
@@ -88,7 +91,13 @@ public class MultiChoiceActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
-
+    public static boolean isValidMultiQuestion(String title, ArrayList<String> choices) {
+        if (title == null || choices == null) {
+            return false;
+        } else if (title.isEmpty()) {
+            return false;
+        } else return choices.size() >= 1;
     }
 }

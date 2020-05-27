@@ -67,28 +67,32 @@ public class CreateVotingTest {
         }
         authSignal.await(5, TimeUnit.SECONDS);
 
-        // create a voting with default name
-        onView(withId(R.id.button_create_voting)).perform(click());
-        onView(withText("CREATE")).check(matches(isDisplayed())).perform(click());
+
 
 
     }
 
     @Test
     public void emptyQuestionTest() throws InterruptedException {
+        // create a voting with default name
+        onView(withId(R.id.button_create_voting)).perform(click());
+        onView(withText("CREATE")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.save_voting_edit)).perform(click());
         onView(withText("OK")).check(matches(isDisplayed())).perform(click());
         onView(withText("OK")).check(matches(isDisplayed())).perform(click());
+        Thread.sleep(1000);
         onView(withText("Voting is empty")).inRoot(withDecorView(not(is(mainActivityRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-        authSignal = new CountDownLatch(5);
-        authSignal.await(5, TimeUnit.SECONDS);
+
     }
 
     @Test
     public void validVotingTest() throws InterruptedException {
-        // create a text question
 
+        // create a voting with default name
+        onView(withId(R.id.button_create_voting)).perform(click());
+        onView(withText("CREATE")).check(matches(isDisplayed())).perform(click());
+        // create a text question
         onView(allOf(withParent(withId(R.id.fab_menu)), withClassName(endsWith("ImageView")), isDisplayed()))
                 .perform(click());
         onView(withId(R.id.fab_text)).perform(click());
@@ -106,7 +110,7 @@ public class CreateVotingTest {
         authSignal.await(1, TimeUnit.SECONDS);
         // delete voting after creating
         onView(withId(R.id.main_recyclerview)).perform(
-                RecyclerViewActions.actionOnItemAtPosition(0, clickChildViewWithId(
+                RecyclerViewActions.actionOnItemAtPosition(1, clickChildViewWithId(
                         R.id.button_delete_voting)));
 
     }

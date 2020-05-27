@@ -57,6 +57,7 @@ class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHol
     }
 
     /**
+     * This helper method is from stackoverflow, which can round the double with the given precision.
      * Source: https://stackoverflow.com/a/22186845/10400661
      */
     private static double round(double value, int precision) {

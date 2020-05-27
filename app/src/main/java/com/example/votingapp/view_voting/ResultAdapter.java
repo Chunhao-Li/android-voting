@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.votingapp.R;
 import com.example.votingapp.data_type.answer_stat.MultiChoiceStat;
-import com.example.votingapp.data_type.answer_stat.QuestionStat;
-import com.example.votingapp.data_type.answer_stat.TextQuestionStat;
+import com.example.votingapp.data_type.answer_stat.AnswerStat;
+import com.example.votingapp.data_type.answer_stat.TextAnswerStat;
 import com.example.votingapp.data_type.question.MultiChoiceParcel;
 import com.example.votingapp.edit_voting.QuestionAdapter;
 import com.example.votingapp.data_type.question.QuestionParcel;
@@ -27,15 +27,15 @@ import java.util.ArrayList;
 public class ResultAdapter extends QuestionAdapter {
 
 
-    private ArrayList<QuestionStat> questionStatistics;
+    private ArrayList<AnswerStat> answerStatistics;
 
     static final String GET_TEXT_STAT = "com.example.votingapp.voting_result.TEXT_STAT";
 
 
     ResultAdapter(Context mContext, ArrayList<QuestionParcel> questionItems,
-                  ArrayList<QuestionStat> questionStatistics) {
+                  ArrayList<AnswerStat> answerStatistics) {
         super(mContext, questionItems);
-        this.questionStatistics = questionStatistics;
+        this.answerStatistics = answerStatistics;
     }
 
 
@@ -62,7 +62,7 @@ public class ResultAdapter extends QuestionAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, TextResultDetailActivity.class);
                     intent.putStringArrayListExtra(GET_TEXT_STAT,
-                            ((TextQuestionStat) questionStatistics.get(position)).getAnswers());
+                            ((TextAnswerStat) answerStatistics.get(position)).getAnswers());
                     mContext.startActivity(intent);
                 }
             });
@@ -72,7 +72,7 @@ public class ResultAdapter extends QuestionAdapter {
             // and then the inner recycler view will show the stat.
             MultiChoiceParcel question = (MultiChoiceParcel) questionItems.get(position);
             ((MultiChoiceStatHolder) holder).questionTitle.setText(question.getQuestionTitle());
-            ArrayList<Integer> choiceCount = ((MultiChoiceStat) questionStatistics.get(position)).getChoiceVoterCount();
+            ArrayList<Integer> choiceCount = ((MultiChoiceStat) answerStatistics.get(position)).getChoiceVoterCount();
             ((MultiChoiceStatHolder) holder).recyclerView.setAdapter(new InnerAdapter(question, choiceCount));
 
         }

@@ -11,7 +11,6 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.widget.TextView;
@@ -20,8 +19,8 @@ import com.example.votingapp.R;
 import com.example.votingapp.VotingAdapter;
 import com.example.votingapp.data_type.question.QuestionType;
 import com.example.votingapp.data_type.answer_stat.MultiChoiceStat;
-import com.example.votingapp.data_type.answer_stat.QuestionStat;
-import com.example.votingapp.data_type.answer_stat.TextQuestionStat;
+import com.example.votingapp.data_type.answer_stat.AnswerStat;
+import com.example.votingapp.data_type.answer_stat.TextAnswerStat;
 import com.example.votingapp.data_type.question.MultiChoiceParcel;
 import com.example.votingapp.data_type.question.QuestionParcel;
 import com.example.votingapp.data_type.question.TextQuestionParcel;
@@ -43,7 +42,7 @@ public class VotingResultActivity extends AppCompatActivity {
     private String votingId;
 
     private ArrayList<QuestionParcel> questionItems = new ArrayList<>();
-    private ArrayList<QuestionStat> questionStatistics = new ArrayList<>();
+    private ArrayList<AnswerStat> answerStatistics = new ArrayList<>();
 
     RecyclerView mRecyclerView;
     ResultAdapter mAdapter;
@@ -84,7 +83,7 @@ public class VotingResultActivity extends AppCompatActivity {
         // Initialize recycler view
         mRecyclerView = findViewById(R.id.voting_result_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new ResultAdapter(this, questionItems, questionStatistics);
+        mAdapter = new ResultAdapter(this, questionItems, answerStatistics);
         mRecyclerView.setAdapter(mAdapter);
 
         // Set voting title and voting id
@@ -130,10 +129,10 @@ public class VotingResultActivity extends AppCompatActivity {
                                     String questionS = ansRef.child("question string").getValue(String.class);
                                     String answerText = ansRef.child("answer text").getValue(String.class);
                                     assert answerText != null;
-                                    if (questionStatistics.size() <= questIndex) { // not yet collect all questions
-                                        questionStatistics.add(new TextQuestionStat(questionS, answerText));
+                                    if (answerStatistics.size() <= questIndex) { // not yet collect all questions
+                                        answerStatistics.add(new TextAnswerStat(questionS, answerText));
                                     } else {
-                                        ((TextQuestionStat) questionStatistics.get(questIndex)).update(answerText);
+                                        ((TextAnswerStat) answerStatistics.get(questIndex)).update(answerText);
                                     }
                                     if (updateQuestionItems) {
                                         questionItems.add(new TextQuestionParcel(questionS));
@@ -141,11 +140,11 @@ public class VotingResultActivity extends AppCompatActivity {
 
                                 } else {    // It is a multi choice question
                                     String questionS = ansRef.child("question string").getValue(String.class);
-                                    if (questionStatistics.size() <= questIndex) {
-                                        questionStatistics.add(new MultiChoiceStat(questionS));
+                                    if (answerStatistics.size() <= questIndex) {
+                                        answerStatistics.add(new MultiChoiceStat(questionS));
                                     }
                                     MultiChoiceStat questStat = (MultiChoiceStat)
-                                            questionStatistics.get(questIndex);
+                                            answerStatistics.get(questIndex);
                                     ArrayList<String> choices = new ArrayList<>();  // collect all choices
                                     for (DataSnapshot choicesRef : ansRef.child("choices").getChildren()) {
                                         String choiceText = choicesRef.getKey();

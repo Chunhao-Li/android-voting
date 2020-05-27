@@ -8,7 +8,7 @@ public abstract class Answer {
     protected QuestionType questionType;
 
     //    public abstract String getRespondentUid();
-    public abstract String getQuestionString();
+    public abstract String getQuestionTitle();
 
     public abstract QuestionType getQuestionType();
 }

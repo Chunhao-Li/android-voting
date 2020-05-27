@@ -11,17 +11,14 @@ public class MultipleChoiceAnswer extends Answer {
     public MultipleChoiceAnswer(String questionString, ArrayList<ArrayList<String>> answerChoice) {
         super.questionString = questionString;
         super.questionType = QuestionType.MULTI_CHOICE;
-//        super.respondentUid = respondentUid;
         this.answerChoice = answerChoice;
     }
 
 
-    @Override
-    public String getQuestionString() {
+    public String getQuestionTitle() {
         return this.questionString;
     }
 
-    @Override
     public QuestionType getQuestionType() {
         return this.questionType;
     }

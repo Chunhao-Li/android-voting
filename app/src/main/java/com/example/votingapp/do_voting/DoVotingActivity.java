@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -153,17 +152,15 @@ public class DoVotingActivity extends AppCompatActivity {
             ArrayList<Answer> answers = DoVotingActivity.this.answers;
             UserAnswers rtnAns = new UserAnswers(votingId, answers);
             Log.d("connecting to server...", "...");
-            SaveAnswerOnCloud(rtnAns);
+            saveAnswerOnCloud(rtnAns);
         }
     }
 
     //    save user's answer to server
-    public void SaveAnswerOnCloud(UserAnswers rtnAns) {
+    public void saveAnswerOnCloud(UserAnswers rtnAns) {
         DatabaseReference newVotingAnswerRef = mDatabaseAnswerRef.push();
-        String votingAnswerKey = newVotingAnswerRef.getKey();
 //        ready to connect
         newVotingAnswerRef.child("Voting UID").setValue(rtnAns.getVotingUid());
-//        newVotingAnswerRef.child("Respondent UID").setValue(rtnAns.getRespondentUid());
         ArrayList<Answer> answers = rtnAns.getAnswers();
 //        store answers in server
         for (int i = 0; i < answers.size(); i++) {
@@ -171,13 +168,13 @@ public class DoVotingActivity extends AppCompatActivity {
             if (currentAns.getQuestionType().equals(QuestionType.TEXT_QUESTION)) {
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
                 curQuestionStatRef.child("answer text").setValue(((TextAnswer) currentAns).getAnswerString());
-                curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
+                curQuestionStatRef.child("question string").setValue(currentAns.getQuestionTitle());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
             } else if (currentAns.getQuestionType().equals(QuestionType.MULTI_CHOICE)) {
                 ArrayList<ArrayList<String>> answerChoices = ((MultipleChoiceAnswer) currentAns).getAnswerChoice();
                 Log.d("dovoting_multi", answerChoices.get(0).get(1));
                 DatabaseReference curQuestionStatRef = newVotingAnswerRef.child("answers").child(Integer.toString(i));
-                curQuestionStatRef.child("question string").setValue(currentAns.getQuestionString());
+                curQuestionStatRef.child("question string").setValue(currentAns.getQuestionTitle());
                 curQuestionStatRef.child("question type").setValue(currentAns.getQuestionType());
                 ArrayList<ArrayList<String>> choices = ((MultipleChoiceAnswer) currentAns).getAnswerChoice();
                 for (int j = 0; j < choices.size(); j++) {
