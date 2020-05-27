@@ -23,14 +23,15 @@ import com.example.votingapp.edit_voting.QuestionAdapter;
 
 import java.util.ArrayList;
 
+/**
+ * This class is for showing the questions when users do a voting, and will save the
+ * answer for saving on the cloud later.
+ */
 public class DoVotingAdapter extends QuestionAdapter {
-    /**
-     * This class is for showing the questions when users do a voting, and will save the
-     * answer for saving on the cloud later.
-     */
+
     private final ArrayList<Answer> answers;
 
-     DoVotingAdapter(Context mContext, ArrayList<QuestionParcel> questionItems, ArrayList<Answer> answers) {
+    DoVotingAdapter(Context mContext, ArrayList<QuestionParcel> questionItems, ArrayList<Answer> answers) {
         super(mContext, questionItems);
         this.answers = answers;
     }
@@ -57,11 +58,11 @@ public class DoVotingAdapter extends QuestionAdapter {
 
         } else {
             // set title and choices for the multiChoice problem, and update position
-            String question =  questionItems.get(position).getQuestionTitle();
+            String question = questionItems.get(position).getQuestionTitle();
             ((MultipleChoiceViewHolder) holder).mQuestion.setText(question);
             final ArrayList<String> choices = ((MultiChoiceParcel) questionItems.get(position)).getChoices();
             final CheckBox[] checkBoxes = ((MultipleChoiceViewHolder) holder).getCheckBoxes();
-            final MultiChoiceRecorder[] recorders =   ((MultipleChoiceViewHolder) holder).getRecorders();
+            final MultiChoiceRecorder[] recorders = ((MultipleChoiceViewHolder) holder).getRecorders();
 
             // show the available checkboxes and update positions
             for (int i = 0; i < choices.size(); i++) {
@@ -74,17 +75,21 @@ public class DoVotingAdapter extends QuestionAdapter {
 
     class TextAnswerListener implements TextWatcher {
         int position;   // position of the ViewHolder
+
         private void updatePosition(int pos) {
             this.position = pos;
         }
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             TextAnswer textAnswer = (TextAnswer) answers.get(position);
             textAnswer.setAnswerText(s.toString());
         }
+
         @Override
         public void afterTextChanged(Editable s) {
 
@@ -95,15 +100,15 @@ public class DoVotingAdapter extends QuestionAdapter {
         TextView mQuestion;
         EditText mAns;
         TextAnswerListener listener;
-         TextQuestionViewHolder(@NonNull View itemView, TextAnswerListener listener) {
+
+        TextQuestionViewHolder(@NonNull View itemView, TextAnswerListener listener) {
             super(itemView);
             mQuestion = itemView.findViewById(R.id.text_q_question);
-            mAns = itemView.findViewById(R.id.text_q_editText);
+            mAns = itemView.findViewById(R.id.editText_text_title);
             this.listener = listener;
             mAns.addTextChangedListener(listener);
         }
     }
-
 
 
     private class MultiChoiceRecorder implements CompoundButton.OnCheckedChangeListener {
@@ -116,7 +121,7 @@ public class DoVotingAdapter extends QuestionAdapter {
             this.choicePos = choicePos;
         }
 
-         MultiChoiceRecorder(int checkboxId) {
+        MultiChoiceRecorder(int checkboxId) {
             this.checkboxId = checkboxId;
         }
 
@@ -138,17 +143,16 @@ public class DoVotingAdapter extends QuestionAdapter {
         MultiChoiceRecorder[] recorders;
 
 
-
         private MultiChoiceRecorder[] getRecorders() {
             return recorders;
         }
 
-         MultipleChoiceViewHolder(@NonNull View itemView) {
+        MultipleChoiceViewHolder(@NonNull View itemView) {
             super(itemView);
-            recorders = new MultiChoiceRecorder[] {new MultiChoiceRecorder(R.id.checkBox0),
+            recorders = new MultiChoiceRecorder[]{new MultiChoiceRecorder(R.id.checkBox0),
                     new MultiChoiceRecorder(R.id.checkBox1), new MultiChoiceRecorder(R.id.checkBox2),
-                    new MultiChoiceRecorder(R.id.checkBox3),new MultiChoiceRecorder(R.id.checkBox4),
-                    new MultiChoiceRecorder(R.id.checkBox5),new MultiChoiceRecorder(R.id.checkBox6),
+                    new MultiChoiceRecorder(R.id.checkBox3), new MultiChoiceRecorder(R.id.checkBox4),
+                    new MultiChoiceRecorder(R.id.checkBox5), new MultiChoiceRecorder(R.id.checkBox6),
                     new MultiChoiceRecorder(R.id.checkBox7)};
             for (int i = 0; i < checkBoxes.length; i++) {
                 checkBoxes[i].setOnCheckedChangeListener(recorders[i]);

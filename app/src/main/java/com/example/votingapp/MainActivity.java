@@ -1,6 +1,8 @@
 package com.example.votingapp;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -49,10 +51,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The main class of this app.
+ */
 public class MainActivity extends AppCompatActivity {
-    /**
-     * The main class of this app.
-     */
 
     private VotingAdapter mVotingAdapter;
     private EditText votingIdInput; // this is for doing voting
@@ -120,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
             String votingTitle = votingEditIntent.getStringExtra(VotingEditActivity.GET_VOTING_TITLE);
             if (newVotingQuestions != null && deadline != null && newVotingQuestions.size() > 0) {
                 saveVoting(newVotingQuestions, deadline, votingTitle);
-                needUpdateUi = false;   // do not need to update the UI of the main
+                needUpdateUi = false;   // avoid updating twice
             }
-
         }
+
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -165,19 +167,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUI() {
+    public void updateUI() {
         /*
         Update the Ui of MainActivity
          */
         new UpdateUiTask().execute();
     }
 
+    /**
+     * This class will download the voting ids and titles created by
+     * the current user, and update the Ui synchronously
+     */
     @SuppressLint("StaticFieldLeak")
     private class UpdateUiTask extends AsyncTask<Void, Void, Void> {
-        /**
-         * This class will download the voting ids and titles created by
-         * the current user, and update the Ui synchronously
-         */
         @Override
         protected void onProgressUpdate(Void... values) {
             mVotingAdapter.notifyDataSetChanged();
@@ -372,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.GoogleBuilder().build()
         );
 
+
         // Create and launch sign-in intent
         startActivityForResult(AuthUI.getInstance().
                 createSignInIntentBuilder().
@@ -380,18 +383,17 @@ public class MainActivity extends AppCompatActivity {
                 build(), RC_SIGN_IN);
     }
 
-
-    public void launchVotingEdit(View view) {
-        /*
+    /*
         This method will launch the VotingEditActivity for creating a new voting
          */
+    public void launchVotingEdit(View view) {
         if (mUser == null) {
             // anonymous users are not allowed to create a voting
             popToSignIn();
         } else {
             // Build a dialog for input title of the voting
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Title for your voting  ");
+            builder.setTitle("Title for your voting:");
             final EditText votingTitleInput = new EditText(this);
             votingTitleInput.setInputType(InputType.TYPE_CLASS_TEXT);
             votingTitleInput.setText(R.string.default_voting_title);

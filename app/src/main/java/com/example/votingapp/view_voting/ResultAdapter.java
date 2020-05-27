@@ -21,10 +21,11 @@ import com.example.votingapp.data_type.question.QuestionParcel;
 
 import java.util.ArrayList;
 
+/**
+ * This adapter is for showing the stat of a multi choice question in the VotingResultActivity
+ */
 public class ResultAdapter extends QuestionAdapter {
-    /**
-     * This adapter helps show the result/stat of the users' created voting
-     */
+
 
     private ArrayList<QuestionStat> questionStatistics;
 

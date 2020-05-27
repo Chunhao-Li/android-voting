@@ -1,6 +1,5 @@
 package com.example.votingapp.view_voting;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,11 @@ import com.example.votingapp.data_type.question.MultiChoiceParcel;
 
 import java.util.ArrayList;
 
+/**
+ * This adapter is for showing the stat of a multi choice question in the VotingResultActivity
+ */
 class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHolder> {
-    /**
-     * This adapter is for showing the stat of a multi choice question in the VotingResultActivity
-     */
+
     private final MultiChoiceParcel question;
     private final ArrayList<Integer> choiceCount;
     private int total;  // record all the choices of the current question
@@ -56,10 +56,10 @@ class InnerAdapter extends RecyclerView.Adapter<InnerAdapter.InnerMultiChoiceHol
 
     }
 
-    /*/
-        Round the percentage to a certain precision
+    /**
+     * Source: https://stackoverflow.com/a/22186845/10400661
      */
-    private static double round(double value, int precision) { // TODO reference: https://stackoverflow.com/a/22186845/10400661
+    private static double round(double value, int precision) {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
     }

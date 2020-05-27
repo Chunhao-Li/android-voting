@@ -13,10 +13,10 @@ import com.example.votingapp.R;
 
 import java.util.ArrayList;
 
+/**
+ * This activity will show all the answers of a text question.
+ */
 public class TextResultDetailActivity extends AppCompatActivity {
-    /**
-     * This activity will show all the answers of a text question.
-     */
 
     private int answerCount = 0;
     private ArrayList<String> allAnswers;

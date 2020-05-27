@@ -6,7 +6,7 @@
     android:layout_gravity="center_horizontal"
     android:layout_margin="8dp"
     android:orientation="vertical"
-    android:background = "@drawable/bgimage">
+    android:background = "#4CAF50">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                         android:textSize="20sp" />
 
                     <Button
-                        android:id="@+id/create_voting_button"
+                        android:id="@+id/button_create_voting"
                         style="@style/MainActivityButton"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                         android:hint="@string/hint_do_voting" />
 
                     <Button
-                        android:id="@+id/do_voting_button"
+                        android:id="@+id/button_do_voting"
                         style="@style/MainActivityButton"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"

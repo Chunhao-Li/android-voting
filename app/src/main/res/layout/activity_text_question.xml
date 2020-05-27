@@ -5,14 +5,13 @@
     android:id="@+id/edit_text"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background = "@drawable/bgimage"
     tools:context=".edit_voting.TextQuestionActivity">
 
     <EditText
-        android:id="@+id/text_q_editText"
+        android:id="@+id/editText_text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="182dp"
         android:layout_marginRight="182dp"
         android:ems="10"
@@ -24,7 +23,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button_cancel"
+        android:id="@+id/button_cancel_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -32,11 +31,11 @@
         android:background="#009688"
         android:text="@string/text_q_cancel"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button_save"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_save_text"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button_save"
+        android:id="@+id/button_save_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -46,18 +45,19 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.589"
-        app:layout_constraintStart_toEndOf="@+id/button_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/text_q_editText" />
+        app:layout_constraintStart_toEndOf="@+id/button_cancel_text"
+        app:layout_constraintTop_toBottomOf="@+id/editText_text_title" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="36dp"
-        android:text="Your Qustion"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="52dp"
+        android:text="Your Question"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

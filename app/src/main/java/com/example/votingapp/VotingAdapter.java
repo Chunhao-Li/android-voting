@@ -2,6 +2,7 @@ package com.example.votingapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * This adapter helps show all the voting created by the current user
+ */
 public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHolder> {
-    /**
-     * This adapter helps show all the voting created by the current user
-     */
+
     private Context mContext;
     private FirebaseDatabase mDatabase;
     private FirebaseAuth mAuth;
@@ -91,7 +93,7 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.hasChild("votings")) {
                         DataSnapshot votingChild = dataSnapshot.child("votings");
-                        for (DataSnapshot curVoting: votingChild.getChildren()) {
+                        for (DataSnapshot curVoting : votingChild.getChildren()) {
                             String curVotingId = curVoting.getValue(String.class);
                             if (curVotingId.equals(votingId)) {
                                 curVoting.getRef().removeValue();
@@ -107,8 +109,7 @@ public class VotingAdapter extends RecyclerView.Adapter<VotingAdapter.VotingHold
                 }
             });
         }
-
-        this.notifyItemRemoved(position);
+        this.notifyDataSetChanged();
     }
 
 

@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:layout_margin="8dp"
-    android:background = "@drawable/bgimage"
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
@@ -24,8 +22,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                android:textSize="20sp" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="5dp"
+                android:textSize="23sp"
+                android:layout_marginRight="5dp" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -43,8 +45,9 @@
         android:id="@+id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8BC34A"
+        android:background="#009688"
         android:onClick="submitAnswers"
+        android:textColor="@color/white"
         android:text="@string/button_submit_text" />
 
 
