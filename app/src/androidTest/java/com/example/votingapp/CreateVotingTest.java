@@ -1,5 +1,6 @@
 package com.example.votingapp;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -54,6 +55,7 @@ public class CreateVotingTest {
     public void initialize() throws InterruptedException {
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
+            Log.d("create voting test", "here");
             auth.signInWithEmailAndPassword("test@test.com", "12345678").addOnCompleteListener(
                     new OnCompleteListener<AuthResult>() {
                         @Override
@@ -80,7 +82,6 @@ public class CreateVotingTest {
         onView(withId(R.id.save_voting_edit)).perform(click());
         onView(withText("OK")).check(matches(isDisplayed())).perform(click());
         onView(withText("OK")).check(matches(isDisplayed())).perform(click());
-        Thread.sleep(1000);
         onView(withText("Voting is empty")).inRoot(withDecorView(not(is(mainActivityRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 

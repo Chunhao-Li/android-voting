@@ -208,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
                                 curVotingInfo.add(votingTitle);
                                 votingInfo.add(curVotingInfo);
                                 allVotingId.add(votingRId);
-                                Log.d("mainUpdateUi", votingRId);
                                 publishProgress();
                             }
                         }
