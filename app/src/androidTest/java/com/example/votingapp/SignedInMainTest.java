@@ -76,8 +76,10 @@ public class SignedInMainTest {
     }
 
     @Test
-    public void emptyVotingIdTest() {
+    public void emptyVotingIdTest() throws InterruptedException {
         onView(withId(R.id.button_do_voting)).perform(click());
+        authSignal = new CountDownLatch(2);
+        authSignal.await(1, TimeUnit.SECONDS);
         onView(withText("Input is empty!")).inRoot(
                 withDecorView(not(is(mainActivityRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }

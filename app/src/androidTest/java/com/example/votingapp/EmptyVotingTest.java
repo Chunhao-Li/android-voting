@@ -25,13 +25,12 @@ public class EmptyVotingTest {
     public ActivityTestRule<VotingEditActivity> editActivityRule = new ActivityTestRule<>(VotingEditActivity.class);
 
     @Test
-    public void emptyVotingTest() {
+    public void emptyVotingTest() throws InterruptedException {
         onView(withId(R.id.save_voting_edit)).perform(click());
         onView(withText("OK")).check(matches(isDisplayed())).perform(click());
+        Thread.sleep(1500);
         onView(withText("OK")).check(matches(isDisplayed())).perform(click());
-//        authSignal = new CountDownLatch(2);
-//        authSignal.await(1, TimeUnit.SECONDS);
-
+        Thread.sleep(500);
         onView(withText("Voting is empty")).inRoot(withDecorView(not(is(editActivityRule.getActivity()
                 .getWindow().getDecorView())))).check(matches(isDisplayed()));
 

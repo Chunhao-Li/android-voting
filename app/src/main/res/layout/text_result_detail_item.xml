@@ -17,6 +17,7 @@
         android:maxLines="100"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:ellipsize="end"
+        android:maxEms="20"
         android:textSize="20sp"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp" />
