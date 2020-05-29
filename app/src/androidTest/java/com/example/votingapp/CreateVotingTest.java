@@ -75,21 +75,6 @@ public class CreateVotingTest {
 
     }
 
-//    @Test
-//    public void emptyQuestionTest() throws InterruptedException {
-//        // create a voting with default name
-//        onView(withId(R.id.button_create_voting)).perform(click());
-//        onView(withText("CREATE")).check(matches(isDisplayed())).perform(click());
-//        onView(withId(R.id.save_voting_edit)).perform(click());
-//        onView(withText("OK")).check(matches(isDisplayed())).perform(click());
-//        onView(withText("OK")).check(matches(isDisplayed())).perform(click());
-//        authSignal = new CountDownLatch(2);
-//        authSignal.await(1, TimeUnit.SECONDS);
-//
-//        onView(withText("Voting is empty")).inRoot(withDecorView(not(is(new ActivityTestRule<VotingEditActivity>(
-//                VotingEditActivity.class).getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-//
-//    }
 
     @Test
     public void validVotingTest() throws InterruptedException {
